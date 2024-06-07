@@ -1,14 +1,4 @@
-# WE4B Project
-
-| WE4B Project in third year at UTBM.
-
-Developed by :
-- Hugo Allainé
-- Léo Angonnet
-- Quentin Balezeau
-- Eliott Speyser
-
-# Angular informations
+# WE4BProject
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.3.
 
