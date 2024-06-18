@@ -15,9 +15,9 @@ header('Content-Type: application/json');
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $status = isConnected();
     $pseudo = $status ? $_SESSION['pseudo'] : null;
-    echo json_encode(array('error' => false, 'status' => $status, 'pseudo' => $pseudo));
+    echo json_encode("success" => true, 'error' => false, 'status' => $status, 'pseudo' => $pseudo);
 } else {
-    echo json_encode(array('error' => true, 'message' => 'Invalid request method'));
+    echo json_encode("success" => false, 'error' => true, 'message' => 'Invalid request method');
 }
 
 ?>
