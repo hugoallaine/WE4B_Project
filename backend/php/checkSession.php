@@ -1,4 +1,7 @@
 <?php
+header("Access-Control-Allow-Origin: http://localhost:4200");
+header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 require_once dirname(__FILE__).'/alreadyConnected.php';
 session_start_secure();
 
@@ -15,9 +18,9 @@ header('Content-Type: application/json');
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $status = isConnected();
     $pseudo = $status ? $_SESSION['pseudo'] : null;
-    echo json_encode("success" => true, 'error' => false, 'status' => $status, 'pseudo' => $pseudo);
+    echo json_encode(["success" => true, 'error' => false, 'status' => $status, 'pseudo' => $pseudo]);
 } else {
-    echo json_encode("success" => false, 'error' => true, 'message' => 'Invalid request method');
+    echo json_encode(["success" => false, 'error' => true, 'message' => 'Invalid request method']);
 }
 
 ?>

@@ -1,32 +1,40 @@
 <app-wrapper>
-  <form id="formLoginId" class="formLogin" method="POST" action="">
-    <div>
-        <h1 class="mb-3" id="modalLoginLabel">Se connecter</h1>
-    </div>
-    <div>
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="username" name="user" placeholder="" required autocomplete="email"/>
-            <label for="username" class="form-label">Adresse Mail</label>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" id="formLoginId" class="formLogin" method="POST" action="">
+        <div>
+            <h1 class="mb-3" id="modalLoginLabel">Se connecter</h1>
         </div>
-        <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="password" name="password" placeholder="" required autocomplete="current-password"/>
-            <label for="password" class="form-label">Mot de passe</label>
+        <div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="username" name="user" placeholder="" formControlName="username" required autocomplete="email" />
+                <label for="username" class="form-label">Adresse Mail</label>
+                <div *ngIf="username?.invalid && (username?.dirty || username?.touched)" class="text-danger">
+                    <div *ngIf="username?.hasError('required')">L'adresse mail est requise.</div>
+                    <div *ngIf="username?.hasError('email')">L'adresse mail n'est pas valide.</div>
+                </div>
+            </div>
+            <div class="form-floating mb-3">
+                <input [type]="showPassword?.value ? 'text' : 'password'" class="form-control" id="password" name="password" placeholder="" formControlName="password" required autocomplete="current-password" />
+                <label for="password" class="form-label">Mot de passe</label>
+                <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="text-danger">
+                    <div *ngIf="password?.hasError('required')">Le mot de passe est requis.</div>
+                  </div>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="showpassword" formControlName="showPassword" (change)="togglePasswordVisibility()">
+                <label class="form-check-label" for="showpassword">
+                    Montrer le mot de passe
+                </label>
+            </div>
+            <!--<div id="tfaDiv" class="form-floating mb-3" *ngIf="loginForm.get('tfa_code')">
+                <input type="text" class="form-control" id="tfa_code" name="tfa_code" placeholder=""
+                    formControlName="tfa_code" autocomplete="one-time-code" />
+                <label for="tfa_code" class="form-label">Code de double authentification</label>
+            </div>-->
+            <div id="error-message" class="text-danger mb-3 text-center" *ngIf="error_message">{{error_message}}</div>
         </div>
-        <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="showpassword" onchange="TogglePassword(this.checked)">
-            <label class="form-check-label" for="showpassword">
-                Montrer le mot de passe
-            </label>
+        <div class="d-flex flex-column align-items-center">
+            <input type="submit" class="btn btn-primary mb-2 fs-5" [disabled]="!loginForm.valid" value="Se connecter" />
+            <p>New here? <a routerLink="/register">Sign up</a></p>
         </div>
-        <div id="tfaDiv" class="form-floating mb-3" style="display:none;">
-            <input type="text" class="form-control" id="tfa_code" name="tfa_code" placeholder="" autocomplete="one-time-code"/>
-            <label for="tfa_code" class="form-label">Code de double authentification</label>
-        </div>
-        <div id="error-message" class="text-danger"></div>
-    </div>
-    <div class="d-flex flex-column align-items-center">
-        <input type="submit" class="btn btn-primary mb-2 fs-5" value="Se connecter"/>
-        <p>New here? <a routerLink="/register">Sign up</a></p>
-    </div>
-  </form>
+    </form>
 </app-wrapper>

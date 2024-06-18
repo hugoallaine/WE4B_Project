@@ -8,7 +8,7 @@ import { tap } from 'rxjs/operators';
 })
 export class AuthService {
   private apiUrl = 'http://localhost:8000'; // URL de votre backend PHP
-  private loggedIn = new BehaviorSubject<boolean>(false);
+  private loggedIn = false;
 
   constructor(private http: HttpClient) {
     this.checkSession();
@@ -18,7 +18,7 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/login.php`, { user: username, password: password }).pipe(
       tap(response => {
         if (response.success) {
-          this.loggedIn.next(true);
+          this.loggedIn = true;
         }
       })
     );
@@ -31,18 +31,19 @@ export class AuthService {
   logout(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/logout.php`).pipe(
       tap(() => {
-        this.loggedIn.next(false);
+        this.loggedIn = false;
       })
     );
   }
 
-  isLoggedIn(): Observable<boolean> {
-    return this.loggedIn.asObservable();
+  isLoggedIn(): boolean {
+    return this.loggedIn;
   }
 
   private checkSession() {
     this.http.get<any>(`${this.apiUrl}/checkSession.php`).subscribe(response => {
-      this.loggedIn.next(response.logged_in);
+      this.loggedIn = response.status;
+      console.log(this.loggedIn)
     });
   }
 }

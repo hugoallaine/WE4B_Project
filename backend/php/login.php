@@ -1,6 +1,9 @@
 <?php
+header("Access-Control-Allow-Origin: http://localhost:4200");
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 require_once dirname(__FILE__).'/alreadyConnected.php';
-session_start();
+session_start_secure();
 require_once dirname(__FILE__).'/db.php';
 require_once dirname(__FILE__).'/vendor/autoload.php';
 use RobThree\Auth\TwoFactorAuth;
