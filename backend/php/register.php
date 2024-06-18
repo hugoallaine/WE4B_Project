@@ -1,11 +1,14 @@
 <?php
 header("Access-Control-Allow-Origin: http://localhost:4200");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 require_once dirname(__FILE__) . '/db.php';
 require_once dirname(__FILE__) . '/mails.php';
 require_once dirname(__FILE__) . '/vendor/autoload.php';
 require_once dirname(__FILE__) . '/json.php';
+
+// Réception des données JSON
+$data = json_decode(file_get_contents("php://input"));
 
 /**
  * Function to get the real IP of the user even if he is behind a proxy
@@ -46,19 +49,15 @@ function getIp()
  * - message (string): the error message
  * - info (boolean): true if an info message is present
  */
-if (isset($_POST['mail1-r']) && isset($_POST['mail2-r']) && isset($_POST['password-r']) && isset($_POST['password2-r']) && isset($_POST['pseudo-r']) && isset($_POST['name-r']) && isset($_POST['firstname-r']) && isset($_POST['birthdate-r']) && isset($_POST['address-r']) && isset($_POST['city-r']) && isset($_POST['zipcode-r']) && isset($_POST['country-r'])) {
-    $email = SecurizeString_ForSQL($_POST['mail1-r']) . "@" . SecurizeString_ForSQL($_POST['mail2-r']);
-    $password = SecurizeString_ForSQL($_POST['password-r']);
-    $password2 = SecurizeString_ForSQL($_POST['password2-r']);
-    $pseudo = SecurizeString_ForSQL($_POST['pseudo-r']);
-    $name = SecurizeString_ForSQL($_POST['name-r']);
-    $firstname = SecurizeString_ForSQL($_POST['firstname-r']);
-    $birthdate = $_POST['birthdate-r'];
-    $address = SecurizeString_ForSQL($_POST['address-r']);
-    $city = SecurizeString_ForSQL($_POST['city-r']);
-    $zipcode = SecurizeString_ForSQL($_POST['zipcode-r']);
-    $country = SecurizeString_ForSQL($_POST['country-r']);
-    if (!empty($email) && !empty($password) && !empty($password2) && !empty($pseudo) && !empty($name) && !empty($firstname) && !empty($birthdate) && !empty($address) && !empty($city) && !empty($zipcode) && !empty($country)) {
+if (isset($data->user) && isset($data->password) && isset($data->password2) && isset($data->pseudo) && isset($data->name) && isset($data->firstname) && isset($data->birthdate)) {
+    $email = SecurizeString_ForSQL($data->user);
+    $password = SecurizeString_ForSQL($data->password);
+    $password2 = SecurizeString_ForSQL($data->password2);
+    $pseudo = SecurizeString_ForSQL($data->pseudo);
+    $name = SecurizeString_ForSQL($data->name);
+    $firstname = SecurizeString_ForSQL($data->firstname);
+    $birthdate = $data->birthdate;
+    if (!empty($email) && !empty($password) && !empty($password2) && !empty($pseudo) && !empty($name) && !empty($firstname) && !empty($birthdate)) {
         if (strlen($pseudo) <= 32) {
             if (strlen($name) <= 32 && strlen($firstname) <= 32) {
                 if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -68,45 +67,39 @@ if (isset($_POST['mail1-r']) && isset($_POST['mail2-r']) && isset($_POST['passwo
                     if ($emailexist == 0) {
                         if ($password == $password2) {
                             if (strlen($password) >= 12 && preg_match('/[A-Z]/', $password) && preg_match('/[a-z]/', $password) && preg_match('/[0-9]/', $password) && preg_match('/[^a-zA-Z0-9]/', $password)) {
-                                if (strlen($zipcode) == 5) {
-                                    $password = password_hash($password, PASSWORD_DEFAULT);
-                                    $key = generateToken(255);
-                                    $token = generateToken(255);
-                                    $req = $db->prepare("INSERT INTO users(email,password,token,name,firstname,birth_date,pseudo) VALUES (?,?,?,?,?,?,?)");
-                                    $req->execute(array($email, $password, $token, $name, $firstname, $birthdate, $pseudo));
-                                    if (isset($_FILES['avatar-r']) && $_FILES['avatar-r']['error'] === UPLOAD_ERR_OK) {
-                                        if ($_FILES['avatar-r']['size'] <= 2097152) {
-                                            $req = $db->prepare("SELECT id FROM users WHERE email = ?");
-                                            $req->execute(array($email));
-                                            $line = $req->fetch();
-                                            $filename = $_FILES['avatar-r']['name'];
-                                            $file_extension = pathinfo($filename, PATHINFO_EXTENSION);
-                                            $allowed_extensions = array('jpg', 'jpeg', 'png', 'gif');
-                                            if (in_array($file_extension, $allowed_extensions) === true) {
-                                                $newfilename = "avatar." . $file_extension;
-                                                $tmp_name = $_FILES['avatar-r']['tmp_name'];
-                                                $upload_directory = '../img/user/' . $line['id'] . '/';
-                                                if (!file_exists($upload_directory)) {
-                                                    mkdir($upload_directory, 0777, true);
-                                                }
-                                                $path = $upload_directory . $newfilename;
-                                                move_uploaded_file($tmp_name, $path);
-                                                $avatar = $newfilename;
-                                                $req = $db->prepare("UPDATE users SET avatar = ? WHERE email = ?");
-                                                $req->execute(array($avatar, $email));
-                                            } else {
-                                                $info = "Votre avatar doit être au format jpg, jpeg, png ou gif et ne doit pas dépasser 2 Mo.";
+                                $password = password_hash($password, PASSWORD_DEFAULT);
+                                $key = generateToken(255);
+                                $token = generateToken(255);
+                                $req = $db->prepare("INSERT INTO users(email,password,token,name,firstname,birth_date,pseudo) VALUES (?,?,?,?,?,?,?)");
+                                $req->execute(array($email, $password, $token, $name, $firstname, $birthdate, $pseudo));
+                                if (isset($_FILES['avatar-r']) && $_FILES['avatar-r']['error'] === UPLOAD_ERR_OK) {
+                                    if ($_FILES['avatar-r']['size'] <= 2097152) {
+                                        $req = $db->prepare("SELECT id FROM users WHERE email = ?");
+                                        $req->execute(array($email));
+                                        $line = $req->fetch();
+                                        $filename = $_FILES['avatar-r']['name'];
+                                        $file_extension = pathinfo($filename, PATHINFO_EXTENSION);
+                                        $allowed_extensions = array('jpg', 'jpeg', 'png', 'gif');
+                                        if (in_array($file_extension, $allowed_extensions) === true) {
+                                            $newfilename = "avatar." . $file_extension;
+                                            $tmp_name = $_FILES['avatar-r']['tmp_name'];
+                                            $upload_directory = '../img/user/' . $line['id'] . '/';
+                                            if (!file_exists($upload_directory)) {
+                                                mkdir($upload_directory, 0777, true);
                                             }
+                                            $path = $upload_directory . $newfilename;
+                                            move_uploaded_file($tmp_name, $path);
+                                            $avatar = $newfilename;
+                                            $req = $db->prepare("UPDATE users SET avatar = ? WHERE email = ?");
+                                            $req->execute(array($avatar, $email));
+                                        } else {
+                                            $info = "Votre avatar doit être au format jpg, jpeg, png ou gif et ne doit pas dépasser 2 Mo.";
                                         }
                                     }
-                                    $req = $db->prepare("INSERT INTO address(id_user,address,city,zip_code,country) VALUES((SELECT id FROM users WHERE email = ?),?,?,?,?)");
-                                    $req->execute(array($email, $address, $city, $zipcode, $country));
-                                    $req = $db->prepare("INSERT INTO emailsnonverifies(email,token,id_user) VALUES (?,?,(SELECT id FROM users WHERE email = ?))");
-                                    $req->execute(array($email, $key, $email));
-                                    sendMailConfirm($email, $key);
-                                } else {
-                                    $error = "Votre code postal doit contenir 5 chiffres.";
                                 }
+                                $req = $db->prepare("INSERT INTO emailsnonverifies(email,token,id_user) VALUES (?,?,(SELECT id FROM users WHERE email = ?))");
+                                $req->execute(array($email, $key, $email));
+                                sendMailConfirm($email, $key);
                             } else {
                                 $error = "Votre mot de passe ne satisfait pas les conditions minimums.";
                             }
@@ -132,12 +125,12 @@ if (isset($_POST['mail1-r']) && isset($_POST['mail2-r']) && isset($_POST['passwo
 
 if (isset($error)) {
     header('Content-Type: application/json');
-    echo json_encode(array('error' => true, 'message' => $error));
+    echo json_encode(array('success' => false, 'error' => true, 'message' => $error));
 } elseif (isset($info)) {
     header('Content-Type: application/json');
-    echo json_encode(array('error' => false, 'info' => true, 'message' => $info));
+    echo json_encode(array('success' => true, 'error' => false, 'info' => true, 'message' => $info));
 } else {
     header('Content-Type: application/json');
-    echo json_encode(array('error' => false));
+    echo json_encode(array('success' => true, 'error' => false));
 }
 ?>
