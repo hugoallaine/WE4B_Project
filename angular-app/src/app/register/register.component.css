@@ -1,48 +1,8 @@
-.register-container {
-    width: 300px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff; /* Ajout d'un fond blanc */
-  }
-  
-  .register-container h2 {
-    text-align: center;
-  }
-  
-  .register-container form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .register-container form div {
-    margin-bottom: 10px;
-  }
-  
-  .register-container form label {
-    margin-bottom: 5px;
-  }
-  
-  .register-container form input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .register-container form button {
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .register-container form button:hover {
-    background-color: #0056b3;
-  }
-  
-  .register-container p {
-    text-align: center;
-  }
-  
+.formRegister {
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    border-radius: 15px;
+    background-color: rgb(182, 182, 182);
+}

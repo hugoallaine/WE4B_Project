@@ -1,17 +1,32 @@
 <app-wrapper>
-  <div class="login-container">
-    <h2>Login</h2>
-    <form (ngSubmit)="login()">
-      <div>
-        <label for="username">Username</label>
-        <input type="text" [(ngModel)]="username" name="username" required>
-      </div>
-      <div>
-        <label for="password">Password</label>
-        <input type="password" [(ngModel)]="password" name="password" required>
-      </div>
-      <button type="submit">Login</button>
-    </form>
-    <p>Don't have an account? <a routerLink="/register">Register here</a></p>
-  </div>
+  <form id="formLoginId" class="formLogin" method="POST" action="">
+    <div>
+        <h1 class="mb-3" id="modalLoginLabel">Se connecter</h1>
+    </div>
+    <div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="username" name="user" placeholder="" required autocomplete="email"/>
+            <label for="username" class="form-label">Adresse Mail</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="password" name="password" placeholder="" required autocomplete="current-password"/>
+            <label for="password" class="form-label">Mot de passe</label>
+        </div>
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" value="" id="showpassword" onchange="TogglePassword(this.checked)">
+            <label class="form-check-label" for="showpassword">
+                Montrer le mot de passe
+            </label>
+        </div>
+        <div id="tfaDiv" class="form-floating mb-3" style="display:none;">
+            <input type="text" class="form-control" id="tfa_code" name="tfa_code" placeholder="" autocomplete="one-time-code"/>
+            <label for="tfa_code" class="form-label">Code de double authentification</label>
+        </div>
+        <div id="error-message" class="text-danger"></div>
+    </div>
+    <div class="d-flex flex-column align-items-center">
+        <input type="submit" class="btn btn-primary mb-2 fs-5" value="Se connecter"/>
+        <p>New here? <a routerLink="/register">Sign up</a></p>
+    </div>
+  </form>
 </app-wrapper>
