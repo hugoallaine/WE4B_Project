@@ -5,7 +5,7 @@ Flex | WE4B Project in third year at UTBM.
 ## Installation
 
 - Clone the repository
-- [Download the vendor folder and put it in the php folder in the backend folder](https://cloud.allaine.cc/s/8fipmLE22S2YRfi)
+- Download the [vendor archive](https://cloud.allaine.cc/s/8fipmLE22S2YRfi) unzip it and put it in the php folder in the backend folder for it looks like this : `backend/php/vendor`
 - Go into angular-app folder and run `npm install` then `ng serve`
 
 
