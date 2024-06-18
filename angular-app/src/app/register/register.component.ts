@@ -3,21 +3,21 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class LoginComponent {
+export class RegisterComponent {
   username: string = '';
   password: string = '';
 
   constructor(private authService: AuthService, private router: Router) { }
 
-  login() {
-    this.authService.login(this.username, this.password).subscribe(response => {
+  register() {
+    this.authService.register(this.username, this.password).subscribe(response => {
       if (response.success) {
-        // Rediriger vers la page d'accueil après une connexion réussie
-        this.router.navigate(['/home']);
+        // Rediriger vers la page de login après une inscription réussie
+        this.router.navigate(['/login']);
       } else {
         alert(response.message);
       }
