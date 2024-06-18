@@ -11,6 +11,7 @@ import { RegisterComponent } from './register/register.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { StyleModule } from './style/style.module';
+import { ElementCoverComponent } from './element-cover/element-cover.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { StyleModule } from './style/style.module';
     HomeComponent,
     AccountComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ElementCoverComponent
   ],
   imports: [
     BrowserModule,
