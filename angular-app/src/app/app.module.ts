@@ -12,6 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { StyleModule } from './style/style.module';
 import { ElementCoverComponent } from './element-cover/element-cover.component';
+import { AuthGuard } from './guards/auth.guard';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,7 @@ import { ElementCoverComponent } from './element-cover/element-cover.component';
     HttpClientModule,
     StyleModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

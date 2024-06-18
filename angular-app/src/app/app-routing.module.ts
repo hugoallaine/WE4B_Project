@@ -7,12 +7,12 @@ import { AuthGuard } from './guards/auth.guard';
 import { ElementCoverComponent } from './element-cover/element-cover.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'cover', component: ElementCoverComponent }
-
+  { path: 'cover', component: ElementCoverComponent },
+  { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({
