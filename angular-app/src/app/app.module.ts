@@ -13,6 +13,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { StyleModule } from './style/style.module';
 import { ElementCoverComponent } from './element-cover/element-cover.component';
 import { AuthGuard } from './guards/auth.guard';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,10 @@ import { AuthGuard } from './guards/auth.guard';
     HttpClientModule,
     StyleModule
   ],
-  providers: [AuthGuard],
+  providers: [
+    AuthGuard,
+    AuthService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
