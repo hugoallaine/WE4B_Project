@@ -14,7 +14,6 @@ const routes: Routes = [
     { path: "login", component: LoginComponent },
     { path: "register", component: RegisterComponent },
     { path: "account", component: AccountComponent, canActivate: [AuthGuard] },
-    { path: "cover", component: ElementCoverComponent },
     { path: "player", component: MediaPlayerComponent },
     { path: "**", redirectTo: "home" },
 ];
