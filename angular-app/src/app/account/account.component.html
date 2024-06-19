@@ -1,1 +1,13 @@
-<p>account works!</p>
+<app-navbar></app-navbar>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <h1>Account</h1>
+      <p>Welcome, {{ user.pseudo }}</p>
+      <p>Email: {{ user.username }}</p>
+      <p>Name: {{user.name}}</p>
+      <p>First name: {{user.firstname}}</p>
+      <input type="date" [value]="user.birthdate">
+    </div>
+  </div>
+</div>
