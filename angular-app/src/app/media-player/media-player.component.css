@@ -68,3 +68,11 @@ button:focus {
 input[type="range"] {
   margin: 0 5px;
 }
+
+#Play {
+  background: #333;
+  color: white;
+}
+#Play:hover {
+  background: #555;
+}
