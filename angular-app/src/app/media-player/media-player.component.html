@@ -1,13 +1,23 @@
 <div class="media-player">
     <video #videoPlayer width="600">
-      <source src="" type="video/mp4">
-      Your browser does not support the video tag.
+        <source
+            src="/assets/video/videotest.mp4"
+            type="video/mp4"
+        />
     </video>
     <div class="controls">
-      <button (click)="playVideo()">Play</button>
-      <button (click)="pauseVideo()">Pause</button>
-      <button (click)="stopVideo()">Stop</button>
-      <input type="range" (input)="setVolume($event)" min="0" max="1" step="0.1" />
+        <input class="progress" type="range" #progressBar (input)="seek($event)" min="0" max="100" step="1" />
+        <button (click)="togglePlayPause()">
+
+        </button>
+        <i *ngIf="!isPlaying" class="bi bi-play"></i>
+        <i *ngIf="isPlaying" class="bi bi-pause"></i>
+        <input class="volume"
+            type="range"
+            (input)="setVolume($event)"
+            min="0"
+            max="1"
+            step="0.1"
+        />
     </div>
-  </div>
-  
+</div>
