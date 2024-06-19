@@ -8,7 +8,7 @@ import { AccountComponent } from "./account/account.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { ReactiveFormsModule } from "@angular/forms";
-import { HttpClient, HttpClientModule } from "@angular/common/http";
+import { HttpClientModule } from "@angular/common/http";
 import { StyleModule } from "./style/style.module";
 import { ElementCoverComponent } from "./element-cover/element-cover.component";
 import { AuthGuard } from "./guards/auth.guard";
