@@ -8,7 +8,8 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 export class MediaPlayerComponent {
   @ViewChild('videoPlayer') videoPlayer!: ElementRef;
   @ViewChild('progressBar') progressBar!: ElementRef;
-
+  @ViewChild('progressText') progressText!: ElementRef;
+  
   isPlaying: boolean = false;
 
   ngAfterViewInit() {
@@ -22,9 +23,16 @@ export class MediaPlayerComponent {
     const currentTime = this.videoPlayer.nativeElement.currentTime;
     if (duration > 0) {
       this.progressBar.nativeElement.value = (currentTime / duration) * 100;
+      const formattedDurationMin = Math.floor(duration / 60).toString().padStart(2, '0');
+      const formattedDurationSec = Math.floor(duration % 60).toString().padStart(2, '0');
+      const formattedCurrentMin = Math.floor(currentTime / 60).toString().padStart(2, '0');
+      const formattedCurrentSec = Math.floor(currentTime % 60).toString().padStart(2, '0');
+      const formattedCurrentTime = `${formattedCurrentMin}:${formattedCurrentSec}`;
+      const formattedDurationTime = `${formattedDurationMin}:${formattedDurationSec}`;
+      this.progressText.nativeElement.textContent = `${formattedCurrentTime} / ${formattedDurationTime}`;
     }
   }
-
+  
 
   seek(event: Event) {
     const seekTo = parseFloat((event.target as HTMLInputElement).value);

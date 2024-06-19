@@ -22,20 +22,6 @@ video {
   z-index: 10;
 }
 
-.progress::-webkit-slider-thumb {
-  height: 8px;
-  width: 8px;
-  background: transparent;
-  cursor: pointer;
-}
-
-.progress::-moz-range-thumb {
-  height: 8px;
-  width: 8px;
-  background: transparent;
-  cursor: pointer;
-}
-
 
 .controls { 
   position: absolute;
@@ -50,11 +36,11 @@ video {
   border-radius: 5px;
   z-index: 1
 }
+
 button {
   margin: 0 5px;
-  padding: 10px;
   font-size: 16px;
-  background-color: #333;
+  background-color: #ffffff00;
   color: white;
   border: none;
   border-radius: 5px;
@@ -69,10 +55,3 @@ input[type="range"] {
   margin: 0 5px;
 }
 
-#Play {
-  background: #333;
-  color: white;
-}
-#Play:hover {
-  background: #555;
-}
