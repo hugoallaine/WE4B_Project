@@ -1,0 +1,15 @@
+<div class="container mt-4">
+    <div class="row">
+      <div *ngFor="let album of albums" class="col-md-4 mb-4">
+        <div class="card">
+          <img [src]="album.coverUrl" class="card-img-top" alt="{{ album.title }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ album.title }}</h5>
+            <p class="card-text">{{ album.artist }}</p>
+            <p class="card-text"><small class="text-muted">{{ album.year }}</small></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

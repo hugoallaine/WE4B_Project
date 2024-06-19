@@ -8,9 +8,10 @@
     <div class="controls">
         <input class="progress" type="range" #progressBar (input)="seek($event)" min="0" max="100" step="1" />
         <button (click)="togglePlayPause()">
-            <img #Play *ngIf="!isPlaying" role="img" src="/assets/icons/play.svg" alt="Play" />
-            <img #Play *ngIf="isPlaying" role="img" src="/assets/icons/pause.svg" alt="Pause" />
+            <i *ngIf="!isPlaying" class="bi bi-play" style="font-size: 2rem; color: white;"></i>
+            <i *ngIf="isPlaying" class="bi bi-pause" style="font-size: 2rem; color: white;"></i>
         </button>
+        <p class="time" #progressText>0:00</p>
         <input class="volume"
             type="range"
             (input)="setVolume($event)"

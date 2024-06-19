@@ -1,0 +1,13 @@
+<div class="container mt-4">
+    <div class="list-group">
+      <div *ngFor="let music of musics" class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{ music.title }}</h5>
+          <small>{{ music.duration }} min</small>
+        </div>
+        <p class="mb-1">{{ music.artist }}</p>
+        <small>{{ music.album }}</small>
+      </div>
+    </div>
+  </div>
+  

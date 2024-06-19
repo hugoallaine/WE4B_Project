@@ -1,4 +1,50 @@
 <app-navbar></app-navbar>
-<div class="d-flex flex-wrap justify-content-center">
-    <app-element-cover *ngFor="let filePath of filePaths" [filePath]="filePath"></app-element-cover>
-</div>
+<div class="container mt-4">
+    <h1>Music Library</h1>
+    <input type="file" id="directoryPicker" webkitdirectory (change)="onDirectorySelected($event)" hidden>
+    <button class="btn btn-primary" (click)="openDirectoryPicker()">Scan Directory</button>
+    
+    <!-- Artists Section -->
+    <h2 class="mt-4">Artists</h2>
+    <div class="row mt-4">
+      <div *ngFor="let artist of artists" class="col-md-4 mb-4">
+        <div class="card">
+          <img [src]="artist.pictureUrl || 'assets/default-artist.jpg'" class="card-img-top" alt="{{ artist.name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ artist.name }}</h5>
+            <p class="card-text">{{ artist.bio }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Albums Section -->
+    <h2 class="mt-4">Albums</h2>
+    <div class="row mt-4">
+      <div *ngFor="let album of albums" class="col-md-4 mb-4">
+        <div class="card">
+          <img [src]="album.coverUrl || 'assets/default-cover.jpg'" class="card-img-top" alt="{{ album.title }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ album.title }}</h5>
+            <p class="card-text">{{ album.artist }}</p>
+            <p class="card-text"><small class="text-muted">{{ album.year }}</small></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Musics Section -->
+    <h2 class="mt-4">Musics</h2>
+    <div class="list-group mt-4">
+      <div *ngFor="let music of musics" class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{ music.title }}</h5>
+          <small>{{ music.duration }} min</small>
+        </div>
+        <p class="mb-1">{{ music.artist }}</p>
+        <small>{{ music.album }}</small>
+        <img *ngIf="music.coverUrl" [src]="music.coverUrl" alt="Cover" class="img-thumbnail mt-2">
+      </div>
+    </div>
+  </div>
+  
