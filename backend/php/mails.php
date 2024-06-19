@@ -23,7 +23,7 @@ function sendMail($destinataire, $sujet, $message) {
         $mail->Password = $json['SMTP_password'];
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port = $json['SMTP_port'];
-        $mail->setFrom($json['SMTP_user'], 'YGreg');
+        $mail->setFrom($json['SMTP_user'], 'Flex');
         $mail->addAddress($destinataire);
         $mail->addReplyTo($json['SMTP_noreply'],'No-Reply');
         $mail->isHTML(true);
@@ -44,15 +44,15 @@ function sendMailConfirm($destinataire, $confirmkey) {
     $parent_folder = dirname($_SERVER['SCRIPT_NAME']);
     $validator_path = ($parent_folder === '/') ? 'validator.php' : $parent_folder . '/validator.php';
     $confirm_link = 'http://' . $_SERVER['HTTP_HOST'] . $validator_path;
-    $sujet = "Confirmation de votre compte YGreg";
+    $sujet = "Confirmation de votre compte Flex";
     $message = '
     <html>
     <head>
         <meta charset="utf-8">
-        <title>Confirmation de votre compte YGreg</title>
+        <title>Confirmation de votre compte Flex</title>
     </head>
     <body>
-        <h1>V&eacute;rification de votre adresse email - YGreg</h1>
+        <h1>V&eacute;rification de votre adresse email - Flex</h1>
         <p>Bonjour, veuillez confirmer votre compte en cliquant sur le lien suivant : <a href="'.$confirm_link.'?email='.urlencode($destinataire).'&key='.urlencode($confirmkey).'">Confirmer</a></p>
         <p>Si vous n\'&ecirc;tes pas &agrave; l\'origine de cette action, merci d\'ignorer ce mail.</p>
     </body>
@@ -66,15 +66,15 @@ function sendMailReset($destinataire, $resetkey) {
     $parent_folder = dirname($_SERVER['SCRIPT_NAME']);
     $validator_path = ($parent_folder === '/') ? 'validator.php' : $parent_folder . '/validator.php';
     $confirm_link = 'http://' . $_SERVER['HTTP_HOST'] . $validator_path;
-    $sujet = "Réinitialisation de votre mot de passe YGreg";
+    $sujet = "Réinitialisation de votre mot de passe Flex";
     $message = '
     <html>
     <head>
         <meta charset="utf-8">
-        <title>R&eacute;initialisation de votre mot de passe YGreg</title>
+        <title>R&eacute;initialisation de votre mot de passe Flex</title>
     </head>
     <body>
-        <h1>R&eacute;initialisation de votre mot de passe - YGreg</h1>
+        <h1>R&eacute;initialisation de votre mot de passe - Flex</h1>
         <p>Bonjour, veuillez r&eacute;initialiser votre mot de passe en cliquant sur le lien suivant : <a href="'.$confirm_link.'?email='.urlencode($destinataire).'&key='.urlencode($resetkey).'">Réinitialiser</a></p>
         <p>Si vous n\'&ecirc;tes pas &agrave; l\'origine de cette action, merci d\'ignorer ce mail.</p>
     </body>
@@ -88,15 +88,15 @@ function sendMailReset($destinataire, $resetkey) {
  * @param string $destinataire
  */
 function sendMailTfaEnabled($destinataire) {
-    $sujet = "Activation de l'authentification à deux facteurs YGreg";
+    $sujet = "Activation de l'authentification à deux facteurs Flex";
     $message = '
     <html>
     <head>
         <meta charset="utf-8">
-        <title>Activation de l\'authentification &agrave; deux facteurs YGreg</title>
+        <title>Activation de l\'authentification &agrave; deux facteurs Flex</title>
     </head>
     <body>
-        <h1>Activation de l\'authentification &agrave; deux facteurs - YGreg</h1>
+        <h1>Activation de l\'authentification &agrave; deux facteurs - Flex</h1>
         <p>Bonjour, l\'authentification &agrave; deux facteurs a bien &eacute;t&eacute; activ&eacute;e sur votre compte.</p>
         <p>Si vous n\'&ecirc;tes pas &agrave; l\'origine de cette action, merci de contacter le support.</p>
     </body>
@@ -110,15 +110,15 @@ function sendMailTfaEnabled($destinataire) {
  * @param string $destinataire
  */
 function sendMailTfaDisabled($destinataire) {
-    $sujet = "Désactivation de l'authentification à deux facteurs YGreg";
+    $sujet = "Désactivation de l'authentification à deux facteurs Flex";
     $message = '
     <html>
     <head>
         <meta charset="utf-8">
-        <title>Désactivation de l\'authentification &agrave; deux facteurs YGreg</title>
+        <title>Désactivation de l\'authentification &agrave; deux facteurs Flex</title>
     </head>
     <body>
-        <h1>D&eacute;sactivation de l\'authentification &agrave; deux facteurs - YGreg</h1>
+        <h1>D&eacute;sactivation de l\'authentification &agrave; deux facteurs - Flex</h1>
         <p>Bonjour, l\'authentification &agrave; deux facteurs a bien &eacute;t&eacute; d&eacute;sactiv&eacute;e sur votre compte.</p>
         <p>Si vous n\'&ecirc;tes pas &agrave; l\'origine de cette action, merci de contacter le support.</p>
     </body>
