@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'WE4B_Project';
+  filePaths: string[] = [
+    'assets/audio/song1.mp3',
+    'assets/audio/song2.mp3',
+    'assets/audio/song3.mp3'
+  ];
 }

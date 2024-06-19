@@ -18,12 +18,9 @@ Two-factor authentication :
 Sending mail using SMTP authentication :   
 - https://github.com/PHPMailer/PHPMailer   
 
-ReCaptcha :
-- https://github.com/google/recaptcha
-
 ## Developers
 
 - [Hugo Allainé](https://github.com/hugoallaine)
 - [Léo Angonnet](https://github.com/ZenT0x)
-- [Eliott Speyser](https://github.com/Ettotsu)
 - [Quentin Balezeau](https://github.com/balezeauquentin)
+- [Eliott Speyser](https://github.com/Ettotsu)
