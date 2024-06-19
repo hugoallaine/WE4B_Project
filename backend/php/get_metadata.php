@@ -5,6 +5,7 @@ require_once dirname(__FILE__).'/vendor/james-heinrich/getid3/getid3/getid3.php'
 header("Access-Control-Allow-Origin: http://localhost:4200");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header('Content-Type: application/json');
 
 function fetchFromMusicBrainz($title, $artist) {
     $query = urlencode("$title $artist");
@@ -13,8 +14,8 @@ function fetchFromMusicBrainz($title, $artist) {
     return json_decode($response, true);
 }
 
-header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
+
+
 
 if (isset($_GET['file'])) {
     $file = $_GET['file'];

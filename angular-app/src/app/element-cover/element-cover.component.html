@@ -1,8 +1,11 @@
 <div class="card element-card">
-    <img [src]="element.coverUrl" class="card-img-top element-cover" alt="{{element.name}}">
-    <div class="card-body text-center element-info">
-      <h5 class="card-title">{{element.name}}</h5>
-      <p class="card-text">{{element.artist}}</p>
-    </div>
+  <img [src]="element.coverUrl" class="card-img-top element-cover" alt="{{element.name}}">
+  <div class="card-body text-center element-info">
+    <h5 class="card-title">{{element.name}}</h5>
+    <p class="card-text">{{element.artist}}</p>
   </div>
-  
+</div>
+
+<div class="d-flex flex-wrap justify-content-center">
+  <app-element-cover *ngFor="let filePath of filePaths" [filePath]="filePath"></app-element-cover>
+</div>
