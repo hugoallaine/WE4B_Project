@@ -10,9 +10,11 @@ import { RegisterComponent } from "./register/register.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { StyleModule } from "./style/style.module";
-import { ElementCoverComponent } from "./element-cover/element-cover.component";
 import { AuthGuard } from "./guards/auth.guard";
 import { MediaPlayerComponent } from "./media-player/media-player.component";
+import { AlbumsComponent } from './albums/albums.component';
+import { MusicsComponent } from './musics/musics.component';
+import { ArtistsComponent } from './artists/artists.component';
 
 @NgModule({
     declarations: [
@@ -22,8 +24,10 @@ import { MediaPlayerComponent } from "./media-player/media-player.component";
         AccountComponent,
         LoginComponent,
         RegisterComponent,
-        ElementCoverComponent,
         MediaPlayerComponent,
+        AlbumsComponent,
+        MusicsComponent,
+        ArtistsComponent,
     ],
     imports: [
         BrowserModule,

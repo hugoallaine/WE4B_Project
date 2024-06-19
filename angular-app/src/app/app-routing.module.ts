@@ -6,6 +6,10 @@ import { HomeComponent } from "./home/home.component";
 import { AuthGuard } from "./guards/auth.guard";
 import { MediaPlayerComponent } from "./media-player/media-player.component";
 import { AccountComponent } from "./account/account.component";
+import { AlbumsComponent } from './albums/albums.component';
+import { MusicsComponent } from './musics/musics.component';
+import { ArtistsComponent } from './artists/artists.component';
+
 
 const routes: Routes = [
     { path: "", redirectTo: "home", pathMatch: "full" },
@@ -14,6 +18,9 @@ const routes: Routes = [
     { path: "register", component: RegisterComponent },
     { path: "account", component: AccountComponent, canActivate: [AuthGuard] },
     { path: "player", component: MediaPlayerComponent },
+    { path: 'albums', component: AlbumsComponent },
+    { path: 'musics', component: MusicsComponent },
+    { path: 'artists', component: ArtistsComponent },
     { path: "**", redirectTo: "home" },
 ];
 
