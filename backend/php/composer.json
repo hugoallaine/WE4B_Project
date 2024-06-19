@@ -3,6 +3,7 @@
         "james-heinrich/getid3": "^1.9",
         "phpmailer/phpmailer": "^6.9",
         "robthree/twofactorauth": "^3.0",
-        "endroid/qr-code": "^5.0"
+        "endroid/qr-code": "^5.0",
+        "guzzlehttp/guzzle": "^7.8"
     }
 }
