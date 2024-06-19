@@ -4,7 +4,6 @@ import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { HomeComponent } from "./home/home.component";
 import { AuthGuard } from "./guards/auth.guard";
-import { ElementCoverComponent } from "./element-cover/element-cover.component";
 import { MediaPlayerComponent } from "./media-player/media-player.component";
 import { AccountComponent } from "./account/account.component";
 
