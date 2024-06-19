@@ -1,6 +1,6 @@
 <?php
 header("Access-Control-Allow-Origin: http://localhost:4200");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: GET, POST");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 require_once dirname(__FILE__).'/alreadyConnected.php';
 session_start_secure();
@@ -66,7 +66,22 @@ function rrmdir($dir) {
  * - changedpseudo (boolean): true if the pseudo has been changed
  * - pseudo (string): the new pseudo
  */
-if (isConnected()) {
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // Get informations
+    if (isset($_GET['id']) && isset($_GET['token'])) {
+        $id = urldecode($_GET['id']);
+        $token = SecurizeString_ForSQL(urldecode($_GET['token']));
+        $req = $db->prepare("SELECT email, pseudo, name, firstname, birth_date FROM users WHERE id = ? AND token = ?");
+        $req->execute(array($id, $token));
+        $user = $req->fetch();
+        header('Content-Type: application/json');
+        echo json_encode(array('success' => true, 'error' => false, 'username' => $user['email'], 'pseudo' => $user['pseudo'], 'name' => $user['name'], 'firstname' => $user['firstname'], 'birthdate' => $user['birth_date']));
+    } else {
+        header('Content-Type: application/json');
+        echo json_encode(array('error' => true, 'message' => 'Invalid parameters'));
+    }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Change informations
     if (isset($_POST['firstname']) && isset($_POST['name']) && isset($_POST['birthdate']) && isset($_POST['address']) && isset($_POST['city']) && isset($_POST['zipcode']) && isset($_POST['country'])) {
         $firstname = SecurizeString_ForSQL($_POST['firstname']);
@@ -321,6 +336,8 @@ if (isConnected()) {
             $error = 'Mot de passe incorrect';
         }
     }
+} else {
+    $error = 'Invalid request method';
 }
 
 if (isset($error)) {
