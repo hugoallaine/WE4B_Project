@@ -6,6 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  filePaths: string[] = [
+    'assets/audio/song1.mp3',
+    'assets/audio/song2.mp3',
+    'assets/audio/song3.mp3'
+  ];
 
   constructor() { }
 

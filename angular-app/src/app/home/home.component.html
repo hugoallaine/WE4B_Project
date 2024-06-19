@@ -1,1 +1,4 @@
 <app-navbar></app-navbar>
+<div class="d-flex flex-wrap justify-content-center">
+    <app-element-cover *ngFor="let filePath of filePaths" [filePath]="filePath"></app-element-cover>
+</div>
