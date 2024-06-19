@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { MediaPlayerComponent } from "./MediaPlayerComponent";
+import { MediaPlayerComponent } from "./media-player.component";
 
 describe("MediaPlayerComponent", () => {
     let component: MediaPlayerComponent;
