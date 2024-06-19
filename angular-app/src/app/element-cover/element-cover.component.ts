@@ -15,7 +15,7 @@ export class ElementCoverComponent implements OnInit {
     coverUrl: ''
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
     this.loadMetadata(this.filePath);
@@ -29,9 +29,13 @@ export class ElementCoverComponent implements OnInit {
 
       this.element.name = metadata.common.title || 'Unknown Title';
       this.element.artist = metadata.common.artist || 'Unknown Artist';
-      this.element.coverUrl = this.getCoverUrl(metadata.common.picture);
+      if (metadata.common.picture) {
+        this.element.coverUrl = this.getCoverUrl(metadata.common.picture);
+      } else {
+        this.element.coverUrl = 'assets/default-cover.jpg'; // Path to a default image
+      }
 
-      // Si le titre ou l'artiste est manquant, recherche sur MusicBrainz
+      // If the title, artist, or cover image is missing, search on MusicBrainz
       if (!metadata.common.title || !metadata.common.artist || !metadata.common.picture) {
         this.fetchMusicBrainzData(metadata.common.title, metadata.common.artist);
       }
@@ -41,16 +45,16 @@ export class ElementCoverComponent implements OnInit {
     }
   }
 
-  getCoverUrl(picture: any): string {
-    if (picture && picture.length > 0) {
-      const { data, format } = picture[0];
+  getCoverUrl(pictures: any[]): string {
+    if (pictures && pictures.length > 0) {
+      const { data, format } = pictures[0];
       let base64String = '';
       for (let i = 0; i < data.length; i++) {
         base64String += String.fromCharCode(data[i]);
       }
       return `data:${format};base64,${window.btoa(base64String)}`;
     }
-    return 'assets/default-cover.jpg'; // Chemin vers une image par défaut
+    return 'assets/default-cover.jpg'; // Path to a default image
   }
 
   fetchMusicBrainzData(title?: string, artist?: string) {
@@ -62,7 +66,7 @@ export class ElementCoverComponent implements OnInit {
           this.element.name = recording.title;
           this.element.artist = recording['artist-credit'][0].name;
 
-          // Rechercher des images sur Cover Art Archive
+          // Search for cover images on Cover Art Archive
           if (!this.element.coverUrl || this.element.coverUrl === 'assets/default-cover.jpg') {
             this.fetchCoverArt(recording.releases[0]['release-group']['id']);
           }
