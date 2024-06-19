@@ -41,7 +41,7 @@ export class AuthService {
   }
 
   private checkSession() {
-    this.http.get<any>(`${this.apiUrl}/check_session.php`).subscribe(response => {
+    this.http.get<any>(`${this.apiUrl}/checkSession.php`).subscribe(response => {
       this.loggedIn.next(response.logged_in);
     });
   }
