@@ -6,12 +6,14 @@ import { HomeComponent } from "./home/home.component";
 import { AuthGuard } from "./guards/auth.guard";
 import { ElementCoverComponent } from "./element-cover/element-cover.component";
 import { MediaPlayerComponent } from "./media-player/media-player.component";
+import { AccountComponent } from "./account/account.component";
 
 const routes: Routes = [
     { path: "", redirectTo: "home", pathMatch: "full" },
     { path: "home", component: HomeComponent, canActivate: [AuthGuard] },
     { path: "login", component: LoginComponent },
     { path: "register", component: RegisterComponent },
+    { path: "account", component: AccountComponent, canActivate: [AuthGuard] },
     { path: "cover", component: ElementCoverComponent },
     { path: "player", component: MediaPlayerComponent },
     { path: "**", redirectTo: "home" },
