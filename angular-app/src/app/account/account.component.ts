@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-account',
@@ -14,8 +15,28 @@ export class AccountComponent implements OnInit {
     name: '',
     birthdate: ''
   }
+  tfa: boolean = false;
+  tfa_secret: string = '';
+  tfa_qrcode: string = '';
 
-  constructor(authService: AuthService) { 
+  changeInfoForm = new FormGroup ({
+    pseudo: new FormControl(''),
+    firstname: new FormControl(''),
+    name: new FormControl(''),
+    birthdate: new FormControl('')
+  })
+
+  changePasswordForm = new FormGroup ({
+    oldPassword: new FormControl(''),
+    newPassword: new FormControl(''),
+    newPassword2: new FormControl('')
+  })
+
+  deleteAccountForm = new FormGroup ({
+    passwordDelete: new FormControl('')
+  })
+
+  constructor(private authService: AuthService) { 
     authService.getUser().subscribe(response => {
       if (response.success) {
         this.user.username = response.username;
@@ -27,9 +48,67 @@ export class AccountComponent implements OnInit {
         console.log(response.message);
       }
     });
+    this.tfa = authService.getTfa();
+    authService.getTfaSecret().subscribe(response => {
+      if (response.success) {
+        this.tfa_secret = response.tfa_secret;
+        this.tfa_qrcode = response.tfa_qrcode;
+      } else {
+        console.log(response.message);
+      }
+    });
   }
 
   ngOnInit(): void {
+  }
+
+  changeInfo(): void {
+    const pseudo = this.changeInfoForm.get('pseudo')?.value;
+    const firstname = this.changeInfoForm.get('firstname')?.value;
+    const name = this.changeInfoForm.get('name')?.value;
+    const birthdate = this.changeInfoForm.get('birthdate')?.value;
+
+    this.authService.changeInfo(pseudo, firstname, name, birthdate).subscribe(response => {
+      if (response.success) {
+        this.user.pseudo = response.pseudo;
+        this.user.firstname = response.firstname;
+        this.user.name = response.name;
+        this.user.birthdate = response.birthdate;
+        console.log('Info changed');
+      } else {
+        console.log(response.message);
+      }
+    });
+  }
+
+  changePassword(): void {
+    const oldPassword = this.changePasswordForm.get('oldPassword')?.value;
+    const newPassword = this.changePasswordForm.get('newPassword')?.value;
+    const newPassword2 = this.changePasswordForm.get('newPassword2')?.value;
+
+    this.authService.changePassword(oldPassword, newPassword, newPassword2).subscribe(response => {
+      if (response.success) {
+        this.authService.logout().subscribe(() => {
+          console.log('Password changed');
+        });
+      } else {
+        console.log(response.message);
+      }
+    });
+  }
+
+  deleteAccount(): void {
+    const password = this.deleteAccountForm.get('passwordDelete')?.value;
+
+    this.authService.deleteAccount(password).subscribe(response => {
+      if (response.success) {
+        this.authService.logout().subscribe(() => {
+          console.log('Account deleted');
+        });
+      } else {
+        console.log(response.message);
+      }
+    });
   }
 
 }

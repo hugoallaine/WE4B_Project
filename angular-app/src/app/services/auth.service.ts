@@ -12,11 +12,10 @@ export class AuthService {
   private user = {
     id: 0,
     token: '',
+    tfa: false
   };
 
-  constructor(private http: HttpClient) {
-    this.checkSession();
-  }
+  constructor(private http: HttpClient) { }
 
   login(username: string, password: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login.php`, { user: username, password: password }).pipe(
@@ -25,6 +24,7 @@ export class AuthService {
           this.loggedIn = true;
           this.user.id = response.id;
           this.user.token = response.token;
+          this.user.tfa = response.tfa;
         }
       })
     );
@@ -40,6 +40,7 @@ export class AuthService {
         this.loggedIn = false;
         this.user.id = 0;
         this.user.token = '';
+        this.user.tfa = false;
       })
     );
   }
@@ -48,14 +49,27 @@ export class AuthService {
     return this.loggedIn;
   }
 
-  private checkSession() {
-    this.http.get<any>(`${this.apiUrl}/checkSession.php`).subscribe(response => {
-      this.loggedIn = response.status;
-      console.log(this.loggedIn)
-    });
-  }
-
   getUser(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/changeAccount.php?id=${this.user.id}&token=${this.user.token}`);
+  }
+
+  getTfaSecret(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/changeAccount.php?id=${this.user.id}&token=${this.user.token}&tfa=1`);
+  }
+
+  getTfa(): boolean {
+    return this.user.tfa;
+  }
+
+  changeInfo(pseudo: string, firstname: string, name: string, birthdate: Date): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/changeAccount.php`, { id: this.user.id, token: this.user.token, pseudo: pseudo, firstname: firstname, name: name, birthdate: birthdate });
+  }
+
+  changePassword(oldPassword: string, newPassword: string, newPassword2: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/changeAccount.php`, { id: this.user.id, token: this.user.token, oldpassword: oldPassword, newpassword: newPassword, newpasswordconfirm: newPassword2 });
+  }
+
+  deleteAccount(password: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/changeAccount.php`, { id: this.user.id, token: this.user.token, passwordCheckDelete: password });
   }
 }
