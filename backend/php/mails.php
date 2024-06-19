@@ -1,9 +1,7 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-require_once dirname(__FILE__).'/vendor/PHPMailer/src/PHPMailer.php';
-require_once dirname(__FILE__).'/vendor/PHPMailer/src/Exception.php';
-require_once dirname(__FILE__).'/vendor/PHPMailer/src/SMTP.php';
+require_once dirname(__FILE__).'/vendor/autoload.php';
 require_once dirname(__FILE__).'/json.php';
 
 /**

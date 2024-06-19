@@ -7,7 +7,8 @@ session_start_secure();
 require_once dirname(__FILE__).'/db.php';
 require_once dirname(__FILE__).'/vendor/autoload.php';
 use RobThree\Auth\TwoFactorAuth;
-$tfa = new TwoFactorAuth($issuer = 'Flex');
+use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
+$tfa = new TwoFactorAuth(new EndroidQrCodeProvider());
 
 // Réception des données JSON
 $data = json_decode(file_get_contents("php://input"));

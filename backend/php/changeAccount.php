@@ -8,7 +8,8 @@ require_once dirname(__FILE__).'/db.php';
 require_once dirname(__FILE__).'/mails.php';
 require_once dirname(__FILE__).'/vendor/autoload.php';
 use RobThree\Auth\TwoFactorAuth;
-$tfa = new TwoFactorAuth($issuer = 'YGreg');
+use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
+$tfa = new TwoFactorAuth(new EndroidQrCodeProvider());
 
 /**
  * Function to delete a directory and its content
