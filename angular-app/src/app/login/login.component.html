@@ -24,7 +24,7 @@
                 <label class="form-check-label" for="showpassword">Show passwords</label>
             </div>
             <div *ngIf="tfa" id="tfaDiv" class="form-floating mb-3">
-                <input type="text" class="form-control" id="tfa_code" name="tfa_code" placeholder=""
+                <input [class.is-valid]="tfa_code?.valid && (tfa_code?.dirty || tfa_code?.touched)" [class.is-invalid]="tfa_code?.invalid && (tfa_code?.dirty || tfa_code?.touched)" type="text" class="form-control" id="tfa_code" name="tfa_code" placeholder=""
                     formControlName="tfa_code" autocomplete="one-time-code" />
                 <label for="tfa_code" class="form-label">2FA code</label>
                 <div *ngIf="tfa_code?.invalid && (tfa_code?.dirty || tfa_code?.touched)" class="text-danger">
