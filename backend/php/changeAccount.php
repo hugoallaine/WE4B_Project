@@ -9,7 +9,7 @@ require_once dirname(__FILE__).'/mails.php';
 require_once dirname(__FILE__).'/vendor/autoload.php';
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
-$tfa = new TwoFactorAuth(new EndroidQrCodeProvider());
+$tfa = new TwoFactorAuth(new EndroidQrCodeProvider(), "Flex");
 
 /**
  * API to change account informations
@@ -46,12 +46,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['id']) && isset($_GET['token']) && !isset($_GET['tfa'])) {
         $id = urldecode($_GET['id']);
         $token = SecurizeString_ForSQL(urldecode($_GET['token']));
-        $req = $db->prepare("SELECT email, pseudo, name, firstname, birth_date FROM users WHERE id = ? AND token = ?");
+        $req = $db->prepare("SELECT email, pseudo, name, firstname, birth_date, tfaKey FROM users WHERE id = ? AND token = ?");
         $req->execute(array($id, $token));
         $user = $req->fetch();
         if ($user) {
+            if ($user['tfaKey'] != NULL) {
+                $tfa_status = true;
+            } else {
+                $tfa_status = false;
+            }	
             header('Content-Type: application/json');
-            echo json_encode(array('success' => true, 'error' => false, 'username' => $user['email'], 'pseudo' => $user['pseudo'], 'name' => $user['name'], 'firstname' => $user['firstname'], 'birthdate' => $user['birth_date']));
+            echo json_encode(array('success' => true, 'error' => false, 'username' => $user['email'], 'pseudo' => $user['pseudo'], 'name' => $user['name'], 'firstname' => $user['firstname'], 'birthdate' => $user['birth_date'], 'tfa_status' => $tfa_status));
         } else {
             header('Content-Type: application/json');
             echo json_encode(array('success' => false, 'error' => true, 'message' => 'Invalid token'));
@@ -188,10 +193,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             }
 
             // Enable 2FA
-            if (isset($data->tfa_code) && isset($data->passwordcheck) && isset($data->tfa_secret)) {
+            if (isset($data->tfa_code) && isset($data->enablePassword) && isset($data->tfa_secret)) {
                 $tfa_code = SecurizeString_ForSQL($data->tfa_code);
                 $tfa_secret = SecurizeString_ForSQL($data->tfa_secret);
-                $password_check_tfa = SecurizeString_ForSQL($data->passwordcheck);
+                $password_check_tfa = SecurizeString_ForSQL($data->enablePassword);
                 $req = $db->prepare('SELECT email,password FROM users WHERE id = ?');
                 $req->execute(array($id));
                 $user = $req->fetch();
@@ -211,8 +216,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             }
 
             // Disable 2FA
-            if (isset($data->passwordcheck)) {
-                $password_check = SecurizeString_ForSQL($data->passwordcheck);
+            if (isset($data->disablePassword)) {
+                $password_check = SecurizeString_ForSQL($data->disablePassword);
                 $req = $db->prepare('SELECT email,password FROM users WHERE id = ?');
                 $req->execute(array($id));
                 $user = $req->fetch();

@@ -19,24 +19,33 @@ export class AccountComponent implements OnInit {
   tfa_secret: string = '';
   tfa_qrcode: string = '';
 
-  changeInfoForm = new FormGroup ({
+  changeInfoForm = new FormGroup({
     pseudo: new FormControl(''),
     firstname: new FormControl(''),
     name: new FormControl(''),
     birthdate: new FormControl('')
   })
 
-  changePasswordForm = new FormGroup ({
+  changePasswordForm = new FormGroup({
     oldPassword: new FormControl(''),
     newPassword: new FormControl(''),
     newPassword2: new FormControl('')
   })
 
-  deleteAccountForm = new FormGroup ({
+  enableTfaForm = new FormGroup({
+    tfa_code: new FormControl(''),
+    enablePassword: new FormControl('')
+  })
+
+  disableTfaForm = new FormGroup({
+    disablePassword: new FormControl('')
+  })
+
+  deleteAccountForm = new FormGroup({
     passwordDelete: new FormControl('')
   })
 
-  constructor(private authService: AuthService) { 
+  constructor(private authService: AuthService) {
     authService.getUser().subscribe(response => {
       if (response.success) {
         this.user.username = response.username;
@@ -44,19 +53,22 @@ export class AccountComponent implements OnInit {
         this.user.firstname = response.firstname;
         this.user.name = response.name;
         this.user.birthdate = response.birthdate;
+        this.tfa = response.tfa_status;
       } else {
         console.log(response.message);
       }
     });
     this.tfa = authService.getTfa();
-    authService.getTfaSecret().subscribe(response => {
-      if (response.success) {
-        this.tfa_secret = response.tfa_secret;
-        this.tfa_qrcode = response.tfa_qrcode;
-      } else {
-        console.log(response.message);
-      }
-    });
+    if (!this.tfa) {
+      authService.getTfaSecret().subscribe(response => {
+        if (response.success) {
+          this.tfa_secret = response.tfa_secret;
+          this.tfa_qrcode = response.tfa_qrcode;
+        } else {
+          console.log(response.message);
+        }
+      });
+    }
   }
 
   ngOnInit(): void {
@@ -91,6 +103,63 @@ export class AccountComponent implements OnInit {
         this.authService.logout().subscribe(() => {
           console.log('Password changed');
         });
+      } else {
+        console.log(response.message);
+      }
+    });
+  }
+
+  enableTfa(): void {
+    const tfa_code = this.enableTfaForm.get('tfa_code')?.value;
+    const enablePassword = this.enableTfaForm.get('enablePassword')?.value;
+    const tfa_secret = this.tfa_secret;
+
+    this.authService.enableTfa(tfa_code, enablePassword, tfa_secret).subscribe(response => {
+      if (response.success) {
+        this.authService.getUser().subscribe(response => {
+          if (response.success) {
+            this.user.username = response.username;
+            this.user.pseudo = response.pseudo;
+            this.user.firstname = response.firstname;
+            this.user.name = response.name;
+            this.user.birthdate = response.birthdate;
+            this.tfa = response.tfa_status;
+          } else {
+            console.log(response.message);
+          }
+        });
+      } else {
+        console.log(response.message);
+      }
+    });
+  }
+
+  disableTfa(): void {
+    const disablePassword = this.disableTfaForm.get('disablePassword')?.value;
+
+    this.authService.disableTfa(disablePassword).subscribe(response => {
+      if (response.success) {
+        this.authService.getUser().subscribe(response => {
+          if (response.success) {
+            this.user.username = response.username;
+            this.user.pseudo = response.pseudo;
+            this.user.firstname = response.firstname;
+            this.user.name = response.name;
+            this.user.birthdate = response.birthdate;
+            this.tfa = response.tfa_status;
+            this.authService.getTfaSecret().subscribe(response => {
+              if (response.success) {
+                this.tfa_secret = response.tfa_secret;
+                this.tfa_qrcode = response.tfa_qrcode;
+              } else {
+                console.log(response.message);
+              }
+            });
+          } else {
+            console.log(response.message);
+          }
+        });
+        console.log('Tfa disabled');
       } else {
         console.log(response.message);
       }

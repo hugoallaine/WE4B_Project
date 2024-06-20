@@ -17,8 +17,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  login(username: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login.php`, { user: username, password: password }).pipe(
+  login(username: string, password: string, tfa_code: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login.php`, { user: username, password: password, tfa_code: tfa_code}).pipe(
       tap(response => {
         if (response.success) {
           this.loggedIn = true;
@@ -67,6 +67,14 @@ export class AuthService {
 
   changePassword(oldPassword: string, newPassword: string, newPassword2: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/changeAccount.php`, { id: this.user.id, token: this.user.token, oldpassword: oldPassword, newpassword: newPassword, newpasswordconfirm: newPassword2 });
+  }
+
+  enableTfa(tfa_code: string, enablePassword: string, tfa_secret: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/changeAccount.php`, { id: this.user.id, token: this.user.token, tfa_code: tfa_code, enablePassword: enablePassword, tfa_secret: tfa_secret});
+  }
+
+  disableTfa(disablePassword: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/changeAccount.php`, { id: this.user.id, token: this.user.token, disablePassword: disablePassword});
   }
 
   deleteAccount(password: string): Observable<any> {
