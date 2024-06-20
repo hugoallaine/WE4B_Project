@@ -1,46 +1,50 @@
 <app-wrapper>
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data" id="formRegisterId" class="formRegister" method="POST" action="">
     <div>
-      <h1 class="mb-3" id="modalRegisterLabel">S'inscrire</h1>
+      <h1 class="mb-3" id="modalRegisterLabel">Sign up</h1>
     </div>
-    <div class="d-flex justify-content-around">
+    <div class="d-flex justify-content-around align-items-start">
       <div>
         <div class="mb-3">
-          <label for="mail" class="form-label">Adresse email</label>
-          <input type="text" class="form-control" id="mail" name="mail-r" formControlName="username">
-          <div class="form-text">Utiliser une adresse email valide uniquement. Un mail de vérification vous sera envoyé.</div>
+          <label for="mail" class="form-label">Email Address</label>
+          <input [class.is-valid]="username?.valid && (username?.dirty || username?.touched)" [class.is-invalid]="username?.invalid && (username?.dirty || username?.touched)" type="text" class="form-control" id="mail" name="mail-r" formControlName="username">
+          <div class="form-text">Use a valid email address only. A verification email will be sent to you.</div>
           <div *ngIf="username?.invalid && (username?.dirty || username?.touched)" class="text-danger">
-            <div *ngIf="username?.hasError('required')">L'adresse mail est requise.</div>
-            <div *ngIf="username?.hasError('email')">L'adresse mail n'est pas valide.</div>
+            <div *ngIf="username?.hasError('required')">Email address is required.</div>
+            <div *ngIf="username?.hasError('email')">Invalid email address.</div>
           </div>
         </div>
         <div class="mb-3">
-          <label for="password" class="form-label">Mot de passe</label>
-          <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" formControlName="password">
+          <label for="password" class="form-label">Password</label>
+          <input [class.is-valid]="password?.valid && (password?.dirty || password?.touched)" [class.is-invalid]="password?.invalid && (password?.dirty || password?.touched)" type="password" class="form-control" id="password" name="password" autocomplete="new-password" formControlName="password">
           <div class="form-text">
-            Les caractéristiques minimales pour un mot de passe sont :
+            The minimum requirements for a password are :
             <ul>
-              <li>12 caractères</li>
-              <li>1 majuscule</li>
-              <li>1 chiffre</li>
-              <li>1 caractère spécial</li>
+              <li [class.text-success]="checkPasswordCriteria()['validLength']">12 characters</li>
+              <li [class.text-success]="checkPasswordCriteria()['hasUppercase']">1 uppercase</li>
+              <li [class.text-success]="checkPasswordCriteria()['hasDigit']">1 digit</li>
+              <li [class.text-success]="checkPasswordCriteria()['hasSpecial']">1 special character</li>
             </ul>
           </div>
         </div>
         <div class="mb-2">
-          <label for="password-r-repeat" class="form-label">Répéter le mot de passe</label>
-          <input type="password" class="form-control" id="password2" name="password2" formControlName="password2">
+          <label for="password-r-repeat" class="form-label">Confirm password</label>
+          <input [class.is-valid]="password2?.valid && (password2?.dirty || password2?.touched)" [class.is-invalid]="password2?.invalid && (password2?.dirty || password2?.touched)" type="password" class="form-control" id="password2" name="password2" formControlName="password2">
         </div>
         <div class="form-check mb-3">
           <input class="form-check-input" type="checkbox" id="showpassword" formControlName="showPassword" (change)="togglePasswordVisibility()">
-          <label class="form-check-label" for="showpassword">Montrer le mot de passe</label>
+          <label class="form-check-label" for="showpassword">Show passwords</label>
         </div>
       </div>
       <div class="vr m-3"></div>
       <div>
         <div class="mb-3">
-          <label for="pseudo" class="form-label">Pseudo</label>
-          <input type="text" class="form-control" id="pseudo" name="pseudo-r" autocomplete="username" formControlName="pseudo">
+          <label for="pseudo" class="form-label">Nickname</label>
+          <input [class.is-valid]="pseudo?.valid && (pseudo?.dirty || pseudo?.touched)" [class.is-invalid]="pseudo?.invalid && (pseudo?.dirty || pseudo?.touched)" type="text" class="form-control" id="pseudo" name="pseudo-r" autocomplete="username" formControlName="pseudo">
+          <div *ngIf="pseudo?.invalid && (pseudo?.dirty || pseudo?.touched)" class="text-danger">
+            <div *ngIf="pseudo?.hasError('required')">Nickname is required.</div>
+            <div *ngIf="pseudo?.hasError('pattern')">Nickname must contain between 1 and 32 characters.</div>
+          </div>
         </div>
         <div class="mb-3">
           <input type="hidden" name="MAX_FILE_SIZE" value="2097152">
@@ -48,25 +52,35 @@
           <input type="file" class="form-control" id="avatar" name="avatar-r" formControlName="avatar">
         </div>
         <hr>
-        <div class="row mb-3">
-          <div class="col">
-            <label for="firstname" class="form-label">Prénom</label>
-            <input type="text" class="form-control" id="firstname" name="firstname-r" autocomplete="given-name" formControlName="firstname">
+        <div class="mb-3">
+          <div class="row">
+            <div class="col">
+              <label for="firstname" class="form-label">First Name</label>
+              <input [class.is-valid]="firstname?.valid && (firstname?.dirty || firstname?.touched)" [class.is-invalid]="firstname?.invalid && (firstname?.dirty || firstname?.touched)" type="text" class="form-control" id="firstname" name="firstname-r" autocomplete="given-name" formControlName="firstname">
+            </div>
+            <div class="col">
+              <label for="name" class="form-label">Last Name</label>
+              <input [class.is-valid]="name?.valid && (name?.dirty || name?.touched)" [class.is-invalid]="name?.invalid && (name?.dirty || name?.touched)" type="text" class="form-control" id="name" name="name-r" autocomplete="family-name" formControlName="name">
+            </div>
           </div>
-          <div class="col">
-            <label for="name" class="form-label">Nom</label>
-            <input type="text" class="form-control" id="name" name="name-r" autocomplete="family-name" formControlName="name">
+          <div *ngIf="firstname?.invalid && (firstname?.dirty || firstname?.touched)" class="text-danger">
+            <div *ngIf="firstname?.hasError('required')">First name is required.</div>
+            <div *ngIf="firstname?.hasError('pattern')">First name must contain between 1 and 32 characters.</div>
+          </div>
+          <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="text-danger">
+            <div *ngIf="name?.hasError('required')">Last name is required.</div>
+            <div *ngIf="name?.hasError('pattern')">Last name must contain between 1 and 32 characters.</div>
           </div>
         </div>
         <div class="mb-3">
-          <label for="birthdate" class="form-label">Date de naissance</label>
-          <input type="date" class="form-control" id="birthdate" name="birthdate-r" autocomplete="bday" formControlName="birthdate">
+          <label for="birthdate" class="form-label">Birth Date</label>
+          <input [class.is-valid]="birthdate?.valid && (birthdate?.dirty || birthdate?.touched)" [class.is-invalid]="birthdate?.invalid && (birthdate?.dirty || birthdate?.touched)" type="date" class="form-control" id="birthdate" name="birthdate-r" autocomplete="bday" formControlName="birthdate">
         </div>
         <div id="error-message" class="text-danger mb-3 text-center" *ngIf="error_message">{{error_message}}</div>
       </div>
     </div>
     <div class="d-flex flex-column align-items-center">
-      <input type="submit" class="btn btn-primary mb-2 fs-5" name="formRegister" value="Valider" />
+      <input type="submit" class="btn btn-primary mb-2 fs-5" name="formRegister" [disabled]="!registerForm.valid" value="Sign up" />
       <p>Already registered? <a routerLink="/login">Sign in</a></p>
     </div>
   </form>

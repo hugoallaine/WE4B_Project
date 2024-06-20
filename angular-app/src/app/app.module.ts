@@ -15,6 +15,7 @@ import { MediaPlayerComponent } from "./media-player/media-player.component";
 import { AlbumsComponent } from './albums/albums.component';
 import { MusicsComponent } from './musics/musics.component';
 import { ArtistsComponent } from './artists/artists.component';
+import { NotificationComponent } from './notification/notification.component';
 import { ArtistDetailComponent } from './artist-detail/artist-detail.component';
 import { AlbumDetailComponent } from './album-detail/album-detail.component';
 
@@ -30,6 +31,7 @@ import { AlbumDetailComponent } from './album-detail/album-detail.component';
         AlbumsComponent,
         MusicsComponent,
         ArtistsComponent,
+        NotificationComponent,
         ArtistDetailComponent,
         AlbumDetailComponent,
     ],

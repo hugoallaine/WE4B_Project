@@ -1,9 +1,6 @@
 <div class="media-player">
     <video #videoPlayer width="600">
-        <source
-            src="/assets/video/videotest.mp4"
-            type="video/mp4"
-        />
+        <source src="/assets/video/videotest.mp4" type="video/mp4" />
     </video>
     <div class="controls">
         <input class="progress" type="range" #progressBar (input)="seek($event)" min="0" max="100" step="1" />
@@ -11,13 +8,23 @@
             <i *ngIf="!isPlaying" class="bi bi-play" style="font-size: 2rem; color: white;"></i>
             <i *ngIf="isPlaying" class="bi bi-pause" style="font-size: 2rem; color: white;"></i>
         </button>
-        <p class="time" #progressText>0:00</p>
-        <input class="volume"
-            type="range"
-            (input)="setVolume($event)"
-            min="0"
-            max="1"
-            step="0.1"
-        />
+        <button (click)="skip(-10)">
+            <i class="bi bi-arrow-counterclockwise" style="font-size: 2rem; color: white;"></i>
+        </button>
+        <button (click)="skip(10)">
+            <i class="bi bi-arrow-clockwise" style="font-size: 2rem; color: white;"></i>
+        </button>
+        <p class="time" #progressText>00:00 / 00:00</p>
+        <button (click)="toggleMute()">
+            <i *ngIf="!isMuted" class="bi bi-volume-up" style="font-size: 2rem; color: white;"></i>
+            <i *ngIf="isMuted" class="bi bi-volume-mute" style="font-size: 2rem; color: white;"></i>
+        </button>
+        <input class="volume" type="range" (input)="setVolume($event)" min="0" max="1" step="0.1" />
+        <button (click)="toggleSettings()">
+            <i class="bi bi-gear" style="font-size: 2rem; color: white;"></i>
+        </button>
+        <button (click)="toggleFullScreen()">
+            <i class="bi bi-fullscreen" style="font-size: 2rem; color: white;"></i>
+        </button>
     </div>
 </div>
