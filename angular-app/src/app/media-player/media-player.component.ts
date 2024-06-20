@@ -5,17 +5,23 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
   templateUrl: './media-player.component.html',
   styleUrls: ['./media-player.component.css']
 })
+
 export class MediaPlayerComponent {
   @ViewChild('videoPlayer') videoPlayer!: ElementRef;
   @ViewChild('progressBar') progressBar!: ElementRef;
   @ViewChild('progressText') progressText!: ElementRef;
   
   isPlaying: boolean = false;
+  isMuted: boolean = false;
 
   ngAfterViewInit() {
     this.videoPlayer.nativeElement.addEventListener('timeupdate', this.updateProgressBar.bind(this));
     this.videoPlayer.nativeElement.addEventListener('play', () => this.isPlaying = true);
     this.videoPlayer.nativeElement.addEventListener('pause', () => this.isPlaying = false);
+    this.videoPlayer.nativeElement.addEventListener('volumechange', () => this.isMuted = this.videoPlayer.nativeElement.muted);
+    this.videoPlayer.nativeElement.addEventListener('ended', () => this.isPlaying = false);
+    this.videoPlayer.nativeElement.addEventListener('click', this.togglePlayPause.bind(this));
+    this.videoPlayer.nativeElement.addEventListener('dblclick', this.toggleFullScreen.bind(this));
   }
   
   updateProgressBar() {
@@ -33,7 +39,6 @@ export class MediaPlayerComponent {
     }
   }
   
-
   seek(event: Event) {
     const seekTo = parseFloat((event.target as HTMLInputElement).value);
     const duration = this.videoPlayer.nativeElement.duration;
@@ -48,10 +53,46 @@ export class MediaPlayerComponent {
     } else {
       this.videoPlayer.nativeElement.pause();
     }
+  } 
+
+  toggleMute() {
+    this.videoPlayer.nativeElement.muted = !this.videoPlayer.nativeElement.muted;
+  }
+
+
+  skip(time : number) {
+    this.videoPlayer.nativeElement.currentTime += time;
   }
 
   setVolume(event: Event) {
     const volume = (event.target as HTMLInputElement).value;
     this.videoPlayer.nativeElement.volume = volume;
+    if (this.videoPlayer.nativeElement.volume == 0) {
+      this.videoPlayer.nativeElement.muted = true;
+    } else {
+      this.videoPlayer.nativeElement.muted = false;
+    }
   }
+
+  toggleFullScreen() {
+    if (this.videoPlayer.nativeElement.requestFullscreen) {
+      this.videoPlayer.nativeElement.requestFullscreen();
+    } else if (this.videoPlayer.nativeElement.mozRequestFullScreen) {
+      this.videoPlayer.nativeElement.mozRequestFullScreen();
+    } else if (this.videoPlayer.nativeElement.webkitRequestFullscreen) {
+      this.videoPlayer.nativeElement.webkitRequestFullscreen();
+    } else if (this.videoPlayer.nativeElement.msRequestFullscreen) {
+      this.videoPlayer.nativeElement.msRequestFullscreen();
+    }
+  }
+
+  toggleSettings(){
+    const settings = document.getElementById("settings");
+    if (settings!.style.display === "block") {
+      settings!.style.display = "none";
+    } else {
+      settings!.style.display = "block";
+    }
+  }
+  
 }
