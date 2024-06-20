@@ -3,8 +3,8 @@
   <h1>Albums</h1>
   <div class="row">
     <div *ngFor="let album of albums" class="col-md-3 mb-4">
-      <div class="card album-card" (click)="navigateTo('album/' + album.id)" style="cursor: pointer;">
-        <img [src]="album.coverUrl || 'assets/default-cover.jpg'" class="card-img-top album-cover" alt="{{ album.title }}">
+      <div class="card album-card hover-clickable" (click)="navigateTo('album/' + album.id)">
+        <img [src]="album.coverUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top album-cover rounded" alt="{{ album.title }}">
         <div class="card-body text-center album-info">
           <h5 class="card-title text-truncate" title="{{ album.title }}">{{ album.title }}</h5>
           <p class="card-text text-truncate" title="{{ album.artist }}">{{ album.artist }}</p>

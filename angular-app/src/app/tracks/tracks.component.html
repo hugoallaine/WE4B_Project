@@ -4,7 +4,7 @@
   <div class="row">
     <div *ngFor="let music of musics" class="col-md-3 mb-4">
       <div class="card music-card">
-        <img [src]="music.coverUrl || 'assets/default-cover.jpg'" class="card-img-top music-cover" alt="{{ music.title }}">
+        <img [src]="music.coverUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top music-cover" alt="{{ music.title }}">
         <div class="card-body text-center music-info">
           <h5 class="card-title text-truncate" title="{{ music.title }}">{{ music.title }}</h5>
           <p class="card-text text-truncate" title="{{ music.artist }}">{{ music.artist }}</p>

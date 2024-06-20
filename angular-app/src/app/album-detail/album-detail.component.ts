@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MusicService } from '../services/music.service';
 import { Album } from '../models/album.model';
 import { HorizontalScrollService } from '../services/horizontal-scroll.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-album-detail',
@@ -16,7 +17,8 @@ export class AlbumDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private musicService: MusicService,
     private horizontalScrollService: HorizontalScrollService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -37,6 +39,10 @@ export class AlbumDetailComponent implements OnInit {
     this.musicService.getAlbumById(albumId).subscribe(album => {
       this.album = album;
     });
+  }
+
+  navigateTo(page: string): void {
+    this.router.navigate([`/${page}`]);
   }
 }
 

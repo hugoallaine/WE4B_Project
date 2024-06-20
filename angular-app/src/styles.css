@@ -76,18 +76,23 @@
 
 /* Styles for hovering over music cards */
 .music-card:hover, .artist-card:hover, .album-card:hover {
-    border-color: red !important;
-    border-radius: 10px;
+    border-color: rgb(255, 0, 0) !important;
     border: 3px solid;
-    transition: border-color 0.5s ease;
+    transition: border-color 0.5s ease-in-out
 }
 
 .music-card, .album-card, .artist-card {
     border: 3px solid !important;
-    
     border-color: transparent !important;
+    transition: border-color 0.5s ease-in-out
 }
 
-.music-card img, .album-card img, .artist-card img {
-    border-radius: 10px;
-}
+.hover-clickable:hover {
+    color: red;
+    cursor: pointer;
+    transition: color 0.5s ease-in-out
+  }
+
+.hover-clickable {
+    transition: color 0.5s ease-in-out
+  }

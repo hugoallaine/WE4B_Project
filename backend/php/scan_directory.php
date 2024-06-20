@@ -64,7 +64,7 @@ function getSpotifyAccessToken($clientId, $clientSecret) {
     return $data['access_token'] ?? null;
 }
 
-function getArtistImageFromSpotify($artistName, $accessToken) {
+function getArtistInfoFromSpotify($artistName, $accessToken) {
     $url = 'https://api.spotify.com/v1/search?q=' . urlencode($artistName) . '&type=artist&limit=1';
     $headers = [
         'Authorization: Bearer ' . $accessToken
@@ -79,16 +79,20 @@ function getArtistImageFromSpotify($artistName, $accessToken) {
     $response = file_get_contents($url, false, $context);
 
     if ($response === FALSE) {
-        error_log("Failed to fetch artist image from Spotify for $artistName: " . error_get_last()['message']);
-        return 'assets/default-artist.jpg'; // Fallback to a default image if none found
+        error_log("Failed to fetch artist info from Spotify for $artistName: " . error_get_last()['message']);
+        return null;
     }
 
     $data = json_decode($response, true);
-    if (isset($data['artists']['items'][0]['images'][0]['url'])) {
-        return $data['artists']['items'][0]['images'][0]['url'];
+    if (isset($data['artists']['items'][0])) {
+        $artist = $data['artists']['items'][0];
+        return [
+            'image' => $artist['images'][0]['url'] ?? 'assets/logo/flex-logo-gris.svg',
+            'bio' => $artist['genres'][0] ?? '' // Spotify doesn't provide detailed bios, using genres as a placeholder
+        ];
     }
 
-    return 'assets/default-artist.jpg'; // Fallback to a default image if none found
+    return null;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -139,11 +143,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Add the artist if it does not already exist
             if (!isset($artistsMap[$metadata['artist']])) {
                 $artistId = count($db['artists']) + 1;
-                $artistImage = $spotifyAccessToken ? getArtistImageFromSpotify($metadata['artist'], $spotifyAccessToken) : 'assets/default-artist.jpg';
+                $artistInfo = $spotifyAccessToken ? getArtistInfoFromSpotify($metadata['artist'], $spotifyAccessToken) : ['image' => 'assets/logo/flex-logo-gris.svg', 'bio' => ''];
                 $newArtist = [
                     'id' => $artistId,
                     'name' => $metadata['artist'],
-                    'pictureUrl' => $artistImage
+                    'pictureUrl' => $artistInfo['image'],
+                    'bio' => $artistInfo['bio']
                 ];
                 $db['artists'][] = $newArtist;
                 $artistsMap[$metadata['artist']] = $newArtist;

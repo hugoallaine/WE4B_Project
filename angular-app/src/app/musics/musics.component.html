@@ -6,11 +6,11 @@
 
     <!-- Artists Section -->
     <div class="container mt-4">
-        <h2 class="mb-4" (click)="navigateTo('artists')" style="cursor: pointer;">Artists</h2>
+        <h2 class="mb-4 hover-clickable" (click)="navigateTo('artists')">Artists</h2>
         <div class="d-flex flex-nowrap overflow-auto element-container">
             <div *ngFor="let artist of artists" class="p-2">
-                <div class="card artist-card" (click)="navigateTo('artist/' + artist.id)" style="cursor: pointer;">
-                    <img [src]="artist.pictureUrl || 'assets/default-artist.jpg'" class="card-img-top artist-cover"
+                <div class="card artist-card hover-clickable" (click)="navigateTo('artist/' + artist.id)">
+                    <img [src]="artist.pictureUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top artist-cover"
                         alt="{{ artist.name }}">
                     <div class="card-body text-center artist-info">
                         <h5 class="card-title text-truncate">{{ artist.name }}</h5>
@@ -22,11 +22,11 @@
 
     <!-- Albums Section -->
     <div class="container mt-4">
-        <h2 class="mb-4" (click)="navigateTo('albums')" style="cursor: pointer;">Albums</h2>
+        <h2 class="mb-4 hover-clickable" (click)="navigateTo('albums')">Albums</h2>
         <div class="d-flex flex-nowrap overflow-auto element-container">
             <div *ngFor="let album of albums" class="p-2">
-                <div class="card album-card" (click)="navigateTo('album/' + album.id)" style="cursor: pointer;">
-                    <img [src]="album.coverUrl || 'assets/default-cover.jpg'" class="card-img-top album-cover"
+                <div class="card album-card hover-clickable" (click)="navigateTo('album/' + album.id)">
+                    <img [src]="album.coverUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top album-cover"
                         alt="{{ album.title }}">
                     <div class="card-body text-center album-info">
                         <h5 class="card-title text-truncate">{{ album.title }}</h5>
@@ -39,11 +39,11 @@
 
     <!-- Musics Section -->
     <div class="container mt-4">
-        <h2 class="mb-4" (click)="navigateTo('musics')" style="cursor: pointer;">Tracks</h2>
+        <h2 class="mb-4 hover-clickable" (click)="navigateTo('musics')">Tracks</h2>
         <div class="d-flex flex-nowrap overflow-auto element-container">
             <div *ngFor="let music of musics" class="p-2">
-                <div class="card music-card" style="cursor: pointer;">
-                    <img [src]="music.coverUrl || 'assets/default-cover.jpg'" class="card-img-top music-cover"
+                <div class="card music-card hover-clickable">
+                    <img [src]="music.coverUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top music-cover"
                         alt="{{music.title}}">
                     <div class="card-body text-center music-info">
                         <h5 class="card-title text-truncate" title="{{music.title}}">{{music.title}}</h5>

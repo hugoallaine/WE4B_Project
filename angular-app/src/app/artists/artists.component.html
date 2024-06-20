@@ -3,8 +3,8 @@
   <h1>Artists</h1>
   <div class="row">
     <div *ngFor="let artist of artists" class="col-md-3 mb-4">
-      <div class="card artist-card" (click)="navigateTo('artist/' + artist.id)" style="cursor: pointer;">
-        <img [src]="artist.pictureUrl || 'assets/default-artist.jpg'" class="card-img-top artist-cover" alt="{{ artist.name }}">
+      <div class="card artist-card hover-clickable" (click)="navigateTo('artist/' + artist.id)">
+        <img [src]="artist.pictureUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top artist-cover rounded" alt="{{ artist.name }}">
         <div class="card-body text-center artist-info">
           <h5 class="card-title text-truncate" title="{{ artist.name }}">{{ artist.name }}</h5>
         </div>
