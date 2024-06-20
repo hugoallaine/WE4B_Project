@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -10,16 +10,16 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 })
 export class RegisterComponent implements OnInit{
   registerForm = new FormGroup({
-    username: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', Validators.required),
+    username: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]),
+    password: new FormControl('', [Validators.required, this.passwordValidator]),
     password2: new FormControl('', Validators.required),
-    pseudo: new FormControl('', Validators.required),
+    pseudo: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9_\-\u00C0-\u017F]{1,32}$/)]),
     avatar: new FormControl(''),
-    firstname: new FormControl('', Validators.required),
-    name: new FormControl('', Validators.required),
+    firstname: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z_\-\u00C0-\u017F]{1,32}$/)]),
+    name: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z_\-\u00C0-\u017F]{1,32}$/)]),
     birthdate: new FormControl('', Validators.required),
     showPassword: new FormControl(false)
-  });
+  }, { validators: this.passwordMatchValidator('password', 'password2') });
   error_message: string = '';
 
   constructor(private authService: AuthService, private router: Router) { }
@@ -58,6 +58,31 @@ export class RegisterComponent implements OnInit{
     return this.registerForm.get('showPassword');
   }
 
+  passwordValidator(control: AbstractControl): { [key: string]: any } | null {
+    const value = control.value;
+    if (!value) return null;
+    const validLength = value.length >= 12;
+    const hasUppercase = /[A-Z]/.test(value);
+    const hasDigit = /\d/.test(value);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+    const isValid = validLength && hasUppercase && hasDigit && hasSpecial;
+    return isValid ? null : { invalidPassword: true };
+  }
+
+  passwordMatchValidator(password: string, confirmPassword: string): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      const passwordControl = control.get(password);
+      const confirmPasswordControl = control.get(confirmPassword);
+  
+      if (passwordControl && confirmPasswordControl && passwordControl.value !== confirmPasswordControl.value) {
+        confirmPasswordControl.setErrors({ passwordMismatch: true });
+        return { passwordMismatch: true };
+      } else {
+        return null;
+      }
+    };
+  }
+
   onSubmit(): void {
     if (this.registerForm.valid) {
       const username = this.registerForm.get('username')?.value;
@@ -83,5 +108,15 @@ export class RegisterComponent implements OnInit{
     const password2Field = document.getElementById('password2') as HTMLInputElement;
     passwordField.type = this.showPassword?.value ? 'text' : 'password';
     password2Field.type = this.showPassword?.value ? 'text' : 'password';
+  }
+
+  checkPasswordCriteria(): { [key: string]: boolean } {
+    const password = this.password?.value || '';
+    return {
+      validLength: password.length >= 12,
+      hasUppercase: /[A-Z]/.test(password),
+      hasDigit: /\d/.test(password),
+      hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    };
   }
 }

@@ -11,7 +11,7 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 export class LoginComponent implements OnInit {
 
   loginForm = new FormGroup({
-    username: new FormControl('', [Validators.required, Validators.email]),
+    username: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]),
     password: new FormControl('', Validators.required),
     showPassword: new FormControl(false),
     tfa_code: new FormControl('')
@@ -35,6 +35,10 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('showPassword');
   }
 
+  get tfa_code(): AbstractControl | null {
+    return this.loginForm.get('tfa_code');
+  }
+
   onSubmit(): void {
     if (this.loginForm.valid) {
       const username = this.loginForm.get('username')?.value;
@@ -46,6 +50,8 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/home']);
         } else if (response.tfa) {
           this.tfa = true;
+          this.loginForm.get('tfa_code')?.setValidators([Validators.required, Validators.pattern(/^[0-9]{6}$/)]);
+          this.loginForm.get('tfa_code')?.updateValueAndValidity();
         } else {
           this.error_message = response.message;
         }

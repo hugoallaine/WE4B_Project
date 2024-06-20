@@ -1,3 +1,8 @@
 .cursor-pointer {
     cursor: pointer;
 }
+
+.nav-link.active {
+    background-color: #007bff; /* Change this to your desired background color */
+    border-radius: 5px;
+}
