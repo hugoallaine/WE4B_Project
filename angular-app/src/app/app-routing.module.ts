@@ -11,6 +11,8 @@ import { TracksComponent } from './tracks/tracks.component';
 import { ArtistsComponent } from './artists/artists.component';
 import { ArtistDetailComponent } from './artist-detail/artist-detail.component';
 import { AlbumDetailComponent } from "./album-detail/album-detail.component";
+import { MusicsComponent } from "./musics/musics.component";
+import { MoviesComponent } from "./movies/movies.component";
 
 
 const routes: Routes = [
@@ -18,10 +20,12 @@ const routes: Routes = [
     { path: "home", component: HomeComponent, canActivate: [AuthGuard] },
     { path: "login", component: LoginComponent },
     { path: "register", component: RegisterComponent },
+    { path: "musics", component: MusicsComponent },
+    { path: "movies", component: MoviesComponent },
     { path: "account", component: AccountComponent, canActivate: [AuthGuard] },
     { path: "player", component: MediaPlayerComponent },
     { path: 'albums', component: AlbumsComponent },
-    { path: 'musics', component: TracksComponent },
+    { path: 'tracks', component: TracksComponent },
     { path: 'artists', component: ArtistsComponent },
     { path: 'artist/:id', component: ArtistDetailComponent },
     { path: 'album/:id', component: AlbumDetailComponent },
