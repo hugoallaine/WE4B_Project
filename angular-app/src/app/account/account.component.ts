@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { FormControl, FormGroup } from '@angular/forms';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-account',
@@ -45,7 +46,7 @@ export class AccountComponent implements OnInit {
     passwordDelete: new FormControl('')
   })
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private notificationService: NotificationService) {
     authService.getUser().subscribe(response => {
       if (response.success) {
         this.user.username = response.username;
@@ -55,7 +56,7 @@ export class AccountComponent implements OnInit {
         this.user.birthdate = response.birthdate;
         this.tfa = response.tfa_status;
       } else {
-        console.log(response.message);
+        this.notificationService.showNotification(response.message, 'error');
       }
     });
     this.tfa = authService.getTfa();
@@ -65,7 +66,7 @@ export class AccountComponent implements OnInit {
           this.tfa_secret = response.tfa_secret;
           this.tfa_qrcode = response.tfa_qrcode;
         } else {
-          console.log(response.message);
+          this.notificationService.showNotification(response.message, 'error');
         }
       });
     }
@@ -86,9 +87,9 @@ export class AccountComponent implements OnInit {
         this.user.firstname = response.firstname;
         this.user.name = response.name;
         this.user.birthdate = response.birthdate;
-        console.log('Info changed');
+        this.notificationService.showNotification('Information Changed', 'info');
       } else {
-        console.log(response.message);
+        this.notificationService.showNotification(response.message, 'error');
       }
     });
   }
@@ -101,9 +102,9 @@ export class AccountComponent implements OnInit {
     this.authService.changePassword(oldPassword, newPassword, newPassword2).subscribe(response => {
       if (response.success) {
         this.authService.logout();
-        console.log('Password changed');
+        this.notificationService.showNotification('Password Changed', 'info');
       } else {
-        console.log(response.message);
+        this.notificationService.showNotification(response.message, 'error');
       }
     });
   }
@@ -123,12 +124,13 @@ export class AccountComponent implements OnInit {
             this.user.name = response.name;
             this.user.birthdate = response.birthdate;
             this.tfa = response.tfa_status;
+            this.notificationService.showNotification('2FA Enabled', 'info');
           } else {
-            console.log(response.message);
+            this.notificationService.showNotification(response.message, 'error');
           }
         });
       } else {
-        console.log(response.message);
+        this.notificationService.showNotification(response.message, 'error');
       }
     });
   }
@@ -151,16 +153,16 @@ export class AccountComponent implements OnInit {
                 this.tfa_secret = response.tfa_secret;
                 this.tfa_qrcode = response.tfa_qrcode;
               } else {
-                console.log(response.message);
+                this.notificationService.showNotification(response.message, 'error');
               }
             });
           } else {
-            console.log(response.message);
+            this.notificationService.showNotification(response.message, 'error');
           }
         });
-        console.log('Tfa disabled');
+        this.notificationService.showNotification('2FA Disabled', 'info');
       } else {
-        console.log(response.message);
+        this.notificationService.showNotification(response.message, 'error');
       }
     });
   }
@@ -171,9 +173,9 @@ export class AccountComponent implements OnInit {
     this.authService.deleteAccount(password).subscribe(response => {
       if (response.success) {
         this.authService.logout();
-        console.log('Account deleted');
+        this.notificationService.showNotification('Account Deleted', 'info');
       } else {
-        console.log(response.message);
+        this.notificationService.showNotification(response.message, 'error');
       }
     });
   }

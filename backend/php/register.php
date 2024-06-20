@@ -7,7 +7,6 @@ require_once dirname(__FILE__) . '/mails.php';
 require_once dirname(__FILE__) . '/vendor/autoload.php';
 require_once dirname(__FILE__) . '/json.php';
 
-// Réception des données JSON
 $data = json_decode(file_get_contents("php://input"));
 
 /**
@@ -101,7 +100,7 @@ if (isset($data->user) && isset($data->password) && isset($data->password2) && i
                                             $req = $db->prepare("UPDATE users SET avatar = ? WHERE email = ?");
                                             $req->execute(array($avatar, $email));
                                         } else {
-                                            $info = "Votre avatar doit être au format jpg, jpeg, png ou gif et ne doit pas dépasser 2 Mo.";
+                                            $info = "Your avatar must be in jpg, jpeg, png or gif format and must not exceed 2 MB.";
                                         }
                                     }
                                 }
@@ -109,25 +108,25 @@ if (isset($data->user) && isset($data->password) && isset($data->password2) && i
                                 $req->execute(array($email, $key, $email));
                                 sendMailConfirm($email, $key);
                             } else {
-                                $error = "Votre mot de passe ne satisfait pas les conditions minimums.";
+                                $error = "Your password does not meet the minimum requirements.";
                             }
                         } else {
-                            $error = "Vos mots de passe ne correspondent pas.";
+                            $error = "Your passwords don't match.";
                         }
                     } else {
-                        $error = "Cette adresse email existe déjà.";
+                        $error = "This email address already exists.";
                     }
                 } else {
-                    $error = "Votre adresse email n'est pas valide.";
+                    $error = "Invalid email address.";
                 }
             } else {
-                $error = "Votre nom et prénom ne doivent pas dépasser 32 caractères !";
+                $error = "Your first and last name must not exceed 32 characters.";
             }
         } else {
-            $error = "Votre nom d'utilisateur ne doit pas dépasser 32 caractères !";
+            $error = "Your username must not exceed 32 characters.";
         }
     } else {
-        $error = "Tous les champs doivent être complétés !";
+        $error = "All fields must be completed.";
     }
 }
 
@@ -139,6 +138,6 @@ if (isset($error)) {
     echo json_encode(array('success' => true, 'error' => false, 'info' => true, 'message' => $info));
 } else {
     header('Content-Type: application/json');
-    echo json_encode(array('success' => true, 'error' => false));
+    echo json_encode(array('success' => true, 'error' => false, 'message' => 'Registration successful. A confirmation e-mail has been sent to you.'));
 }
 ?>

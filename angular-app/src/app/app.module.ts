@@ -15,6 +15,7 @@ import { MediaPlayerComponent } from "./media-player/media-player.component";
 import { AlbumsComponent } from './albums/albums.component';
 import { MusicsComponent } from './musics/musics.component';
 import { ArtistsComponent } from './artists/artists.component';
+import { NotificationComponent } from './notification/notification.component';
 
 @NgModule({
     declarations: [
@@ -28,6 +29,7 @@ import { ArtistsComponent } from './artists/artists.component';
         AlbumsComponent,
         MusicsComponent,
         ArtistsComponent,
+        NotificationComponent,
     ],
     imports: [
         BrowserModule,

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -22,7 +23,7 @@ export class RegisterComponent implements OnInit{
   }, { validators: this.passwordMatchValidator('password', 'password2') });
   error_message: string = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private notificationService: NotificationService) { }
 
   ngOnInit(): void { }
 
@@ -95,9 +96,10 @@ export class RegisterComponent implements OnInit{
 
       this.authService.register(username, password, password2, pseudo, firstname, name, birthdate).subscribe(response => {
         if (response.success) {
+          this.notificationService.showNotification(response.message, 'success');
           this.router.navigate(['/login']);
         } else {
-          this.error_message = response.message;
+          this.notificationService.showNotification(response.message, 'error');
         }
       });
     }

@@ -46,16 +46,16 @@ if (isset($data->user) && isset($data->password)) {
                         echo json_encode(['success' => true, 'message' => 'Login successful', 'id' => $user['id'], 'token' => $user['token']]);
                     }
                 } else {
-                    $error = "Votre adresse mail n'a pas été confirmée, consultez votre boîte mail.";
+                    $error = "Your e-mail address has not been confirmed. Check your mailbox.";
                 }
             } else {
-                $error = "Mot de passe ou adresse mail invalide.";
+                $error = "Invalid password or e-mail address.";
             }
         } else {
-            $error = "Mot de passe ou adresse mail invalide.";
+            $error = "Invalid password or e-mail address.";
         }
     } else {
-        $error = "Tous les champs doivent être complétés.";
+        $error = "All fields must be completed.";
     }
 }
 
