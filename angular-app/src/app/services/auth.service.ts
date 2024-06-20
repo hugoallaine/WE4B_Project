@@ -17,7 +17,6 @@ export class AuthService {
   };
 
   constructor(private http: HttpClient, private router: Router) { 
-    console.log(sessionStorage.getItem('id'), sessionStorage.getItem('token'));
     this.checkLogin().subscribe(response => {
       if (response.success) {
         this.loggedIn = true;
