@@ -31,7 +31,7 @@ if (isset($data->user) && isset($data->password)) {
                             $_SESSION['token'] = $user['token'];
                             $_SESSION['pseudo'] = $user['pseudo'];
                             $_SESSION['avatar'] = empty($user['avatar']) ? null : $user['avatar'];
-                            echo json_encode(['success' => true, 'message' => 'Login successful']);
+                            echo json_encode(['success' => true, 'message' => 'Login successful', 'id' => $user['id'], 'token' => $user['token'], 'tfa' => true]);
                         } else {
                             $error = "Code invalide.";
                         }

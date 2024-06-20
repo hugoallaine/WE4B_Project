@@ -1,6 +1,6 @@
 <?php
 header("Access-Control-Allow-Origin: http://localhost:4200");
-header("Access-Control-Allow-Methods: GET, POST");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 require_once dirname(__FILE__).'/alreadyConnected.php';
 session_start_secure();
@@ -9,44 +9,19 @@ require_once dirname(__FILE__).'/mails.php';
 require_once dirname(__FILE__).'/vendor/autoload.php';
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
-$tfa = new TwoFactorAuth(new EndroidQrCodeProvider());
-
-/**
- * Function to delete a directory and its content
- */
-function rrmdir($dir) { 
-    if (is_dir($dir)) { 
-        $objects = scandir($dir); 
-        foreach ($objects as $object) { 
-            if ($object != "." && $object != "..") { 
-            if (filetype($dir."/".$object) == "dir") rrmdir($dir."/".$object); else unlink($dir."/".$object); 
-            } 
-        } 
-        reset($objects); 
-        rmdir($dir); 
-    } 
-} 
+$tfa = new TwoFactorAuth(new EndroidQrCodeProvider(), "Flex");
 
 /**
  * API to change account informations
  * 
  * POST parameters:
  * - Change informations:
+ *   - pseudo (string): the new pseudo
  *   - firstname (string): the new firstname
  *   - name (string): the new name
  *   - birthdate (string): the new birthdate
- *   - address (string): the new address
- *   - city (string): the new city
- *   - zipcode (string): the new zipcode
- *   - country (string): the new country
- * - Change pseudo:
- *   - pseudo-f (string): the new pseudo
- * - Change bio:
- *   - bio-f (string): the new bio
  * - Change avatar:
  *   - avatar-f (file): the new avatar
- * - Change banner:
- *   - banner-f (file): the new banner
  * - Change password:
  *   - oldPassword (string): the old password
  *   - newPassword (string): the new password
@@ -61,280 +36,226 @@ function rrmdir($dir) {
  *   - password_check_delete (string): the password to delete account
  * 
  * Response:
+ * - success (boolean): true if the action succeeded
  * - error (boolean): true if an error occured
  * - message (string): the error message
- * - changedpseudo (boolean): true if the pseudo has been changed
- * - pseudo (string): the new pseudo
  */
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Get informations
-    if (isset($_GET['id']) && isset($_GET['token'])) {
+    if (isset($_GET['id']) && isset($_GET['token']) && !isset($_GET['tfa'])) {
         $id = urldecode($_GET['id']);
         $token = SecurizeString_ForSQL(urldecode($_GET['token']));
-        $req = $db->prepare("SELECT email, pseudo, name, firstname, birth_date FROM users WHERE id = ? AND token = ?");
+        $req = $db->prepare("SELECT email, pseudo, name, firstname, birth_date, tfaKey FROM users WHERE id = ? AND token = ?");
         $req->execute(array($id, $token));
         $user = $req->fetch();
-        header('Content-Type: application/json');
-        echo json_encode(array('success' => true, 'error' => false, 'username' => $user['email'], 'pseudo' => $user['pseudo'], 'name' => $user['name'], 'firstname' => $user['firstname'], 'birthdate' => $user['birth_date']));
+        if ($user) {
+            if ($user['tfaKey'] != NULL) {
+                $tfa_status = true;
+            } else {
+                $tfa_status = false;
+            }	
+            header('Content-Type: application/json');
+            echo json_encode(array('success' => true, 'error' => false, 'username' => $user['email'], 'pseudo' => $user['pseudo'], 'name' => $user['name'], 'firstname' => $user['firstname'], 'birthdate' => $user['birth_date'], 'tfa_status' => $tfa_status));
+        } else {
+            header('Content-Type: application/json');
+            echo json_encode(array('success' => false, 'error' => true, 'message' => 'Invalid token'));
+        }
+    } else if (isset($_GET['id']) && isset($_GET['token']) && isset($_GET['tfa'])) {
+        $id = urldecode($_GET['id']);
+        $token = SecurizeString_ForSQL(urldecode($_GET['token']));
+        $req = $db->prepare("SELECT email FROM users WHERE id = ? AND token = ?");
+        $req->execute(array($id, $token));
+        $user = $req->fetch();
+        if ($user) {
+            $tfa_secret = $tfa->createSecret();
+            $qrcode = $tfa->getQRCodeImageAsDataUri($user['email'], $tfa_secret);
+            header('Content-Type: application/json');
+            echo json_encode(array('success' => true, 'error' => false, 'tfa_secret' => $tfa_secret, 'tfa_qrcode' => $qrcode));
+        } else {
+            header('Content-Type: application/json');
+            echo json_encode(array('success' => false, 'error' => true, 'message' => 'Invalid token'));
+        }
     } else {
         header('Content-Type: application/json');
         echo json_encode(array('error' => true, 'message' => 'Invalid parameters'));
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Change informations
-    if (isset($_POST['firstname']) && isset($_POST['name']) && isset($_POST['birthdate']) && isset($_POST['address']) && isset($_POST['city']) && isset($_POST['zipcode']) && isset($_POST['country'])) {
-        $firstname = SecurizeString_ForSQL($_POST['firstname']);
-        $name = SecurizeString_ForSQL($_POST['name']);
-        $birthdate = SecurizeString_ForSQL($_POST['birthdate']);
-        $address = SecurizeString_ForSQL($_POST['address']);
-        $city = SecurizeString_ForSQL($_POST['city']);
-        $zipcode = SecurizeString_ForSQL($_POST['zipcode']);
-        $country = SecurizeString_ForSQL($_POST['country']);
-        $req = $db->prepare("SELECT u.name,u.firstname,u.birth_date,a.address,a.city,a.zip_code,a.country FROM users u JOIN address a ON u.id = a.id_user WHERE u.id = ?");
-        $req->execute(array($_SESSION['id']));
-        $oldinfos = $req->fetch();
-        $count = 0;
-        if ($oldinfos['firstname'] != $firstname && !empty($firstname) && strlen($firstname) <= 32) {
-            $req = $db->prepare("UPDATE users SET firstname = ? WHERE id = ?");
-            $req->execute(array($firstname, $_SESSION['id']));
-            $count += 1;
-        }
-        if ($oldinfos['name'] != $name && !empty($name) && strlen($name) <= 32) {
-            $req = $db->prepare("UPDATE users SET name = ? WHERE id = ?");
-            $req->execute(array($name, $_SESSION['id']));
-            $count += 1;
-        }
-        if ($oldinfos['birth_date'] != $birthdate && !empty($birthdate)) {
-            $req = $db->prepare("UPDATE users SET birth_date = ? WHERE id = ?");
-            $req->execute(array($birthdate, $_SESSION['id']));
-            $count += 1;
-        }
-        if ($oldinfos['address'] != $address && !empty($address)) {
-            $req = $db->prepare("UPDATE address SET address = ? WHERE id_user = ?");
-            $req->execute(array($address, $_SESSION['id']));
-            $count += 1;
-        }
-        if ($oldinfos['city'] != $city && !empty($city)) {
-            $req = $db->prepare("UPDATE address SET city = ? WHERE id_user = ?");
-            $req->execute(array($city, $_SESSION['id']));
-            $count += 1;
-        }
-        if ($oldinfos['zip_code'] != $zipcode && !empty($zipcode) && strlen($zipcode) == 5) {
-            $req = $db->prepare("UPDATE address SET zip_code = ? WHERE id_user = ?");
-            $req->execute(array($zipcode, $_SESSION['id']));
-            $count += 1;
-        }
-        if ($oldinfos['country'] != $country && !empty($country)) {
-            $req = $db->prepare("UPDATE address SET country = ? WHERE id_user = ?");
-            $req->execute(array($country, $_SESSION['id']));
-            $count += 1;
-        }
-        if ($count > 0) {
-            header('Content-Type: application/json');
-            echo json_encode(array('error' => false));
-        } else {
-            header('Content-Type: application/json');
-            echo json_encode(array('error' => true,'message' => "Aucune information n'a été modifiée."));
-        }
-    }
-
-    // Change pseudo
-    if (isset($_POST['pseudo-f'])) {
-        $pseudo = SecurizeString_ForSQL($_POST['pseudo-f']);
-        if (!empty($pseudo)) {
-            if ($pseudo != $_SESSION['pseudo']) {
-                if (strlen($pseudo) <= 32) {
+    $data = json_decode(file_get_contents('php://input'));
+    // Check token
+    if (isset($data->id) && isset($data->token)) {
+        $id = SecurizeString_ForSQL($data->id);
+        $token = SecurizeString_ForSQL($data->token);
+        if (checkToken($token, $id)) {
+            // Change informations
+            if (isset($data->pseudo) && isset($data->firstname) && isset($data->name) && isset($data->birthdate)) {
+                $pseudo = SecurizeString_ForSQL($data->pseudo);
+                $firstname = SecurizeString_ForSQL($data->firstname);
+                $name = SecurizeString_ForSQL($data->name);
+                $birthdate = SecurizeString_ForSQL($data->birthdate);
+                $req = $db->prepare("SELECT u.name,u.firstname,u.birth_date,u.pseudo FROM users u WHERE u.id = ?");
+                $req->execute(array($id));
+                $oldinfos = $req->fetch();
+                $count = 0;
+                if ($oldinfos['firstname'] != $firstname && !empty($firstname) && strlen($firstname) <= 32) {
+                    $req = $db->prepare("UPDATE users SET firstname = ? WHERE id = ?");
+                    $req->execute(array($firstname, $id));
+                    $count += 1;
+                }
+                if ($oldinfos['name'] != $name && !empty($name) && strlen($name) <= 32) {
+                    $req = $db->prepare("UPDATE users SET name = ? WHERE id = ?");
+                    $req->execute(array($name, $id));
+                    $count += 1;
+                }
+                if ($oldinfos['birth_date'] != $birthdate && !empty($birthdate)) {
+                    $req = $db->prepare("UPDATE users SET birth_date = ? WHERE id = ?");
+                    $req->execute(array($birthdate, $id));
+                    $count += 1;
+                }
+                if ($oldinfos['pseudo'] != $pseudo && !empty($pseudo) && strlen($pseudo) <= 32) {
                     $req = $db->prepare("UPDATE users SET pseudo = ? WHERE id = ?");
-                    $req->execute(array($pseudo, $_SESSION['id']));
-                    $_SESSION['pseudo'] = $pseudo;
-                    $newpseudo = true;
+                    $req->execute(array($pseudo, $id));
+                    $count += 1;
+                }
+                if ($count > 0) {
+                    $req = $db->prepare("SELECT pseudo, name, firstname, birth_date FROM users WHERE id = ?");
+                    $req->execute(array($id));
+                    $newinfos = $req->fetch();
+                    if ($newinfos) {
+                        header('Content-Type: application/json');
+                        echo json_encode(array('success' => true, 'error' => false, 'pseudo' => $newinfos['pseudo'], 'name' => $newinfos['name'], 'firstname' => $newinfos['firstname'], 'birthdate' => $newinfos['birth_date']));
+                    } else {
+                        header('Content-Type: application/json');
+                        echo json_encode(array('success' => false, 'error' => true, 'message' => "An error occured."));
+                    }
                 } else {
-                    $error = "Le pseudo ne doit pas dépasser 32 caractères.";
+                    header('Content-Type: application/json');
+                    echo json_encode(array('success' => false, 'error' => true, 'message' => "No changes."));
                 }
             }
-        } else {
-            $error = "Le pseudo ne peut pas être vide.";
-        }
-    }
 
-    // Change bio
-    if (isset($_POST['bio-f'])) {
-        $bio = SecurizeString_ForSQL($_POST['bio-f']);
-        if (empty($bio)) {
-            $bio = null;
-        }
-        $req = $db->prepare("SELECT bio FROM users WHERE id = ?");
-        $req->execute(array($_SESSION['id']));
-        $oldbio = $req->fetch();
-        if ($oldbio['bio'] != $bio) {
-            if (strlen($bio) <= 128) {
-                $req = $db->prepare("UPDATE users SET bio = ? WHERE id = ?");
-                $req->execute(array($bio, $_SESSION['id']));
-            } else {
-                $error = "La bio ne doit pas dépasser 128 caractères.";
-            }
-        }
-    }
-
-    // Change avatar
-    if (isset($_FILES['avatar-f']) && $_FILES['avatar-f']['error'] === UPLOAD_ERR_OK) {
-        if ($_FILES['avatar-f']['size'] <= 2097152) {
-            $filename = $_FILES['avatar-f']['name'];
-            $file_extension = pathinfo($filename, PATHINFO_EXTENSION);
-            $allowed_extensions = array('jpg', 'jpeg', 'png', 'gif');
-            if (in_array($file_extension, $allowed_extensions) === true) {
-                $newfilename = "avatar.".$file_extension;
-                $tmp_name = $_FILES['avatar-f']['tmp_name'];
-                $upload_directory = '../img/user/'.$_SESSION['id'].'/';
-                if (!file_exists($upload_directory)) {
-                    mkdir($upload_directory, 0777, true);
-                }
-                $path = $upload_directory.$newfilename;
-                $req = $db->prepare("SELECT avatar FROM users WHERE id = ?");
-                $req->execute(array($_SESSION['id']));
-                $oldfilename = $req->fetch();
-                if (!empty($oldfilename['avatar'])) {
-                    unlink($upload_directory.$oldfilename['avatar']);
-                }
-                move_uploaded_file($tmp_name, $path);
-                $req = $db->prepare("UPDATE users SET avatar = ? WHERE id = ?");
-                $req->execute(array($newfilename, $_SESSION['id']));
-                $_SESSION['avatar'] = $newfilename;
-            } else {
-                $error = "L'avatar doit être au format jpg, jpeg, png ou gif.";
-            }
-        } else {
-            $error = "L'avatar ne doit pas dépasser 2 Mo.";
-        }
-    }
-
-    // Change banner
-    if (isset($_FILES['banner-f']) && $_FILES['banner-f']['error'] === UPLOAD_ERR_OK) {
-        if ($_FILES['banner-f']['size'] <= 10485760) {
-            $filename = $_FILES['banner-f']['name'];
-            $file_extension = pathinfo($filename, PATHINFO_EXTENSION);
-            $allowed_extensions = array('jpg', 'jpeg', 'png', 'gif');
-            if (in_array($file_extension, $allowed_extensions) === true) {
-                $newfilename = "banner.".$file_extension;
-                $tmp_name = $_FILES['banner-f']['tmp_name'];
-                $upload_directory = '../img/user/'.$_SESSION['id'].'/';
-                if (!file_exists($upload_directory)) {
-                    mkdir($upload_directory, 0777, true);
-                }
-                $path = $upload_directory.$newfilename;
-                $req = $db->prepare("SELECT banner FROM users WHERE id = ?");
-                $req->execute(array($_SESSION['id']));
-                $oldfilename = $req->fetch();
-                if (!empty($oldfilename['banner'])) {
-                    unlink($upload_directory.$oldfilename['banner']);
-                }
-                move_uploaded_file($tmp_name, $path);
-                $req = $db->prepare("UPDATE users SET banner = ? WHERE id = ?");
-                $req->execute(array($newfilename, $_SESSION['id']));
-            } else {
-                $error = "La bannière doit être au format jpg, jpeg, png ou gif.";
-            }
-        } else {
-            $error = "La bannière ne doit pas dépasser 10 Mo.";
-        }
-    }
-
-    // Change password
-    if (isset($_POST['oldPassword']) && isset($_POST['newPassword']) && isset($_POST['newPasswordConfirm'])) {
-        $oldPassword = SecurizeString_ForSQL($_POST['oldPassword']);
-        $newPassword = SecurizeString_ForSQL($_POST['newPassword']);
-        $newPasswordConfirm = SecurizeString_ForSQL($_POST['newPasswordConfirm']);
-        $req = $db->prepare('SELECT password FROM users WHERE id = ?');
-        $req->execute(array($_SESSION['id']));
-        $user = $req->fetch();
-        if (password_verify($oldPassword, $user['password'])) {
-            if ($newPassword == $newPasswordConfirm) {
-                if (strlen($newPassword) >= 12 && preg_match('/[A-Z]/', $newPassword) && preg_match('/[a-z]/', $newPassword) && preg_match('/[0-9]/', $newPassword) && preg_match('/[^a-zA-Z0-9]/', $newPassword)) {
-                    $req = $db->prepare('UPDATE users SET password = ? WHERE id = ?');
-                    $req->execute(array(password_hash($newPassword, PASSWORD_DEFAULT), $_SESSION['id']));
+            // Change avatar
+            if (isset($_FILES['avatar-f']) && $_FILES['avatar-f']['error'] === UPLOAD_ERR_OK) {
+                if ($_FILES['avatar-f']['size'] <= 2097152) {
+                    $filename = $_FILES['avatar-f']['name'];
+                    $file_extension = pathinfo($filename, PATHINFO_EXTENSION);
+                    $allowed_extensions = array('jpg', 'jpeg', 'png', 'gif');
+                    if (in_array($file_extension, $allowed_extensions) === true) {
+                        $newfilename = "avatar.".$file_extension;
+                        $tmp_name = $_FILES['avatar-f']['tmp_name'];
+                        $upload_directory = '../img/user/'.$id.'/';
+                        if (!file_exists($upload_directory)) {
+                            mkdir($upload_directory, 0777, true);
+                        }
+                        $path = $upload_directory.$newfilename;
+                        $req = $db->prepare("SELECT avatar FROM users WHERE id = ?");
+                        $req->execute(array($id));
+                        $oldfilename = $req->fetch();
+                        if (!empty($oldfilename['avatar'])) {
+                            unlink($upload_directory.$oldfilename['avatar']);
+                        }
+                        move_uploaded_file($tmp_name, $path);
+                        $req = $db->prepare("UPDATE users SET avatar = ? WHERE id = ?");
+                        $req->execute(array($newfilename, $id));
+                        $_SESSION['avatar'] = $newfilename;
+                    } else {
+                        $error = "The avatar must be a jpg, jpeg, png or gif file.";
+                    }
                 } else {
-                    $error = 'Le mot de passe doit contenir au moins 12 caractères';
+                    $error = "The avatar must be less than 2MB.";
                 }
-            } else {
-                $error = 'Les mots de passe ne correspondent pas';
+            }
+
+            // Change password
+            if (isset($data->oldpassword) && isset($data->newpassword) && isset($data->newpasswordconfirm)) {
+                $oldPassword = SecurizeString_ForSQL($data->oldpassword);
+                $newPassword = SecurizeString_ForSQL($data->newpassword);
+                $newPasswordConfirm = SecurizeString_ForSQL($data->newpasswordconfirm);
+                $req = $db->prepare('SELECT password FROM users WHERE id = ?');
+                $req->execute(array($id));
+                $user = $req->fetch();
+                if (password_verify($oldPassword, $user['password'])) {
+                    if ($newPassword == $newPasswordConfirm) {
+                        if (strlen($newPassword) >= 12 && preg_match('/[A-Z]/', $newPassword) && preg_match('/[a-z]/', $newPassword) && preg_match('/[0-9]/', $newPassword) && preg_match('/[^a-zA-Z0-9]/', $newPassword)) {
+                            $req = $db->prepare('UPDATE users SET password = ? WHERE id = ?');
+                            $req->execute(array(password_hash($newPassword, PASSWORD_DEFAULT), $id));
+                            header('Content-Type: application/json');
+                            echo json_encode(array('success' => true, 'error' => false));
+                        } else {
+                            $error = 'The password must contain at least 12 characters, one uppercase letter, one lowercase letter, one number and one special character.';
+                        }
+                    } else {
+                        $error = 'The passwords do not match.';
+                    }
+                } else {
+                    $error = 'Invalid password.';
+                }
+            }
+
+            // Enable 2FA
+            if (isset($data->tfa_code) && isset($data->enablePassword) && isset($data->tfa_secret)) {
+                $tfa_code = SecurizeString_ForSQL($data->tfa_code);
+                $tfa_secret = SecurizeString_ForSQL($data->tfa_secret);
+                $password_check_tfa = SecurizeString_ForSQL($data->enablePassword);
+                $req = $db->prepare('SELECT email,password FROM users WHERE id = ?');
+                $req->execute(array($id));
+                $user = $req->fetch();
+                if (password_verify($password_check_tfa, $user['password'])) {
+                    if ($tfa->verifyCode($tfa_secret, $tfa_code)) {
+                        $req = $db->prepare('UPDATE users SET tfaKey = ? WHERE id = ?');
+                        $req->execute(array($tfa_secret, $id));
+                        sendMailTfaEnabled($user['email']);
+                        header('Content-Type: application/json');
+                        echo json_encode(array('success' => true, 'error' => false));
+                    } else {
+                        $error = 'Invalid 2FA code';
+                    }
+                } else {
+                    $error = 'Invalid password';
+                }
+            }
+
+            // Disable 2FA
+            if (isset($data->disablePassword)) {
+                $password_check = SecurizeString_ForSQL($data->disablePassword);
+                $req = $db->prepare('SELECT email,password FROM users WHERE id = ?');
+                $req->execute(array($id));
+                $user = $req->fetch();
+                if (password_verify($password_check, $user['password'])) {
+                    $req = $db->prepare('UPDATE users SET tfaKey = NULL WHERE id = ?');
+                    $req->execute(array($id));
+                    sendMailTfaDisabled($user['email']);
+                    header('Content-Type: application/json');
+                    echo json_encode(array('success' => true, 'error' => false));
+                } else {
+                    $error = 'Invalid password';
+                }
+            }
+
+            // Delete account
+            if (isset($data->passwordCheckDelete)) {
+                $password_check_delete = SecurizeString_ForSQL($data->passwordCheckDelete);
+                $req = $db->prepare('SELECT password FROM users WHERE id = ?');
+                $req->execute(array($id));
+                $user = $req->fetch();
+                if (password_verify($password_check_delete, $user['password'])) {
+                    if (checkToken($token, $id)) {
+                        $req = $db->prepare('DELETE FROM users WHERE id = ?');
+                        $req->execute(array($id));
+                        header('Content-Type: application/json');
+                        echo json_encode(array('success' => true, 'error' => false));
+                    } else {
+                        $error = 'Invalid token';
+                    }
+                } else {
+                    $error = 'Invalid password';
+                }
             }
         } else {
-            $error = 'Mot de passe incorrect';
+            $error = 'Invalid token';
         }
-    }
-
-    // Enable 2FA
-    if (isset($_POST['tfa_code']) && isset($_POST['password_check_tfa']) && isset($_POST['tfa_secret'])) {
-        $tfa_code = SecurizeString_ForSQL($_POST['tfa_code']);
-        $tfa_secret = SecurizeString_ForSQL($_POST['tfa_secret']);
-        $password_check_tfa = SecurizeString_ForSQL($_POST['password_check_tfa']);
-        $req = $db->prepare('SELECT password FROM users WHERE id = ?');
-        $req->execute(array($_SESSION['id']));
-        $user = $req->fetch();
-        if (password_verify($password_check_tfa, $user['password'])) {
-            if ($tfa->verifyCode($tfa_secret, $tfa_code)) {
-                $req = $db->prepare('UPDATE users SET tfaKey = ? WHERE id = ?');
-                $req->execute(array($tfa_secret, $_SESSION['id']));
-                sendMailTfaEnabled($_SESSION['email']);
-            } else {
-                $error = 'Code invalide';
-            }
-        } else {
-            $error = 'Mot de passe incorrect';
-        }
-    }
-
-    // Disable 2FA
-    if (isset($_POST['password_check'])) {
-        $password_check = SecurizeString_ForSQL($_POST['password_check']);
-        $req = $db->prepare('SELECT password FROM users WHERE id = ?');
-        $req->execute(array($_SESSION['id']));
-        $user = $req->fetch();
-        if (password_verify($password_check, $user['password'])) {
-            $req = $db->prepare('UPDATE users SET tfaKey = NULL WHERE id = ?');
-            $req->execute(array($_SESSION['id']));
-            sendMailTfaDisabled($_SESSION['email']);
-        } else {
-            $error = 'Mot de passe incorrect';
-        }
-    }
-
-    // Delete account
-    if (isset($_POST['password_check_delete'])) {
-        $password_check_delete = SecurizeString_ForSQL($_POST['password_check_delete']);
-        $req = $db->prepare('SELECT password FROM users WHERE id = ?');
-        $req->execute(array($_SESSION['id']));
-        $user = $req->fetch();
-        if (password_verify($password_check_delete, $user['password'])) {
-            if (checkToken($_SESSION['token'], $_SESSION['id'])) {
-                $req = $db->prepare('DELETE FROM likes WHERE id_user = ?');
-                $req->execute(array($_SESSION['id']));
-                $req = $db->prepare('DELETE pictures FROM pictures JOIN posts ON pictures.id_post = posts.id WHERE posts.id_user = ?');
-                $req->execute(array($_SESSION['id']));
-                $req = $db->prepare('DELETE FROM posts WHERE id_user = ?');
-                $req->execute(array($_SESSION['id']));
-                $req = $db->prepare('DELETE FROM follows WHERE id_user_following = ? OR id_user_followed = ?');
-                $req->execute(array($_SESSION['id'], $_SESSION['id']));
-                $req = $db->prepare('DELETE FROM address WHERE id_user = ?');
-                $req->execute(array($_SESSION['id']));
-                $req = $db->prepare('DELETE FROM emailsnonverifies WHERE id = ?');
-                $req->execute(array($_SESSION['id']));
-                $req = $db->prepare('DELETE FROM notifications WHERE user_id = ?');
-                $req->execute(array($_SESSION['id']));
-                $req = $db->prepare('DELETE FROM users WHERE id = ?');
-                $req->execute(array($_SESSION['id']));
-                // delete directory
-                $dir = '../img/user/'.$_SESSION['id'].'/';
-                rrmdir($dir);
-                $_SESSION = array();
-                session_destroy();
-            } else {
-                $error = 'Session invalide';
-            }
-        } else {
-            $error = 'Mot de passe incorrect';
-        }
+    } else {
+        $error = 'Invalid parameters';
     }
 } else {
     $error = 'Invalid request method';
@@ -343,10 +264,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 if (isset($error)) {
     header('Content-Type: application/json');
     echo json_encode(array('error' => true,'message' => $error));
-}
-if (isset($newpseudo) && $newpseudo == true) {
-    header('Content-Type: application/json');
-    echo json_encode(array('changedpseudo' => true, 'pseudo' => $pseudo));
 }
 
 ?>

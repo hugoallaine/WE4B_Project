@@ -14,8 +14,9 @@ export class LoginComponent implements OnInit {
     username: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
     showPassword: new FormControl(false),
-    //tfa_code: new FormControl('')
+    tfa_code: new FormControl('')
   });
+  tfa: boolean = false;
   error_message: string = '';
 
   constructor(private authService: AuthService, private router: Router) { }
@@ -38,10 +39,13 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const username = this.loginForm.get('username')?.value;
       const password = this.loginForm.get('password')?.value;
+      const tfa_code = this.loginForm.get('tfa_code')?.value;
 
-      this.authService.login(username, password).subscribe(response => {
+      this.authService.login(username, password, tfa_code).subscribe(response => {
         if (response.success) {
           this.router.navigate(['/home']);
+        } else if (response.tfa) {
+          this.tfa = true;
         } else {
           this.error_message = response.message;
         }
