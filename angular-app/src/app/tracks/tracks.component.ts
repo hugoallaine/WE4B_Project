@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MusicService } from '../services/music.service';
 
 @Component({
-  selector: 'app-musics',
-  templateUrl: './musics.component.html',
-  styleUrls: ['./musics.component.css']
+  selector: 'app-tracks',
+  templateUrl: './tracks.component.html',
+  styleUrls: ['./tracks.component.css']
 })
-export class MusicsComponent implements OnInit {
+export class TracksComponent implements OnInit {
   musics: any[] = [];
 
   constructor(private musicService: MusicService) { }

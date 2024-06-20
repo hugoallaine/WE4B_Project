@@ -6,7 +6,7 @@
 
   <!-- Artists Section -->
   <div class="container mt-4">
-    <h2 class="mb-4" (click)="navigateTo('artists')" style="cursor: pointer;">Artistes</h2>
+    <h2 class="mb-4" (click)="navigateTo('artists')" style="cursor: pointer;">Artists</h2>
     <div class="d-flex flex-nowrap overflow-auto element-container">
       <div *ngFor="let artist of artists" class="p-2">
         <div class="card artist-card" (click)="navigateTo('artist/' + artist.id)"  style="cursor: pointer;">
@@ -37,7 +37,7 @@
 
   <!-- Musics Section -->
   <div class="container mt-4">
-    <h2 class="mb-4" (click)="navigateTo('musics')" style="cursor: pointer;">Musiques</h2>
+    <h2 class="mb-4" (click)="navigateTo('musics')" style="cursor: pointer;">Tracks</h2>
     <div class="d-flex flex-nowrap overflow-auto element-container">
       <div *ngFor="let music of musics" class="p-2">
         <div class="card music-card"  style="cursor: pointer;">

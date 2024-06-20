@@ -7,7 +7,7 @@ import { AuthGuard } from "./guards/auth.guard";
 import { MediaPlayerComponent } from "./media-player/media-player.component";
 import { AccountComponent } from "./account/account.component";
 import { AlbumsComponent } from './albums/albums.component';
-import { MusicsComponent } from './musics/musics.component';
+import { TracksComponent } from './tracks/tracks.component';
 import { ArtistsComponent } from './artists/artists.component';
 import { ArtistDetailComponent } from './artist-detail/artist-detail.component';
 import { AlbumDetailComponent } from "./album-detail/album-detail.component";
@@ -21,7 +21,7 @@ const routes: Routes = [
     { path: "account", component: AccountComponent, canActivate: [AuthGuard] },
     { path: "player", component: MediaPlayerComponent },
     { path: 'albums', component: AlbumsComponent },
-    { path: 'musics', component: MusicsComponent },
+    { path: 'musics', component: TracksComponent },
     { path: 'artists', component: ArtistsComponent },
     { path: 'artist/:id', component: ArtistDetailComponent },
     { path: 'album/:id', component: AlbumDetailComponent },

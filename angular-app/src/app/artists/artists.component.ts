@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MusicService } from '../services/music.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-artists',
@@ -9,11 +10,15 @@ import { MusicService } from '../services/music.service';
 export class ArtistsComponent implements OnInit {
   artists: any[] = [];
 
-  constructor(private musicService: MusicService) { }
+  constructor(private musicService: MusicService, private router: Router) { }
 
   ngOnInit(): void {
     this.musicService.getArtists().subscribe(artists => {
       this.artists = artists;
     });
+  }
+
+  navigateTo(page: string): void {
+    this.router.navigate([`/${page}`]);
   }
 }
