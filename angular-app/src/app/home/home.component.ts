@@ -1,43 +1,53 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Renderer2 } from '@angular/core';
 import { MusicService } from '../services/music.service';
-import { Album } from '../models/album.model';
-import { Music } from '../models/music.model';
-import { Artist } from '../models/artist.model';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
-  artists: Artist[] = [];
-  albums: Album[] = [];
-  musics: Music[] = [];
-  filePaths: string[] = [];
+export class HomeComponent implements OnInit, AfterViewInit {
+  artists: any[] = [];
+  albums: any[] = [];
+  musics: any[] = [];
 
-  constructor(private musicService: MusicService) { }
+  constructor(private musicService: MusicService, private renderer: Renderer2) { }
 
   ngOnInit(): void {
-    this.getArtists();
-    this.getAlbums();
-    this.getMusics();
+    this.loadArtists();
+    this.loadAlbums();
+    this.loadMusics();
   }
 
-  getArtists(): void {
-    this.musicService.getArtists().subscribe(data => {
-      this.artists = data;
+  ngAfterViewInit(): void {
+    const sections = document.querySelectorAll('.d-flex-nowrap');
+    sections.forEach(section => {
+      this.renderer.listen(section, 'wheel', (event: WheelEvent) => {
+        if (event.deltaY > 0) {
+          section.scrollLeft += 100; // Ajustez cette valeur selon vos besoins
+        } else {
+          section.scrollLeft -= 100; // Ajustez cette valeur selon vos besoins
+        }
+        event.preventDefault();
+      });
     });
   }
 
-  getAlbums(): void {
-    this.musicService.getAlbums().subscribe(data => {
-      this.albums = data;
+  loadArtists(): void {
+    this.musicService.getArtists().subscribe(artists => {
+      this.artists = artists;
     });
   }
 
-  getMusics(): void {
-    this.musicService.getMusics().subscribe(data => {
-      this.musics = data;
+  loadAlbums(): void {
+    this.musicService.getAlbums().subscribe(albums => {
+      this.albums = albums;
+    });
+  }
+
+  loadMusics(): void {
+    this.musicService.getMusics().subscribe(musics => {
+      this.musics = musics;
     });
   }
 
@@ -46,22 +56,18 @@ export class HomeComponent implements OnInit {
     directoryPicker.click();
   }
 
-onDirectorySelected(event: any): void {
-  const files: FileList = event.target.files;
-  const filePaths: string[] = [];
-  const basePath = '/home/zentox/Documents/BR02/WE4B/WE4B_Project/angular-app/src/assets/'; // à remplacer par la méthode d'obtention de votre choix
-  for (let i = 0; i < files.length; i++) {
-    filePaths.push(basePath + files[i].webkitRelativePath);
-  }
-  this.scanDirectory(filePaths);
-}
-
-  scanDirectory(filePaths: string[]): void {
-    this.musicService.scanDirectory(filePaths).subscribe(data => {
-      // Mettre à jour la vue après avoir scanné le dossier
-      this.getArtists();
-      this.getAlbums();
-      this.getMusics();
-    });
+  onDirectorySelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+    if (files) {
+      const filePaths = Array.from(files).map(file => file.webkitRelativePath);
+      this.musicService.scanDirectory(filePaths).subscribe(response => {
+        if (response.success) {
+          this.loadArtists();
+          this.loadAlbums();
+          this.loadMusics();
+        }
+      });
+    }
   }
 }
