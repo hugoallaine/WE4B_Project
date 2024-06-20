@@ -21,6 +21,12 @@ export class MusicService {
     );
   }
 
+  getAlbumById(albumId: number): Observable<Album> {
+    return this.http.get<{ album: Album }>(`${this.apiUrl}/get_album.php?albumId=${albumId}`).pipe(
+      map(response => response.album)
+    );
+  }
+
   getMusics(): Observable<Music[]> {
     return this.http.get<{musics: Music[]}>(`${this.apiUrl}/get_data.php`).pipe(
       map(data => data.musics ?? [])
@@ -30,6 +36,12 @@ export class MusicService {
   getArtists(): Observable<Artist[]> {
     return this.http.get<{artists: Artist[]}>(`${this.apiUrl}/get_data.php`).pipe(
       map(data => data.artists ?? [])
+    );
+  }
+
+  getArtistById(id: number): Observable<Artist> {
+    return this.http.get<{artists: Artist[]}>(`${this.apiUrl}/get_data.php`).pipe(
+      map(data => data.artists.find(artist => artist.id === id)!)
     );
   }
 

@@ -1,13 +1,15 @@
+<app-navbar></app-navbar>
 <div class="container mt-4">
-    <div class="list-group">
-      <div *ngFor="let music of musics" class="list-group-item list-group-item-action flex-column align-items-start">
-        <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-1">{{ music.title }}</h5>
-          <small>{{ music.duration }} min</small>
+  <h1>Musiques</h1>
+  <div class="row">
+    <div *ngFor="let music of musics" class="col-md-3 mb-4">
+      <div class="card music-card">
+        <img [src]="music.coverUrl || 'assets/default-cover.jpg'" class="card-img-top music-cover" alt="{{ music.title }}">
+        <div class="card-body text-center music-info">
+          <h5 class="card-title text-truncate" title="{{ music.title }}">{{ music.title }}</h5>
+          <p class="card-text text-truncate" title="{{ music.artist }}">{{ music.artist }}</p>
         </div>
-        <p class="mb-1">{{ music.artist }}</p>
-        <small>{{ music.album }}</small>
       </div>
     </div>
   </div>
-  
+</div>

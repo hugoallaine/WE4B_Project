@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, Renderer2 } from '@angular/core';
+import { Router } from '@angular/router';
 import { MusicService } from '../services/music.service';
-
+import { HorizontalScrollService } from '../services/horizontal-scroll.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -11,7 +12,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   albums: any[] = [];
   musics: any[] = [];
 
-  constructor(private musicService: MusicService, private renderer: Renderer2) { }
+  constructor(
+    private musicService: MusicService,
+    private horizontalScrollService: HorizontalScrollService,
+    private renderer: Renderer2,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.loadArtists();
@@ -20,16 +26,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    const sections = document.querySelectorAll('.d-flex-nowrap');
+    const sections = document.querySelectorAll('.element-container');
     sections.forEach(section => {
-      this.renderer.listen(section, 'wheel', (event: WheelEvent) => {
-        if (event.deltaY > 0) {
-          section.scrollLeft += 100; // Ajustez cette valeur selon vos besoins
-        } else {
-          section.scrollLeft -= 100; // Ajustez cette valeur selon vos besoins
-        }
-        event.preventDefault();
-      });
+      this.horizontalScrollService.applySmoothScroll(section as HTMLElement, this.renderer);
     });
   }
 
@@ -69,5 +68,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
       });
     }
+  }
+
+  navigateTo(page: string): void {
+    this.router.navigate([`/${page}`]);
   }
 }

@@ -35,9 +35,40 @@
     display: none;
 }
   
-.d-flex-nowrap {
-    overflow-x: auto;
+.element-container {
+    overflow-x: scroll;
     white-space: nowrap;
     padding-bottom: 10px;
   }
-  
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #6c757d;
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #ff0000;
+} 
+
+.element-container.scrolling::-webkit-scrollbar-thumb {
+    background-color: #ff0000;
+  }
+
+.d-flex.flex-nowrap.scrolling::-webkit-scrollbar-thumb {
+    background-color: #ff0000;
+}
+
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

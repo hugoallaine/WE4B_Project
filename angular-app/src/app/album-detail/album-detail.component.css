@@ -1,0 +1,22 @@
+.container {
+    margin-top: 20px;
+  }
+  
+  .card-img-top {
+    max-height: 300px;
+    object-fit: cover;
+  }
+  
+  .list-group-item {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .list-group-item span {
+    flex: 1;
+  }
+  
+  .list-group-item span:first-child {
+    margin-right: 10px;
+  }
+  

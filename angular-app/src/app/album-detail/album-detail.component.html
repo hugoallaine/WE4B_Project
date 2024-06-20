@@ -1,0 +1,28 @@
+<app-navbar></app-navbar>
+<div class="container mt-4">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <img [src]="album?.coverUrl || 'assets/default-cover.jpg'" class="card-img-top" alt="{{ album?.title }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ album?.title }}</h5>
+            <p class="card-text">{{ album?.artist }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <h2>{{ album?.title }}</h2>
+        <p>by <a [routerLink]="['/artist', album?.artistId]">{{ album?.artist }}</a></p>
+        <h4>Tracks</h4>
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let track of album?.tracks">
+            <div class="d-flex justify-content-between">
+              <span>{{ track.title }}</span>
+              <span>{{ track.duration | number:'1.0-2' }} mins</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  

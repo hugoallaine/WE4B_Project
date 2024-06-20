@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MusicService } from '../services/music.service';
-import { Album } from '../models/album.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-albums',
@@ -8,14 +8,23 @@ import { Album } from '../models/album.model';
   styleUrls: ['./albums.component.css']
 })
 export class AlbumsComponent implements OnInit {
+  albums: any[] = [];
 
-  albums: Album[] = [];
-
-  constructor(private musicService: MusicService) { }
+  constructor(
+    private musicService: MusicService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
-    this.musicService.getAlbums().subscribe(data => {
-      this.albums = data;
+    this.loadAlbums();
+  }
+
+  loadAlbums(): void {
+    this.musicService.getAlbums().subscribe(albums => {
+      this.albums = albums;
     });
+  }
+  navigateTo(page: string): void {
+    this.router.navigate([`/${page}`]);
   }
 }

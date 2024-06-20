@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MusicService } from '../services/music.service';
-import { Music } from '../models/music.model';
 
 @Component({
   selector: 'app-musics',
@@ -8,17 +7,17 @@ import { Music } from '../models/music.model';
   styleUrls: ['./musics.component.css']
 })
 export class MusicsComponent implements OnInit {
-  musics: Music[] = [];
+  musics: any[] = [];
 
   constructor(private musicService: MusicService) { }
 
   ngOnInit(): void {
-    this.getMusics();
+    this.loadMusics();
   }
 
-  getMusics(): void {
-    this.musicService.getMusics().subscribe(data => {
-      this.musics = data;
+  loadMusics(): void {
+    this.musicService.getMusics().subscribe(musics => {
+      this.musics = musics;
     });
   }
 }

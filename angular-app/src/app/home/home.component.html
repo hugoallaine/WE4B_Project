@@ -6,50 +6,48 @@
 
   <!-- Artists Section -->
   <div class="container mt-4">
-    <h2 class="mb-4">Artistes</h2>
-    <div class="d-flex flex-nowrap overflow-auto">
+    <h2 class="mb-4" (click)="navigateTo('artists')" style="cursor: pointer;">Artistes</h2>
+    <div class="d-flex flex-nowrap overflow-auto element-container">
       <div *ngFor="let artist of artists" class="p-2">
-        <div class="card artist-card">
+        <div class="card artist-card" (click)="navigateTo('artist/' + artist.id)"  style="cursor: pointer;">
           <img [src]="artist.pictureUrl || 'assets/default-artist.jpg'" class="card-img-top artist-cover" alt="{{ artist.name }}">
           <div class="card-body text-center artist-info">
-            <h5 class="card-title">{{ artist.name }}</h5>
+            <h5 class="card-title text-truncate">{{ artist.name }}</h5>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 
   <!-- Albums Section -->
   <div class="container mt-4">
-    <h2 class="mb-4">Albums</h2>
-    <div class="d-flex flex-nowrap overflow-auto">
+    <h2 class="mb-4" (click)="navigateTo('albums')" style="cursor: pointer;">Albums</h2>
+    <div class="d-flex flex-nowrap overflow-auto element-container">
       <div *ngFor="let album of albums" class="p-2">
-        <div class="card album-card">
+        <div class="card album-card" (click)="navigateTo('album/' + album.id)"  style="cursor: pointer;">
           <img [src]="album.coverUrl || 'assets/default-cover.jpg'" class="card-img-top album-cover" alt="{{ album.title }}">
           <div class="card-body text-center album-info">
-            <h5 class="card-title">{{ album.title }}</h5>
-            <p class="card-text">{{ album.artist }}</p>
+            <h5 class="card-title text-truncate">{{ album.title }}</h5>
+            <p class="card-text text-truncate">{{ album.artist }}</p>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 
   <!-- Musics Section -->
   <div class="container mt-4">
-    <h2 class="mb-4">Musiques</h2>
-    <div class="d-flex flex-nowrap overflow-auto">
+    <h2 class="mb-4" (click)="navigateTo('musics')" style="cursor: pointer;">Musiques</h2>
+    <div class="d-flex flex-nowrap overflow-auto element-container">
       <div *ngFor="let music of musics" class="p-2">
-        <div class="card music-card">
-          <img [src]="music.coverUrl || 'assets/default-cover.jpg'" class="card-img-top music-cover"
-            alt="{{music.title}}">
+        <div class="card music-card"  style="cursor: pointer;">
+          <img [src]="music.coverUrl || 'assets/default-cover.jpg'" class="card-img-top music-cover" alt="{{music.title}}">
           <div class="card-body text-center music-info">
-            <h5 class="card-title">{{music.artist}}</h5>
-            <p class="card-text">{{music.title}}</p>
+            <h5 class="card-title text-truncate" title="{{music.title}}">{{music.title}}</h5>
+            <p class="card-text text-truncate" title="{{music.artist}}">{{music.artist}}</p>
           </div>
         </div>
       </div>
     </div>
   </div>
+  
