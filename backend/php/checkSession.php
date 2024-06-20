@@ -11,14 +11,23 @@ session_start_secure();
  *  Response:
  * - error (boolean): true if an error occured
  * - message (string): the error message
- * - status (boolean): true if the user is connected
- * - pseudo (string): the pseudo of the user
  */
 header('Content-Type: application/json');
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $status = isConnected();
-    $pseudo = $status ? $_SESSION['pseudo'] : null;
-    echo json_encode(["success" => true, 'error' => false, 'status' => $status, 'pseudo' => $pseudo]);
+    if (isset($_GET['id']) && isset($_GET['token'])) {
+        $id = SecurizeString_ForSQL(urldecode($_GET['id']));
+        $token = SecurizeString_ForSQL(urldecode($_GET['token']));
+        $req = $db->prepare('SELECT id,token FROM users WHERE id = ? AND token = ?');
+        $req->execute([$id, $token]);
+        $user = $req->fetch();
+        if ($user) {
+            echo json_encode(["success" => true, 'error' => false, 'id' => $user['id'], 'token' => $user['token']]);
+        } else {
+            echo json_encode(["success" => false, 'error' => true]);
+        }
+    } else {
+        echo json_encode(["success" => false, 'error' => true, 'message' => 'Missing parameters']);
+    }
 } else {
     echo json_encode(["success" => false, 'error' => true, 'message' => 'Invalid request method']);
 }

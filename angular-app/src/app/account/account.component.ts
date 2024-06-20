@@ -100,9 +100,8 @@ export class AccountComponent implements OnInit {
 
     this.authService.changePassword(oldPassword, newPassword, newPassword2).subscribe(response => {
       if (response.success) {
-        this.authService.logout().subscribe(() => {
-          console.log('Password changed');
-        });
+        this.authService.logout();
+        console.log('Password changed');
       } else {
         console.log(response.message);
       }
@@ -171,9 +170,8 @@ export class AccountComponent implements OnInit {
 
     this.authService.deleteAccount(password).subscribe(response => {
       if (response.success) {
-        this.authService.logout().subscribe(() => {
-          console.log('Account deleted');
-        });
+        this.authService.logout();
+        console.log('Account deleted');
       } else {
         console.log(response.message);
       }

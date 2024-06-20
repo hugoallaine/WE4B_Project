@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,32 @@ export class AuthService {
     tfa: false
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { 
+    console.log(sessionStorage.getItem('id'), sessionStorage.getItem('token'));
+    this.checkLogin().subscribe(response => {
+      if (response.success) {
+        this.loggedIn = true;
+        if (this.loggedIn) {
+          this.getUser().subscribe(response => {
+            this.user.tfa = response.tfa;
+            router.navigate(['/home']);
+          });
+        }
+      }
+    });
+  }
+
+  checkLogin(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/checkSession.php?id=${parseInt(sessionStorage.getItem('id') ?? '0')}&token=${sessionStorage.getItem('token') ?? ''}`).pipe(
+      tap(response => {
+        if (response.success) {
+          this.loggedIn = true;
+          this.user.id = response.id;
+          this.user.token = response.token;
+        }
+      })
+    );
+  }
 
   login(username: string, password: string, tfa_code: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login.php`, { user: username, password: password, tfa_code: tfa_code}).pipe(
@@ -25,6 +51,8 @@ export class AuthService {
           this.user.id = response.id;
           this.user.token = response.token;
           this.user.tfa = response.tfa;
+          sessionStorage.setItem('id', response.id);
+          sessionStorage.setItem('token', response.token);
         }
       })
     );
@@ -34,15 +62,12 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/register.php`, { user: username, password: password, password2: password2, pseudo: pseudo, firstname: firstname, name: name, birthdate: birthdate });
   }
 
-  logout(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/logout.php`).pipe(
-      tap(() => {
-        this.loggedIn = false;
-        this.user.id = 0;
-        this.user.token = '';
-        this.user.tfa = false;
-      })
-    );
+  logout(): void {
+    this.loggedIn = false;
+    this.user.id = 0;
+    this.user.token = '';
+    this.user.tfa = false;
+    sessionStorage.clear();
   }
 
   isLoggedIn(): boolean {
