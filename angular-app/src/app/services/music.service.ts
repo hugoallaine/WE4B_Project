@@ -45,7 +45,7 @@ export class MusicService {
     );
   }
 
-  scanDirectory(filePaths: string[]): Observable<any> {
+  scanDirectory(filePaths: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/scan_directory.php`, { filePaths });
   }
 }

@@ -12,6 +12,8 @@ export class MusicsComponent implements OnInit, AfterViewInit {
   artists: any[] = [];
   albums: any[] = [];
   musics: any[] = [];
+  directoryPath: string = '';
+
   constructor(
     private musicService: MusicService,
     private horizontalScrollService: HorizontalScrollService,
@@ -51,22 +53,16 @@ export class MusicsComponent implements OnInit, AfterViewInit {
   }
 
   openDirectoryPicker(): void {
-    const directoryPicker = document.getElementById('directoryPicker') as HTMLInputElement;
-    directoryPicker.click();
-  }
-
-  onDirectorySelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const files = input.files;
-    if (files) {
-      const filePaths = Array.from(files).map(file => file.webkitRelativePath);
-      this.musicService.scanDirectory(filePaths).subscribe(response => {
+    if (this.directoryPath.trim() !== '') {
+      this.musicService.scanDirectory(this.directoryPath).subscribe(response => {
         if (response.success) {
           this.loadArtists();
           this.loadAlbums();
           this.loadMusics();
         }
       });
+    } else {
+      alert('Please enter a valid directory path.');
     }
   }
 

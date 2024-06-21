@@ -20,6 +20,7 @@ import { ArtistDetailComponent } from './artist-detail/artist-detail.component';
 import { AlbumDetailComponent } from './album-detail/album-detail.component';
 import { MusicsComponent } from './musics/musics.component';
 import { MoviesComponent } from './movies/movies.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -45,6 +46,7 @@ import { MoviesComponent } from './movies/movies.component';
         ReactiveFormsModule,
         HttpClientModule,
         StyleModule,
+        FormsModule,
     ],
     providers: [AuthGuard],
     bootstrap: [AppComponent],

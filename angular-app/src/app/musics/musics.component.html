@@ -1,8 +1,10 @@
 <app-navbar></app-navbar>
 <div class="container mt-4">
     <h1>Music Library</h1>
-    <input type="file" id="directoryPicker" webkitdirectory (change)="onDirectorySelected($event)" hidden>
-    <button class="btn btn-primary" (click)="openDirectoryPicker()">Scan Directory</button>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Enter directory path" [(ngModel)]="directoryPath">
+        <button class="btn btn-primary" (click)="openDirectoryPicker()">Scan Directory</button>
+    </div>
 
     <!-- Artists Section -->
     <div class="container mt-4">

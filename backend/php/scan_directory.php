@@ -23,8 +23,23 @@ function analyzeFile($filePath) {
     $coverUrl = null;
     if (isset($fileInfo['comments']['picture'][0])) {
         $picture = $fileInfo['comments']['picture'][0];
-        $base64Image = base64_encode($picture['data']);
-        $coverUrl = 'data:' . $picture['image_mime'] . ';base64,' . $base64Image;
+        $imageData = $picture['data'];
+        $imageMime = $picture['image_mime'];
+        $imageExtension = explode('/', $imageMime)[1];
+        $imagePath = 'assets/covers/' . md5($filePath) . '.' . $imageExtension;
+
+        // Path to the covers directory relative to scan_directory.php
+        $relativeCoversPath = dirname(dirname(__DIR__)) . '/angular-app/src/' . $imagePath;
+
+        // Create the covers directory if it doesn't exist
+        if (!is_dir(dirname(dirname(__DIR__)) . '/angular-app/src/assets/covers')) {
+            mkdir(dirname(dirname(__DIR__)) . '/angular-app/src/assets/covers', 0755, true);
+        }
+
+        // Save the image file
+        file_put_contents($relativeCoversPath, $imageData);
+
+        $coverUrl = $imagePath;
     }
 
     return [
@@ -64,7 +79,7 @@ function getSpotifyAccessToken($clientId, $clientSecret) {
     return $data['access_token'] ?? null;
 }
 
-function getArtistInfoFromSpotify($artistName, $accessToken) {
+function getArtistImageFromSpotify($artistName, $accessToken) {
     $url = 'https://api.spotify.com/v1/search?q=' . urlencode($artistName) . '&type=artist&limit=1';
     $headers = [
         'Authorization: Bearer ' . $accessToken
@@ -79,20 +94,16 @@ function getArtistInfoFromSpotify($artistName, $accessToken) {
     $response = file_get_contents($url, false, $context);
 
     if ($response === FALSE) {
-        error_log("Failed to fetch artist info from Spotify for $artistName: " . error_get_last()['message']);
-        return null;
+        error_log("Failed to fetch artist image from Spotify for $artistName: " . error_get_last()['message']);
+        return 'assets/default-artist.jpg'; // Fallback to a default image if none found
     }
 
     $data = json_decode($response, true);
-    if (isset($data['artists']['items'][0])) {
-        $artist = $data['artists']['items'][0];
-        return [
-            'image' => $artist['images'][0]['url'] ?? 'assets/logo/flex-logo-gris.svg',
-            'bio' => $artist['genres'][0] ?? '' // Spotify doesn't provide detailed bios, using genres as a placeholder
-        ];
+    if (isset($data['artists']['items'][0]['images'][0]['url'])) {
+        return $data['artists']['items'][0]['images'][0]['url'];
     }
 
-    return null;
+    return 'assets/default-artist.jpg'; // Fallback to a default image if none found
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -100,10 +111,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     error_log("Received data: " . print_r($data, true));
 
-    $filePaths = $data['filePaths'] ?? [];
+    $directoryPath = $data['filePaths'] ?? '';
 
-    if (empty($filePaths)) {
-        echo json_encode(['error' => 'No files provided']);
+    error_log("Directory path: " . $directoryPath);
+
+    if (empty($directoryPath)) {
+        echo json_encode(['error' => 'No directory path provided']);
         exit;
     }
 
@@ -134,21 +147,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $spotifyAccessToken = getSpotifyAccessToken($SPOTIFY_CLIENT_ID, $SPOTIFY_CLIENT_SECRET);
 
-    foreach ($filePaths as $filePath) {
-        // Relative path to the audio file
-        $absoluteFilePath = realpath("../../angular-app/src/assets/" . $filePath);
+    // Fetch all files in the given directory recursively
+    $allFiles = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directoryPath));
+    $filePaths = [];
+    foreach ($allFiles as $file) {
+        if ($file->isFile() && in_array(strtolower($file->getExtension()), ['mp3', 'flac', 'wav'])) {
+            $filePaths[] = $file->getRealPath();
+        }
+    }
+
+    foreach ($filePaths as $absoluteFilePath) {
         if ($absoluteFilePath && file_exists($absoluteFilePath)) {
             $metadata = analyzeFile($absoluteFilePath);
 
             // Add the artist if it does not already exist
             if (!isset($artistsMap[$metadata['artist']])) {
                 $artistId = count($db['artists']) + 1;
-                $artistInfo = $spotifyAccessToken ? getArtistInfoFromSpotify($metadata['artist'], $spotifyAccessToken) : ['image' => 'assets/logo/flex-logo-gris.svg', 'bio' => ''];
+                $artistImage = $spotifyAccessToken ? getArtistImageFromSpotify($metadata['artist'], $spotifyAccessToken) : 'assets/default-artist.jpg';
                 $newArtist = [
                     'id' => $artistId,
                     'name' => $metadata['artist'],
-                    'pictureUrl' => $artistInfo['image'],
-                    'bio' => $artistInfo['bio']
+                    'pictureUrl' => $artistImage
                 ];
                 $db['artists'][] = $newArtist;
                 $artistsMap[$metadata['artist']] = $newArtist;
@@ -189,7 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ];
             }
         } else {
-            error_log("File not found: " . $filePath);
+            error_log("File not found: " . $absoluteFilePath);
         }
     }
 
@@ -199,4 +218,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo json_encode(['error' => 'Invalid request method']);
 }
-?>
