@@ -68,17 +68,19 @@ if (isset($data->user) && isset($data->password) && isset($data->password2) && i
                             if (strlen($password) >= 12 && preg_match('/[A-Z]/', $password) && preg_match('/[a-z]/', $password) && preg_match('/[0-9]/', $password) && preg_match('/[^a-zA-Z0-9]/', $password)) {
                                 $password = password_hash($password, PASSWORD_DEFAULT);
                                 $key = generateToken(255);
-                                $req = $db->prepare("INSERT INTO users(email,password,name,firstname,birth_date,pseudo) VALUES (?,?,?,?,?,?)");
-                                $req->execute(array($email, $password, $name, $firstname, $birthdate, $pseudo));
+                                $token = generateToken(255);
+                                $req = $db->prepare("INSERT INTO users(email,password,token,name,firstname,birth_date,pseudo) VALUES (?,?,?,?,?,?)");
+                                $req->execute(array($email, $password, $token, $name, $firstname, $birthdate, $pseudo));
                                 $req = $db->prepare("SELECT id FROM users WHERE email = ?");
                                 $req->execute(array($email));
                                 $id = $req->fetch()['id'];
-                                $token = generateToken(255);
-                                while (checkToken($token, $id) == true) {
-                                    $token = generateToken(255);
+                                if (checkToken($token, $id)) {
+                                    while (checkToken($token, $id)) {
+                                        $token = generateToken(255);
+                                    }
+                                    $req = $db->prepare("UPDATE users SET token = ? WHERE id = ?");
+                                    $req->execute(array($token, $id));
                                 }
-                                $req = $db->prepare("UPDATE users SET token = ? WHERE id = ?");
-                                $req->execute(array($token, $id));
                                 if (isset($_FILES['avatar-r']) && $_FILES['avatar-r']['error'] === UPLOAD_ERR_OK) {
                                     if ($_FILES['avatar-r']['size'] <= 2097152) {
                                         $req = $db->prepare("SELECT id FROM users WHERE email = ?");
