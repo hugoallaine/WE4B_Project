@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MusicService } from '../services/music.service';
 import { Router } from '@angular/router';
+import { Album, Artist } from '../models/artist.model';
 
 @Component({
   selector: 'app-artist-detail',
@@ -9,8 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./artist-detail.component.css']
 })
 export class ArtistDetailComponent implements OnInit {
-  artist: any;
-  albums: any[] = [];
+  artist?: Artist;
 
   constructor(
     private route: ActivatedRoute,
@@ -21,14 +21,13 @@ export class ArtistDetailComponent implements OnInit {
   ngOnInit(): void {
     const artistId = this.route.snapshot.paramMap.get('id');
     if (artistId) {
-      this.loadArtist(parseInt(artistId));
+      this.loadArtist(artistId);
     }
   }
 
-  loadArtist(artistId: number): void {
+  loadArtist(artistId: string): void {
     this.musicService.getArtists().subscribe(artists => {
       this.artist = artists.find(a => a.id === artistId);
-      this.albums = this.artist ? this.artist.albums : [];
     });
   }
 

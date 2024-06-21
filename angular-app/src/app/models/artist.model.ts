@@ -16,5 +16,6 @@ export interface Artist {
   id: string;
   name: string;
   pictureUrl: string;
+  bio?: string;
   albums: Album[];
 }
