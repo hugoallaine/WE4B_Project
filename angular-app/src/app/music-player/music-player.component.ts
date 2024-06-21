@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-music-player',
@@ -7,8 +8,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./music-player.component.css']
 })
 export class MusicPlayerComponent implements OnInit, AfterViewInit {
-  
-  constructor(private router: Router) {}
+
+  constructor(private router: Router) { }
 
   @ViewChild('audioPlayer') audioPlayer!: ElementRef<HTMLAudioElement>;
   @ViewChild('progressBar') progressBar!: ElementRef;
@@ -20,6 +21,7 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit {
   isMuted = false;
   showVolume = false;
   previousVolume = 1;
+  showPlayer = true;
 
   progress = 0;
   tracks = ['song1.mp3', 'song2.mp3', 'song3.mp3'];
@@ -27,11 +29,30 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit {
   type = 'audio/mp3';
   path = '/assets/audio';
   trackpath = this.path + '/' + this.tracks[this.currentTrackIndex];
+  wrongUrl = ['/login', '/register', '/player', '/movies'];
+  private routerSubscription!: Subscription;
 
   ngOnInit() {
-    setTimeout(() => {
-      console.log(this.router.url);
-    }, 500); // Délai de 500 ms
+    this.checkUrl(); // Initial check
+    this.routerSubscription = this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.checkUrl();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+  }
+
+  checkUrl() {
+    if (this.wrongUrl.includes(this.router.url)) {
+      this.showPlayer = false;
+    } else {
+      this.showPlayer = true;
+    }
   }
 
   ngAfterViewInit() {
@@ -42,7 +63,7 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit {
     this.audioPlayer.nativeElement.addEventListener('volumechange', () => this.isMuted = this.audioPlayer.nativeElement.muted);
     this.audioPlayer.nativeElement.addEventListener('ended', () => this.isPlaying = false);
     this.audioPlayer.nativeElement.addEventListener('click', this.togglePlayPause.bind(this));
-  }  
+  }
 
   updateProgressBar() {
     const duration = this.audioPlayer.nativeElement.duration;

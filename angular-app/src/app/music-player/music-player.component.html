@@ -1,4 +1,4 @@
-<div class="music-player" style="z-index: 1;" #audioElement>
+<div *ngIf="showPlayer" class="music-player" style="z-index: 1;" #audioElement>
   <audio #audioPlayer>
     <source [src]="trackpath" type="audio/mp3">
   </audio>
