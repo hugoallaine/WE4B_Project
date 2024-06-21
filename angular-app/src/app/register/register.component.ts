@@ -65,7 +65,7 @@ export class RegisterComponent implements OnInit{
     const validLength = value.length >= 12;
     const hasUppercase = /[A-Z]/.test(value);
     const hasDigit = /\d/.test(value);
-    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>-_]/.test(value);
     const isValid = validLength && hasUppercase && hasDigit && hasSpecial;
     return isValid ? null : { invalidPassword: true };
   }
@@ -118,7 +118,7 @@ export class RegisterComponent implements OnInit{
       validLength: password.length >= 12,
       hasUppercase: /[A-Z]/.test(password),
       hasDigit: /\d/.test(password),
-      hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+      hasSpecial: /[!@#$%^&*(),.?":{}|<>-_]/.test(password)
     };
   }
 }

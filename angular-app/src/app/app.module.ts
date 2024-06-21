@@ -21,7 +21,6 @@ import { AlbumDetailComponent } from './album-detail/album-detail.component';
 import { MusicsComponent } from './musics/musics.component';
 import { MoviesComponent } from './movies/movies.component';
 import { MusicPlayerComponent } from './music-player/music-player.component';
-import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
