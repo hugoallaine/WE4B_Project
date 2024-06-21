@@ -1,21 +1,17 @@
 .music-player {
     position: fixed;
     bottom: 0;
+    height: 8%;
     width: 100%;
-    background-color: #333;
     color: white;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    background-color: #333;
 }
 
 .controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-p {
-    margin: 0;
+    height: 100%;
 }
 
 input[type="range"] {
@@ -26,36 +22,85 @@ input[type="range"] {
 }
 
 .progress-bar {
-    flex: 1;
+    top: -3px;
     height: 3px;
-    position: absolute;
-    top: -1.5px;
     width: 100%;
+    position: absolute;
 }
 
 .progress-bar:hover {
-    flex: 1;
     height: 5px;
-    position: absolute;
-    top: -2.5px;
-    width: 100%;
+    top: -4px;
 }
 
 .controls button {
     background: none;
-    border: none;
     cursor: pointer;
-    position: relative;
-    display: inline-block;
+
 }
 
-.volume-container {
+.controls button:hover {
+    animation: zoom 0.1s forwards;
+}
+
+.controls button:not(:hover) {
+    animation: zoom-out 0.1s forwards;
+}
+
+@keyframes zoom {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes zoom-out {
+    0% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.music-info {
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.music-info img {
+    margin-right: 10px;
+}
+
+.infos {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-weight: bold;
+    margin: 0;
+}
+
+.album-artist {
+    margin: 0;
+    color: gray;
+}
+
+.controls .play-pause:hover i {
+    color: #ff0000;
+}
+
+ .volume-container {
     z-index: 2;
     position: absolute;
     bottom: 0;
-    left: 100%;
-    transform: translateY(-20%);
     display: none;
+    right: 100%;
+    transform: translateY(-20%);
     padding: 5px;
     border-radius: 5px;
 }

@@ -24,13 +24,17 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit {
   showPlayer = true;
   progress = 0;
   currentTrackIndex = 0;
-  title = 'Music Player';
+
+  title = 'Title';
+  artist = 'Artist';
+  album = 'Album';
+
 
   type = 'audio/mp3';
   tracks = [];
   path = '/assets/audio';
   trackpath = this.path + '/' + this.tracks[this.currentTrackIndex];
-  wrongUrl = ['/login', '/register', '/player', '/movies'];
+  wrongUrl = ['/login', '/register', '/player'];
   private routerSubscription!: Subscription;
 
   ngOnInit() {
