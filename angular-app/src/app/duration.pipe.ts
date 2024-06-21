@@ -4,13 +4,25 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'durationPipe'
 })
 export class DurationPipe implements PipeTransform {
+
   transform(value: number): string {
-    const hours: number = Math.floor(value / 3600);
-    const minutes: number = Math.floor((value % 3600) / 60);
-    const seconds: number = value % 60;
-    const hoursString = hours > 0 ? `${hours}:` : '';
-    const minutesString = hours > 0 && minutes < 10 ? `0${minutes}` : `${minutes}`;
-    const secondsString = seconds < 10 ? `0${seconds}` : `${seconds}`;
-    return `${hoursString}${minutesString}:${secondsString}`;
+    if (typeof value !== 'number' || isNaN(value) || value < 0) {
+      return '00:00';
+    }
+
+    const totalSeconds = Math.floor(value * 60);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+
+    if (hours > 0) {
+      return `${hours}:${formattedMinutes}:${formattedSeconds}`;
+    } else {
+      return `${formattedMinutes}:${formattedSeconds}`;
+    }
   }
+
 }

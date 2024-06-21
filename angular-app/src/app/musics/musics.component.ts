@@ -11,8 +11,6 @@ import { Artist, Album, Track } from '../models/artist.model';
 })
 export class MusicsComponent implements OnInit, AfterViewInit {
   artists: Artist[] = [];
-  albums: Album[] = [];
-  tracks: Track[] = [];
   directoryPath: string = '';
 
   constructor(

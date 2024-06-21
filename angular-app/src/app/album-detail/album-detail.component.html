@@ -14,9 +14,9 @@
       <h4>Tracks</h4>
       <ul class="list-group">
         <li class="list-group-item" *ngFor="let track of album?.tracks; let i = index">
-          <div class="d-flex justify-content-between">
+          <div class="d-flex justify-content-between hover-clickable">
             <span>{{ i + 1 }}. {{ track.title }}</span>
-            <span>{{ track.duration | number:'1.0-2' }} mins</span>
+            <span>{{ track.duration | durationPipe }} mins</span>
           </div>
         </li>
       </ul>

@@ -15,9 +15,7 @@ export class MediaPlayerComponent implements AfterViewInit {
   path: string = '/assets/video/videotest.mp4'
   isPlaying: boolean = false;
   isMuted: boolean = false;
-  isFullScreen = false;
-  showVolume = false;
-  isSettingsMenuVisible = false;
+  isFullScreen: boolean = false;
   previousVolume: number = 1; // Default volume before muting
 
   ngAfterViewInit() {
@@ -25,26 +23,38 @@ export class MediaPlayerComponent implements AfterViewInit {
     this.videoPlayer.nativeElement.addEventListener('timeupdate', this.updateProgressBar.bind(this));
     this.videoPlayer.nativeElement.addEventListener('play', () => this.isPlaying = true);
     this.videoPlayer.nativeElement.addEventListener('pause', () => this.isPlaying = false);
-    this.videoPlayer.nativeElement.addEventListener('volumechange', () => this.isMuted = this.videoPlayer.nativeElement.muted);
     this.videoPlayer.nativeElement.addEventListener('ended', () => this.isPlaying = false);
     this.videoPlayer.nativeElement.addEventListener('click', this.togglePlayPause.bind(this));
     this.videoPlayer.nativeElement.addEventListener('dblclick', this.toggleFullScreen.bind(this));
   }
 
   updateProgressBar() {
-    const duration = this.videoPlayer.nativeElement.duration;
-    const currentTime = this.videoPlayer.nativeElement.currentTime;
+    const videoElement = this.videoPlayer.nativeElement;
+    const progressBarElement = this.progressBar.nativeElement;
+    const progressTextElement = this.progressText.nativeElement;
+    
+    const duration = videoElement.duration;
+    const currentTime = videoElement.currentTime;
+    
     if (duration > 0) {
-      this.progressBar.nativeElement.value = (currentTime / duration) * 100;
-      const formattedDurationMin = Math.floor(duration / 60).toString().padStart(2, '0');
-      const formattedDurationSec = Math.floor(duration % 60).toString().padStart(2, '0');
-      const formattedCurrentMin = Math.floor(currentTime / 60).toString().padStart(2, '0');
-      const formattedCurrentSec = Math.floor(currentTime % 60).toString().padStart(2, '0');
-      const formattedCurrentTime = `${formattedCurrentMin}:${formattedCurrentSec}`;
-      const formattedDurationTime = `${formattedDurationMin}:${formattedDurationSec}`;
-      this.progressText.nativeElement.textContent = `${formattedCurrentTime} / ${formattedDurationTime}`;
+      progressBarElement.value = (currentTime / duration) * 100;
+      progressTextElement.textContent = `${this.formatTime(currentTime, duration)} / ${this.formatTime(duration, duration)}`;
     }
   }
+  
+  formatTime(timeInSeconds : number, totalDuration : number) {
+    const hours = Math.floor(timeInSeconds / 3600).toString().padStart(2, '0');
+    const minutes = Math.floor((timeInSeconds % 3600) / 60).toString().padStart(2, '0');
+    const seconds = Math.floor(timeInSeconds % 60).toString().padStart(2, '0');
+  
+    // Check if totalDuration is greater than an hour
+    if (totalDuration >= 3600) {
+      return `${hours}:${minutes}:${seconds}`;
+    } else {
+      return `${minutes}:${seconds}`;
+    }
+  }
+  
 
   seek(event: Event) {
     const seekTo = parseFloat((event.target as HTMLInputElement).value);
@@ -128,10 +138,6 @@ export class MediaPlayerComponent implements AfterViewInit {
     for (let i = 0; i < tracks.length; i++) {
       tracks[i].mode = tracks[i].language === language ? 'showing' : 'hidden';
     }
-  }
-
-  showSettingsMenu(visible: boolean) {
-    this.isSettingsMenuVisible = visible;
   }
 
   exit() {

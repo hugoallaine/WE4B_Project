@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MusicService } from '../services/music.service';
 import { Router } from '@angular/router';
+import { Track } from '../models/artist.model';
 
 @Component({
   selector: 'app-album-detail',
@@ -34,4 +35,10 @@ export class AlbumDetailComponent implements OnInit {
   navigateTo(page: string): void {
     this.router.navigate([`/${page}`]);
   }
+
+  playTrack(track: Track): void {
+    this.musicService.addTrack(track);
+  }
 }
+
+
