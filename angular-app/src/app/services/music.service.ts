@@ -3,15 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Album } from '../models/album.model';
-import { Music } from '../models/music.model';
 import { Artist } from '../models/artist.model';
+import { Track } from '../models/track.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MusicService {
-
-  private apiUrl = 'http://localhost:8000';  // Mettez ici l'URL de votre backend
+  private apiUrl = 'http://localhost:8000';
 
   constructor(private http: HttpClient) { }
 
@@ -27,9 +26,9 @@ export class MusicService {
     );
   }
 
-  getMusics(): Observable<Music[]> {
-    return this.http.get<{musics: Music[]}>(`${this.apiUrl}/get_data.php`).pipe(
-      map(data => data.musics ?? [])
+  getMusics(): Observable<Track[]> {
+    return this.http.get<{tracks: Track[]}>(`${this.apiUrl}/get_data.php`).pipe(
+      map(data => data.tracks ?? [])
     );
   }
 

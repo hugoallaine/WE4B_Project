@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MusicService } from '../services/music.service';
 import { Artist } from '../models/artist.model';
 import { Album } from '../models/album.model';
-import { Music } from '../models/music.model';
+import { Track } from '../models/track.model';
 import { Router } from '@angular/router';
 import { HorizontalScrollService } from '../services/horizontal-scroll.service';
 
@@ -15,7 +15,7 @@ import { HorizontalScrollService } from '../services/horizontal-scroll.service';
 export class ArtistDetailComponent implements OnInit {
   artist: Artist | undefined;
   artistAlbums: Album[] = [];
-  artistMusics: Music[] = [];
+  artistMusics: Track[] = [];
 
   constructor(
     private route: ActivatedRoute,

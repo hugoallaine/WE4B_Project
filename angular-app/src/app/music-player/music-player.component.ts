@@ -19,7 +19,6 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit {
   isPlaying = false;
   isLooping = false;
   isMuted = false;
-  showVolume = false;
   previousVolume = 1;
   showPlayer = true;
   progress = 0;
