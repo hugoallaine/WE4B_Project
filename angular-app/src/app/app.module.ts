@@ -7,7 +7,7 @@ import { HomeComponent } from "./home/home.component";
 import { AccountComponent } from "./account/account.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
-import { ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { StyleModule } from "./style/style.module";
 import { AuthGuard } from "./guards/auth.guard";
@@ -43,6 +43,7 @@ import { MoviesComponent } from './movies/movies.component';
         BrowserModule,
         AppRoutingModule,
         ReactiveFormsModule,
+        FormsModule,
         HttpClientModule,
         StyleModule,
     ],
