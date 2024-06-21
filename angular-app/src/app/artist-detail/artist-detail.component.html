@@ -31,12 +31,12 @@
     <div class="container mt-4">
         <h2 class="mb-4 hover-clickable" (click)="navigateTo('musics')">Musics</h2>
         <div class="d-flex flex-nowrap overflow-auto element-container">
-        <div *ngFor="let music of artistMusics" class="p-2">
+        <div *ngFor="let track of artistMusics" class="p-2">
             <div class="card music-card hover-clickable">
-            <img [src]="music.coverUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top music-cover rounded" alt="{{music.title}}">
+            <img [src]="track.coverUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top music-cover rounded" alt="{{track.title}}">
             <div class="card-body text-center music-info">
-                <h5 class="card-title text-truncate" title="{{music.title}}">{{music.title}}</h5>
-                <p class="card-text text-truncate" title="{{music.artist}}">{{music.artist}}</p>
+                <h5 class="card-title text-truncate" title="{{track.title}}">{{track.title}}</h5>
+                <p class="card-text text-truncate" title="{{track.artist}}">{{track.artist}}</p>
             </div>
             </div>
         </div>

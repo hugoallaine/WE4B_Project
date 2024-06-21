@@ -1,0 +1,35 @@
+{
+    "artists": [
+        {
+            "id": 1,
+            "name": "Unknown Artist",
+            "pictureUrl": "https:\/\/i.scdn.co\/image\/ab67616d0000b2733a111cf4e6c1168e0db07e14"
+        }
+    ],
+    "albums": [
+        {
+            "id": 1,
+            "title": "Unknown Album",
+            "artist": "Unknown Artist",
+            "artistId": 1,
+            "coverUrl": "https:\/\/i.scdn.co\/image\/ab67616d0000b2733a111cf4e6c1168e0db07e14",
+            "tracks": [
+                {
+                    "title": "oroborus.flac",
+                    "duration": 0.87
+                }
+            ]
+        }
+    ],
+    "musics": [
+        {
+            "title": "oroborus.flac",
+            "artist": "Unknown Artist",
+            "album": "Unknown Album",
+            "duration": 0.87,
+            "filePath": "C:\\Users\\HugoPlayer\\Music\\oroborus.flac",
+            "coverUrl": null,
+            "artistId": 1
+        }
+    ]
+}

@@ -21,6 +21,24 @@ input[type="range"] {
     accent-color: #ff0000;
 }
 
+.left-controls {
+    display: flex;
+    align-items: center;
+}
+
+.left-controls button {
+    font-size: 2em;
+    margin: 0 5px;
+}
+
+.right-controls {
+    font-size: 1.5em;
+}
+
+.left-controls .play-pause {
+    font-size: 3.5em;
+}
+
 .progress-bar {
     top: -3px;
     height: 3px;
@@ -36,7 +54,7 @@ input[type="range"] {
 .controls button {
     background: none;
     cursor: pointer;
-
+    border: none;
 }
 
 .controls button:hover {
@@ -51,6 +69,7 @@ input[type="range"] {
     0% {
         transform: scale(1);
     }
+
     100% {
         transform: scale(1.1);
     }
@@ -60,6 +79,7 @@ input[type="range"] {
     0% {
         transform: scale(1.1);
     }
+
     100% {
         transform: scale(1);
     }
@@ -94,14 +114,14 @@ input[type="range"] {
     color: #ff0000;
 }
 
- .volume-container {
-    z-index: 2;
+.volume-container {
     position: absolute;
-    bottom: 0;
     display: none;
+    bottom: 0;
+    top: 0;
     right: 100%;
-    transform: translateY(-20%);
-    padding: 5px;
+    padding-right: 5px;
+    z-index: 2;
     border-radius: 5px;
 }
 
@@ -109,6 +129,6 @@ input[type="range"] {
     width: 100px;
 }
 
-.controls .volume-button:hover .volume-container {
+.controls .volume-button:hover .volume-container  {
     display: block;
 }
