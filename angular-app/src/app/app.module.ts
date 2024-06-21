@@ -7,7 +7,7 @@ import { HomeComponent } from "./home/home.component";
 import { AccountComponent } from "./account/account.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
-import { ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { StyleModule } from "./style/style.module";
 import { AuthGuard } from "./guards/auth.guard";
@@ -20,6 +20,7 @@ import { ArtistDetailComponent } from './artist-detail/artist-detail.component';
 import { AlbumDetailComponent } from './album-detail/album-detail.component';
 import { MusicsComponent } from './musics/musics.component';
 import { MoviesComponent } from './movies/movies.component';
+import { MusicPlayerComponent } from './music-player/music-player.component';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -39,11 +40,13 @@ import { FormsModule } from '@angular/forms';
         AlbumDetailComponent,
         MusicsComponent,
         MoviesComponent,
+        MusicPlayerComponent,
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         ReactiveFormsModule,
+        FormsModule,
         HttpClientModule,
         StyleModule,
         FormsModule,

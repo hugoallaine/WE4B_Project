@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg bg-body-tertiary custom-navbar">
     <div class="container-fluid">
         <a class="navbar-brand" routerLink="/home">
             <img src="assets/logo/flex-logo.svg" alt="Logo" width="30" height="30" class="d-inline-block align-text-top me-2">
@@ -20,9 +20,34 @@
                     <a class="nav-link" routerLink="/movies" routerLinkActive="active">Movies</a>
                 </li>
             </ul>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" id="searchbar" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
+            <form class="d-flex position-relative w-25" role="search" (ngSubmit)="onSearch()">
+                <input class="form-control me-2" id="searchbar" type="search" placeholder="Search" aria-label="Search" [(ngModel)]="searchQuery" name="searchQuery" (input)="onSearch()" (focus)="onFocus()" (blur)="onBlur()">
+                <div class="search-results position-absolute w-100 custom-margin-top rounded" *ngIf="searchResultsVisible">
+                    <div *ngIf="searchResults.artists.length > 0">
+                        <h5 class="px-3 pt-2">Artists</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item" *ngFor="let artist of searchResults.artists" (click)="navigateToArtist(artist.id)">
+                                {{ artist.name }}
+                            </li>
+                        </ul>
+                    </div>
+                        <div *ngIf="searchResults.albums.length > 0">
+                        <h5 class="px-3 pt-2">Albums</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item" *ngFor="let album of searchResults.albums" (click)="navigateToAlbum(album.id)">
+                                {{ album.title }} by {{ album.artist }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div *ngIf="searchResults.tracks.length > 0">
+                        <h5 class="px-3 pt-2">Tracks</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item" *ngFor="let track of searchResults.tracks" (click)="navigateToAlbumByTrack(track.album.id)">
+                                {{ track.title }} by {{ track.album.artist }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </form>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">

@@ -132,7 +132,6 @@ input[type="range"] {
     width: 30%;
 }
 
-
 .volume-container {
     position: absolute;
     bottom: 0; /* Align with the bottom of the button */
@@ -149,4 +148,34 @@ input[type="range"] {
 
 .controls .volume-button:hover .volume-container {
     display: block;
+}
+
+.settings-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    bottom: 70px; /* Adjust based on button size */
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+.settings-button:hover .settings-menu {
+    display: block;
+}
+
+.settings-menu label {
+    color: white;
+    margin-right: 10px;
+}
+
+.settings-menu select,
+.settings-menu input {
+    margin-bottom: 10px;
+}
+
+.title p {
+    font-size: 20px;
+    margin-bottom: 5px;
 }
