@@ -1,25 +1,53 @@
 .music-player {
-    width: 100%;
-  }
-  
-  .progress-bar {
-    background: #555;
-    height: 10px;
-    cursor: pointer;
-    position: relative;
-  }
-  
-  .progress {
-    background: #fff;
-    height: 100%;
-  }
-  
-  .fullscreen-player {
     position: fixed;
-    top: 0;
-    left: 0;
+    bottom: 0;
     width: 100%;
-    height: 100%;
-  }
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
 
-  
+input[type="range"] {
+    -webkit-slider-thumb-background: #ff0000;
+    -moz-range-thumb-background: #ff0000;
+    -ms-thumb-background: #ff0000;
+    accent-color: #ff0000;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+}
+
+.controls button,
+.controls input[type="range"] {
+    margin: 0 5px;
+}
+
+input[type="range"] {
+    width: 100px;
+}
+
+.volume-container {
+    z-index: 2;
+    position: absolute;
+    bottom: 0;
+    /* Align with the bottom of the button */
+    left: 100%;
+    /* Position to the right of the button */
+    transform: translateY(-20%);
+    display: none;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.volume-container input[type="range"] {
+    width: 100px;
+}
+
+.controls .volume-button:hover .volume-container {
+    display: block;
+}
