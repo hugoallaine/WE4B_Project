@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class MusicsComponent implements OnInit, AfterViewInit {
   artists: any[] = [];
   albums: any[] = [];
-  musics: any[] = [];
+  tracks: any[] = [];
   directoryPath: string = '';
 
   constructor(
@@ -47,8 +47,8 @@ export class MusicsComponent implements OnInit, AfterViewInit {
   }
 
   loadMusics(): void {
-    this.musicService.getMusics().subscribe(musics => {
-      this.musics = musics;
+    this.musicService.getMusics().subscribe(tracks => {
+      this.tracks = tracks;
     });
   }
 

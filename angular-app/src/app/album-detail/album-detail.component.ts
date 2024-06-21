@@ -2,6 +2,7 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MusicService } from '../services/music.service';
 import { Album } from '../models/album.model';
+import { Track } from '../models/track.model';
 import { HorizontalScrollService } from '../services/horizontal-scroll.service';
 import { Router } from '@angular/router';
 
@@ -44,6 +45,8 @@ export class AlbumDetailComponent implements OnInit {
   navigateTo(page: string): void {
     this.router.navigate([`/${page}`]);
   }
+
+  playTrack(track: Track): void {
+    this.musicService.addTrack(track);
+  }
 }
-
-

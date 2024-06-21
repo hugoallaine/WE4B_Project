@@ -1,7 +1,7 @@
-<div *ngIf="showPlayer" class="music-player" style="z-index: 1;" #audioElement>
+<div class="music-player" style="z-index: 10;" #audioElement>
 	<input class="progress-bar" type="range" min="0" max="100" step="1" [value]="progress" (input)="seek($event)">
 	<audio #audioPlayer>
-		<source [src]="trackpath" type="audio/mp3">
+		<source [src]="track?.filePath" type="audio/mp3">
 	</audio>
 	<div class="controls">
 		<div class="left-controls">
@@ -14,10 +14,10 @@
 			<div class="time" #progressText>00:00 / 00:00</div>
 		</div>
 		<div class="music-info">
-			<img src="/assets/logo/flex-logo.svg" alt="cover" width="50" height="50" />
+			<img [src]="track?.coverUrl || '../../assets/logo/flex-logo-gris.svg'" alt="cover" width="50" height="50" />
 			<div class="infos">
-				<p class="title">{{title}}</p>
-				<p class="album-artist">{{album}} - {{artist}}</p>
+				<p class="title">{{track?.title || "Player"}}</p>
+				<p class="album-artist">{{track?.album || "No"}} - {{track?.artist || "Song"}}</p>
 			</div>
 		</div>
 		<div class="right-controls">
@@ -33,8 +33,8 @@
 			<button (click)="seekForward()">+10s</button>
 			<button (click)="toggleShuffle()"><i class="bi bi-shuffle"></i></button>
 			<button (click)="toggleLoop()">
-				<i *ngIf="!isLooping" class="bi bi-repeat" (click)="toggleMute()"></i>
-				<i *ngIf="isLooping" class="bi bi-repeat-1" (click)="toggleMute()"></i>
+				<i *ngIf="!isLooping" class="bi bi-repeat"></i>
+				<i *ngIf="isLooping" class="bi bi-repeat-1"></i>
 			</button>
 		</div>
 	</div>
