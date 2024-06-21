@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { SearchService } from '../services/search.service';
 import { NotificationService } from '../services/notification.service';
+import { HorizontalScrollService } from '../services/horizontal-scroll.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,9 +15,23 @@ export class NavbarComponent implements OnInit {
   searchResults: { artists: any[], albums: any[], tracks: any[] } = { artists: [], albums: [], tracks: [] };
   searchResultsVisible: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router, private searchService: SearchService, private notificationService: NotificationService) { }
+  constructor(
+    private authService: AuthService, 
+    private router: Router, 
+    private searchService: SearchService, 
+    private notificationService: NotificationService,
+    private horizontalScrollService: HorizontalScrollService,
+    private renderer: Renderer2
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  ngAfterViewInit(): void {
+    const sections = document.querySelectorAll('.element-container');
+    sections.forEach(section => {
+      this.horizontalScrollService.applySmoothScroll(section as HTMLElement, this.renderer);
+    });
   }
 
   logout() {
