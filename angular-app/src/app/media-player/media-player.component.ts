@@ -11,13 +11,17 @@ export class MediaPlayerComponent implements AfterViewInit {
   @ViewChild('progressText') progressText!: ElementRef;
   @ViewChild('volumeBar') volumeBar!: ElementRef;
 
+  title: string = '';
+  path: string = '/assets/video/videotest.mp4'
   isPlaying: boolean = false;
   isMuted: boolean = false;
   isFullScreen = false;
   showVolume = false;
+  isSettingsMenuVisible = false;
   previousVolume: number = 1; // Default volume before muting
 
   ngAfterViewInit() {
+    this.videoPlayer.nativeElement.autoplay = true;
     this.videoPlayer.nativeElement.addEventListener('timeupdate', this.updateProgressBar.bind(this));
     this.videoPlayer.nativeElement.addEventListener('play', () => this.isPlaying = true);
     this.videoPlayer.nativeElement.addEventListener('pause', () => this.isPlaying = false);
@@ -100,13 +104,34 @@ export class MediaPlayerComponent implements AfterViewInit {
     this.isFullScreen = !!document.fullscreenElement;
   }
 
-  toggleSettings() {
-    const settings = document.getElementById("settings");
-    if (settings!.style.display === "block") {
-      settings!.style.display = "none";
+  setPlaybackRate(event: Event) {
+    const playbackRate = parseFloat((event.target as HTMLSelectElement).value);
+    this.videoPlayer.nativeElement.playbackRate = playbackRate;
+  }
+
+  toggleSubtitles(event: Event) {
+    const tracks = this.videoPlayer.nativeElement.textTracks;
+    if ((event.target as HTMLInputElement).checked) {
+      for (let i = 0; i < tracks.length; i++) {
+        tracks[i].mode = 'showing';
+      }
     } else {
-      settings!.style.display = "block";
+      for (let i = 0; i < tracks.length; i++) {
+        tracks[i].mode = 'hidden';
+      }
     }
+  }
+
+  setLanguage(event: Event) {
+    const language = (event.target as HTMLSelectElement).value;
+    const tracks = this.videoPlayer.nativeElement.textTracks;
+    for (let i = 0; i < tracks.length; i++) {
+      tracks[i].mode = tracks[i].language === language ? 'showing' : 'hidden';
+    }
+  }
+
+  showSettingsMenu(visible: boolean) {
+    this.isSettingsMenuVisible = visible;
   }
 
   exit() {

@@ -1,0 +1,25 @@
+.music-player {
+    width: 100%;
+  }
+  
+  .progress-bar {
+    background: #555;
+    height: 10px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .progress {
+    background: #fff;
+    height: 100%;
+  }
+  
+  .fullscreen-player {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  

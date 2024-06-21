@@ -1,0 +1,19 @@
+<div class="music-player fixed-bottom bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+    <div class="controls">
+      <i class="bi bi-skip-backward-fill mx-2" (click)="prevTrack()"></i>
+      <i class="bi" [ngClass]="{'bi-play-fill': !isPlaying, 'bi-pause-fill': isPlaying}" (click)="togglePlayPause()"></i>
+      <i class="bi bi-skip-forward-fill mx-2" (click)="nextTrack()"></i>
+    </div>
+    <div class="progress-bar flex-grow-1 mx-3" (click)="seek($event)">
+      <div class="progress" [style.width.%]="progress"></div>
+    </div>
+    <div class="time-controls">
+      <i class="bi bi-arrow-left-circle mx-2" (click)="seekBackward()"></i>
+      <i class="bi bi-arrow-right-circle mx-2" (click)="seekForward()"></i>
+    </div>
+  </div>
+  
+  <div *ngIf="isFullscreen" class="fullscreen-player bg-dark text-white d-flex justify-content-center align-items-center" (click)="toggleFullscreen()">
+    <!-- Contenu du lecteur en plein écran -->
+  </div>
+  

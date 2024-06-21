@@ -20,6 +20,7 @@ import { ArtistDetailComponent } from './artist-detail/artist-detail.component';
 import { AlbumDetailComponent } from './album-detail/album-detail.component';
 import { MusicsComponent } from './musics/musics.component';
 import { MoviesComponent } from './movies/movies.component';
+import { MusicPlayerComponent } from './music-player/music-player.component';
 
 @NgModule({
     declarations: [
@@ -38,6 +39,7 @@ import { MoviesComponent } from './movies/movies.component';
         AlbumDetailComponent,
         MusicsComponent,
         MoviesComponent,
+        MusicPlayerComponent,
     ],
     imports: [
         BrowserModule,
