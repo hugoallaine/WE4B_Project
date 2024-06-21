@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Album } from '../models/album.model';
-import { Artist } from '../models/artist.model';
-import { Track } from '../models/track.model';
+import { Artist, Album, Track } from '../models/artist.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,37 +12,38 @@ export class MusicService {
 
   constructor(private http: HttpClient) { }
 
-  getAlbums(): Observable<Album[]> {
-    return this.http.get<{albums: Album[]}>(`${this.apiUrl}/get_data.php`).pipe(
-      map(data => data.albums ?? [])
+  getArtists(): Observable<any[]> {
+    return this.http.get<any>(`${this.apiUrl}/get_data.php`).pipe(
+      map(data => data.artists || [])
     );
   }
 
-  getAlbumById(albumId: number): Observable<Album> {
-    return this.http.get<{ album: Album }>(`${this.apiUrl}/get_album.php?albumId=${albumId}`).pipe(
-      map(response => response.album)
+  getAlbums(): Observable<any[]> {
+    return this.http.get<any>(`${this.apiUrl}/get_data.php`).pipe(
+      map(data => {
+        let albums: any[] = [];
+        data.artists.forEach((artist:  Artist) => {
+          albums = albums.concat(artist.albums);
+        });
+        return albums;
+      })
     );
   }
 
-  getMusics(): Observable<Track[]> {
-    return this.http.get<{tracks: Track[]}>(`${this.apiUrl}/get_data.php`).pipe(
-      map(data => data.tracks ?? [])
+getTracks(): Observable<Track[]> {
+    return this.http.get<{ artists: Artist[] }>(`${this.apiUrl}/get_data.php`).pipe(
+      map(data => {
+        let musics: Track[] = [];
+        data.artists.forEach((artist: Artist) => {
+          artist.albums.forEach((album: Album) => {
+            musics = musics.concat(album.tracks);
+          });
+        });
+        return musics;
+      })
     );
-  }
-
-  getArtists(): Observable<Artist[]> {
-    return this.http.get<{artists: Artist[]}>(`${this.apiUrl}/get_data.php`).pipe(
-      map(data => data.artists ?? [])
-    );
-  }
-
-  getArtistById(id: number): Observable<Artist> {
-    return this.http.get<{artists: Artist[]}>(`${this.apiUrl}/get_data.php`).pipe(
-      map(data => data.artists.find(artist => artist.id === id)!)
-    );
-  }
-
-  scanDirectory(filePaths: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/scan_directory.php`, { filePaths });
+}
+  scanDirectory(directoryPath: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/scan_directory.php`, { directoryPath });
   }
 }

@@ -1,7 +1,7 @@
 <?php
-require_once dirname(__FILE__).'/vendor/autoload.php';
-require_once dirname(__FILE__).'/vendor/james-heinrich/getid3/getid3/getid3.php';
-require_once dirname(__FILE__).'/json.php';
+require_once dirname(__FILE__) . '/vendor/autoload.php';
+require_once dirname(__FILE__) . '/vendor/james-heinrich/getid3/getid3/getid3.php';
+require_once dirname(__FILE__) . '/json.php';
 
 header("Access-Control-Allow-Origin: http://localhost:4200");
 header("Access-Control-Allow-Methods: POST");
@@ -11,7 +11,8 @@ header('Content-Type: application/json');
 $SPOTIFY_CLIENT_ID = $json['SPOTIFY_CLIENT_ID'];
 $SPOTIFY_CLIENT_SECRET = $json['SPOTIFY_CLIENT_SECRET'];
 
-function analyzeFile($filePath) {
+function analyzeFile($filePath)
+{
     $getID3 = new getID3;
     $fileInfo = $getID3->analyze($filePath);
 
@@ -52,7 +53,8 @@ function analyzeFile($filePath) {
     ];
 }
 
-function getSpotifyAccessToken($clientId, $clientSecret) {
+function getSpotifyAccessToken($clientId, $clientSecret)
+{
     $url = 'https://accounts.spotify.com/api/token';
     $headers = [
         'Authorization: Basic ' . base64_encode($clientId . ':' . $clientSecret),
@@ -79,7 +81,8 @@ function getSpotifyAccessToken($clientId, $clientSecret) {
     return $data['access_token'] ?? null;
 }
 
-function getArtistImageFromSpotify($artistName, $accessToken) {
+function getArtistImageFromSpotify($artistName, $accessToken)
+{
     $url = 'https://api.spotify.com/v1/search?q=' . urlencode($artistName) . '&type=artist&limit=1';
     $headers = [
         'Authorization: Bearer ' . $accessToken
@@ -112,7 +115,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     error_log("Received data: " . print_r($data, true));
 
     $directoryPath = $data['filePaths'] ?? '';
-
     error_log("Directory path: " . $directoryPath);
 
     if (empty($directoryPath)) {
@@ -125,24 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Initialize the database if it is empty or malformed
     if (!$db || !is_array($db)) {
-        $db = ['artists' => [], 'albums' => [], 'musics' => []];
-    }
-
-    $artistsMap = [];
-    $albumsMap = [];
-    $tracksMap = [];
-
-    // Create a map of existing artists and albums for faster lookup
-    foreach ($db['artists'] as $artist) {
-        $artistsMap[$artist['name']] = $artist;
-    }
-
-    foreach ($db['albums'] as $album) {
-        $albumsMap[$album['title']] = $album;
-    }
-
-    foreach ($db['musics'] as $music) {
-        $tracksMap[$music['title']] = $music;
+        $db = ['artists' => []];
     }
 
     $spotifyAccessToken = getSpotifyAccessToken($SPOTIFY_CLIENT_ID, $SPOTIFY_CLIENT_SECRET);
@@ -160,51 +145,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($absoluteFilePath && file_exists($absoluteFilePath)) {
             $metadata = analyzeFile($absoluteFilePath);
 
-            // Add the artist if it does not already exist
-            if (!isset($artistsMap[$metadata['artist']])) {
-                $artistId = count($db['artists']) + 1;
-                $artistImage = $spotifyAccessToken ? getArtistImageFromSpotify($metadata['artist'], $spotifyAccessToken) : 'assets/default-artist.jpg';
-                $newArtist = [
-                    'id' => $artistId,
-                    'name' => $metadata['artist'],
-                    'pictureUrl' => $artistImage
-                ];
-                $db['artists'][] = $newArtist;
-                $artistsMap[$metadata['artist']] = $newArtist;
-            }
-
-            // Add the album if it does not already exist
-            if (!isset($albumsMap[$metadata['album']])) {
-                $albumId = count($db['albums']) + 1;
-                $coverUrl = $metadata['coverUrl'] ?? $artistsMap[$metadata['artist']]['pictureUrl'] ?? null;
-                $newAlbum = [
-                    'id' => $albumId,
-                    'title' => $metadata['album'],
-                    'artist' => $metadata['artist'],
-                    'artistId' => $artistsMap[$metadata['artist']]['id'],
-                    'coverUrl' => $coverUrl,
-                    'tracks' => []
-                ];
-                $db['albums'][] = $newAlbum;
-                $albumsMap[$metadata['album']] = $newAlbum;
-            }
-
-            // Check if the music already exists in the database
-            $musicExists = false;
-            foreach ($db['musics'] as $music) {
-                if ($music['filePath'] === $metadata['filePath']) {
-                    $musicExists = true;
+            // Find or create the artist
+            $artistIndex = null;
+            foreach ($db['artists'] as $index => $artist) {
+                if ($artist['name'] === $metadata['artist']) {
+                    $artistIndex = $index;
                     break;
                 }
             }
 
-            // Add the music if it does not already exist
-            if (!$musicExists) {
-                $metadata['artistId'] = $artistsMap[$metadata['artist']]['id'];
-                $db['musics'][] = $metadata;
-                $db['albums'][$albumsMap[$metadata['album']]['id'] - 1]['tracks'][] = [
+            if ($artistIndex === null) {
+                $artistId = uniqid();
+                $artistImage = $spotifyAccessToken ? getArtistImageFromSpotify($metadata['artist'], $spotifyAccessToken) : 'assets/default-artist.jpg';
+                $newArtist = [
+                    'id' => $artistId,
+                    'name' => $metadata['artist'],
+                    'pictureUrl' => $artistImage,
+                    'albums' => []
+                ];
+                $db['artists'][] = $newArtist;
+                $artistIndex = count($db['artists']) - 1;
+            } else {
+                $artistId = $db['artists'][$artistIndex]['id'];
+            }
+
+            // Find or create the album
+            $albumIndex = null;
+            foreach ($db['artists'][$artistIndex]['albums'] as $index => $album) {
+                if ($album['title'] === $metadata['album']) {
+                    $albumIndex = $index;
+                    break;
+                }
+            }
+
+            if ($albumIndex === null) {
+                $albumId = uniqid();
+                $coverUrl = $metadata['coverUrl'] ?? $db['artists'][$artistIndex]['pictureUrl'] ?? null;
+                $newAlbum = [
+                    'id' => $albumId,
+                    'title' => $metadata['album'],
+                    'coverUrl' => $coverUrl,
+                    'tracks' => []
+                ];
+                $db['artists'][$artistIndex]['albums'][] = $newAlbum;
+                $albumIndex = count($db['artists'][$artistIndex]['albums']) - 1;
+            } else {
+                $albumId = $db['artists'][$artistIndex]['albums'][$albumIndex]['id'];
+            }
+
+            // Check if the track already exists
+            $trackExists = false;
+            foreach ($db['artists'][$artistIndex]['albums'][$albumIndex]['tracks'] as $track) {
+                if ($track['filePath'] === $metadata['filePath']) {
+                    $trackExists = true;
+                    break;
+                }
+            }
+
+            // Add the track if it does not already exist
+            if (!$trackExists) {
+                $trackId = uniqid();
+                $db['artists'][$artistIndex]['albums'][$albumIndex]['tracks'][] = [
+                    'id' => $trackId,
                     'title' => $metadata['title'],
-                    'duration' => $metadata['duration']
+                    'duration' => $metadata['duration'],
+                    'filePath' => $metadata['filePath']
                 ];
             }
         } else {
@@ -218,3 +223,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo json_encode(['error' => 'Invalid request method']);
 }
+?>

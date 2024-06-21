@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, Renderer2 } from '@angular/core';
 import { MusicService } from '../services/music.service';
 import { HorizontalScrollService } from '../services/horizontal-scroll.service';
 import { Router } from '@angular/router';
+import { Artist, Album, Track } from '../models/artist.model';
 
 @Component({
   selector: 'app-musics',
@@ -9,9 +10,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./musics.component.css']
 })
 export class MusicsComponent implements OnInit, AfterViewInit {
-  artists: any[] = [];
-  albums: any[] = [];
-  musics: any[] = [];
+  artists: Artist[] = [];
+  albums: Album[] = [];
+  tracks: Track[] = [];
   directoryPath: string = '';
 
   constructor(
@@ -23,8 +24,6 @@ export class MusicsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadArtists();
-    this.loadAlbums();
-    this.loadMusics();
   }
 
   ngAfterViewInit(): void {
@@ -40,29 +39,14 @@ export class MusicsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  loadAlbums(): void {
-    this.musicService.getAlbums().subscribe(albums => {
-      this.albums = albums;
-    });
-  }
 
-  loadMusics(): void {
-    this.musicService.getMusics().subscribe(musics => {
-      this.musics = musics;
-    });
-  }
-
-  openDirectoryPicker(): void {
-    if (this.directoryPath.trim() !== '') {
+  scanDirectory(): void {
+    if (this.directoryPath) {
       this.musicService.scanDirectory(this.directoryPath).subscribe(response => {
         if (response.success) {
           this.loadArtists();
-          this.loadAlbums();
-          this.loadMusics();
         }
       });
-    } else {
-      alert('Please enter a valid directory path.');
     }
   }
 

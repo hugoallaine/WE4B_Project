@@ -2,12 +2,17 @@
 <div class="container mt-4">
   <h1>Tracks</h1>
   <div class="row">
-    <div *ngFor="let track of tracks" class="col-md-3 mb-4">
-      <div class="card music-card">
-        <img [src]="track.coverUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top music-cover" alt="{{ track.title }}">
-        <div class="card-body text-center music-info">
-          <h5 class="card-title text-truncate" title="{{ track.title }}">{{ track.title }}</h5>
-          <p class="card-text text-truncate" title="{{ track.artist }}">{{ track.artist }}</p>
+    <div *ngFor="let artist of artists" class="col-md-3 mb-4">
+      <div *ngFor="let album of artist.albums">
+        <div *ngFor="let track of album.tracks" class="col-md-3 mb-4">
+          <div class="card music-card">
+            <img [src]="album.coverUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top music-cover"
+              alt="{{ track.title }}">
+            <div class="card-body text-center music-info">
+              <h5 class="card-title text-truncate" title="{{ track.title }}">{{ track.title }}</h5>
+              <p class="card-text text-truncate" title="{{ artist.name }}">{{ artist.name }}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

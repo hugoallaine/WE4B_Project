@@ -1,8 +1,6 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MusicService } from '../services/music.service';
-import { Album } from '../models/album.model';
-import { HorizontalScrollService } from '../services/horizontal-scroll.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,39 +9,29 @@ import { Router } from '@angular/router';
   styleUrls: ['./album-detail.component.css']
 })
 export class AlbumDetailComponent implements OnInit {
-  album: Album | undefined;
+  album: any;
+  tracks: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private musicService: MusicService,
-    private horizontalScrollService: HorizontalScrollService,
-    private renderer: Renderer2,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    const albumId = Number(this.route.snapshot.paramMap.get('id'));
+    const albumId = this.route.snapshot.paramMap.get('id');
     if (albumId) {
-      this.loadAlbum(albumId);
+      this.loadAlbum(parseInt(albumId));
     }
   }
 
-  ngAfterViewInit(): void {
-    const sections = document.querySelectorAll('.element-container');
-    sections.forEach(section => {
-      this.horizontalScrollService.applySmoothScroll(section as HTMLElement, this.renderer);
-    });
-  }
-
   loadAlbum(albumId: number): void {
-    this.musicService.getAlbumById(albumId).subscribe(album => {
-      this.album = album;
+    this.musicService.getAlbums().subscribe(albums => {
+      this.album = albums.find(a => a.id === albumId);
+      this.tracks = this.album ? this.album.tracks : [];
     });
   }
-
   navigateTo(page: string): void {
     this.router.navigate([`/${page}`]);
   }
 }
-
-
