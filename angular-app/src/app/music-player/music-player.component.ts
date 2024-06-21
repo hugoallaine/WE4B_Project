@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Track } from '../models/album.model';
+import { Track } from '../models/artist.model';
 import { MusicService } from '../services/music.service';
 
 @Component({

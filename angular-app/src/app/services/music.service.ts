@@ -85,41 +85,5 @@ getTracks(): Observable<Track[]> {
       this.currentIndex = index;
     }
   }
-
-  addTrack(track: Track) {
-    this.queue.push(track);
-    console.log(this.queue)
-  }
-
-  addTracks(tracks: Track[]) {
-    this.queue.push(...tracks);
-  }
-
-  getQueue(): Track[] {
-    return this.queue;
-  }
-
-  getCurrentTrack(): Track {
-    return this.queue[this.currentIndex];
-  }
-
-  nextTrack(): Track {
-    if (this.currentIndex < this.queue.length - 1) {
-      this.currentIndex++;
-    }
-    return this.getCurrentTrack();
-  }
-
-  prevTrack(): Track {
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
-    }
-    return this.getCurrentTrack();
-  }
-
-  setTrack(index: number) {
-    if (index >= 0 && index < this.queue.length) {
-      this.currentIndex = index;
-    }
-  }
 }
+
