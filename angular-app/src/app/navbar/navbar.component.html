@@ -34,7 +34,7 @@
                         <div *ngIf="searchResults.albums.length > 0">
                         <h5 class="px-3 pt-2">Albums</h5>
                         <ul class="list-group">
-                            <li class="list-group-item" *ngFor="let album of searchResults.albums" (click)="navigateToAlbum(album.id)">
+                            <li class="list-group-item element-container" *ngFor="let album of searchResults.albums" (click)="navigateToAlbum(album.id)">
                                 {{ album.title }} by {{ album.artist }}
                             </li>
                         </ul>
