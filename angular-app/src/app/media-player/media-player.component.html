@@ -1,7 +1,7 @@
 <div class="screen">
     <div class="media-player">
         <video #videoPlayer>
-            <source src="/assets/video/videotest.mp4" type="video/mp4" />
+            <source src="{{path}}" type="video/mp4" />
         </video>
         <button class="close-button" (click)="exit()">
             <i class="bi bi-arrow-left-short"></i>
@@ -32,40 +32,40 @@
                     </button>
                 </div>
                 <div class="title">
-                    <p>salut</p>
+                    <p>{{title}}</p>
                 </div>
-                <div class="right-controls">
-                    <button (click)="toggleSettings()">
+                <div class="right-controls" (mouseover)="showSettingsMenu(true)" (mouseout)="showSettingsMenu(false)">
+                    <button class="settings-button">
                         <i class="bi bi-gear"></i>
                     </button>
+                    <div id="settings" class="settings-menu" [class.show]="isSettingsMenuVisible">
+                        <div>
+                            <label for="playbackRate">Vitesse de lecture:</label>
+                            <select id="playbackRate" (change)="setPlaybackRate($event)">
+                                <option value="0.5">0.5x</option>
+                                <option value="1" selected>1x</option>
+                                <option value="1.5">1.5x</option>
+                                <option value="2">2x</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="subtitles">Sous-titres:</label>
+                            <input id="subtitles" type="checkbox" (change)="toggleSubtitles($event)">
+                        </div>
+                        <div>
+                            <label for="language">Langue:</label>
+                            <select id="language" (change)="setLanguage($event)">
+                                <option value="en">Anglais</option>
+                                <option value="fr">Français</option>
+                                <option value="es">Espagnol</option>
+                            </select>
+                        </div>
+                    </div>
                     <button (click)="toggleFullScreen()">
                         <i class="bi bi-fullscreen"></i>
                     </button>
                 </div>
             </div>
         </div>
-        <!-- <div id="settings" class="settings-menu" [class.show]="showSettings">
-            <div>
-                <label for="playbackRate">Vitesse de lecture:</label>
-                <select id="playbackRate" (change)="setPlaybackRate($event)">
-                    <option value="0.5">0.5x</option>
-                    <option value="1" selected>1x</option>
-                    <option value="1.5">1.5x</option>
-                    <option value="2">2x</option>
-                </select>
-            </div>
-            <div>
-                <label for="subtitles">Sous-titres:</label>
-                <input id="subtitles" type="checkbox" (change)="toggleSubtitles($event)">
-            </div>
-            <div>
-                <label for="language">Langue:</label>
-                <select id="language" (change)="setLanguage($event)">
-                    <option value="en">Anglais</option>
-                    <option value="fr">Français</option>
-                    <option value="es">Espagnol</option>
-                </select>
-            </div> 
-        </div>-->
     </div>
 </div>
