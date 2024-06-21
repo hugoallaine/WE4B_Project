@@ -69,7 +69,7 @@ if (isset($data->user) && isset($data->password) && isset($data->password2) && i
                                 $password = password_hash($password, PASSWORD_DEFAULT);
                                 $key = generateToken(255);
                                 $token = generateToken(255);
-                                $req = $db->prepare("INSERT INTO users(email,password,token,name,firstname,birth_date,pseudo) VALUES (?,?,?,?,?,?)");
+                                $req = $db->prepare("INSERT INTO users(email,password,token,name,firstname,birth_date,pseudo) VALUES (?,?,?,?,?,?,?)");
                                 $req->execute(array($email, $password, $token, $name, $firstname, $birthdate, $pseudo));
                                 $req = $db->prepare("SELECT id FROM users WHERE email = ?");
                                 $req->execute(array($email));
