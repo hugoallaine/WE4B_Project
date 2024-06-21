@@ -22,11 +22,12 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit {
   showVolume = false;
   previousVolume = 1;
   showPlayer = true;
-
   progress = 0;
-  tracks = ['song1.mp3', 'song2.mp3', 'song3.mp3'];
   currentTrackIndex = 0;
+  title = 'Music Player';
+
   type = 'audio/mp3';
+  tracks = [];
   path = '/assets/audio';
   trackpath = this.path + '/' + this.tracks[this.currentTrackIndex];
   wrongUrl = ['/login', '/register', '/player', '/movies'];

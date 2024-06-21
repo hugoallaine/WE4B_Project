@@ -1,29 +1,37 @@
 <div *ngIf="showPlayer" class="music-player" style="z-index: 1;" #audioElement>
-  <audio #audioPlayer>
-    <source [src]="trackpath" type="audio/mp3">
-  </audio>
-  <div class="controls">
-    <button (click)="prevTrack()"><i class="bi bi-skip-start-fill"></i></button>
-    <button class="play-pause" (click)="togglePlayPause()">
-      <i *ngIf="!isPlaying" class="bi bi-play-fill"></i>
-      <i *ngIf="isPlaying" class="bi bi-pause-fill"></i>
-    </button>
-    <button (click)="nextTrack()"><i class="bi bi-skip-end-fill"></i></button>
-    <button (click)="seekBackward()">-10s</button>
-    <button (click)="seekForward()">+10s</button>
-    <input type="range" min="0" max="100" step="1" [value]="progress" (input)="seek($event)">
-    <button (click)="toggleShuffle()"><i class="bi bi-shuffle"></i></button>
-    <button (click)="toggleLoop()">
-      <i *ngIf="!isLooping" class="bi bi-repeat" (click)="toggleMute()"></i>
-      <i *ngIf="isLooping" class="bi bi-repeat-1" (click)="toggleMute()"></i>
-    </button>
-    <button class="volume-button">
-      <i *ngIf="!isMuted" class="bi bi-volume-up" (click)="toggleMute()"></i>
-      <i *ngIf="isMuted" class="bi bi-volume-mute" (click)="toggleMute()"></i>
-      <div class="volume-container">
-        <input class="volume-bar" type="range" #volumeBar (input)="setVolume($event)" min="0" max="1" step="0.1" />
-      </div>
-    </button>
-
-  </div>
+	<input class="progress-bar" type="range" min="0" max="100" step="1" [value]="progress" (input)="seek($event)">
+	<audio #audioPlayer>
+		<source [src]="trackpath" type="audio/mp3">
+	</audio>
+	<div class="controls">
+		<div class="left-controls">
+			<button (click)="prevTrack()"><i class="bi bi-skip-start-fill"></i></button>
+			<button class="play-pause" (click)="togglePlayPause()">
+				<i *ngIf="!isPlaying" class="bi bi-play-fill"></i>
+				<i *ngIf="isPlaying" class="bi bi-pause-fill"></i>
+			</button>
+			<button (click)="nextTrack()"><i class="bi bi-skip-end-fill"></i></button>
+			<button (click)="seekBackward()">-10s</button>
+			<button (click)="seekForward()">+10s</button>
+			<span class="time" #progressText>00:00 / 00:00</span>
+		</div>
+		<div class="music-info">
+			<p>{{title}}</p>
+		</div>
+		<div class="right-controls">
+		<button (click)="toggleShuffle()"><i class="bi bi-shuffle"></i></button>
+		<button (click)="toggleLoop()">
+			<i *ngIf="!isLooping" class="bi bi-repeat" (click)="toggleMute()"></i>
+			<i *ngIf="isLooping" class="bi bi-repeat-1" (click)="toggleMute()"></i>
+		</button>
+		<button class="volume-button">
+			<i *ngIf="!isMuted" class="bi bi-volume-up" (click)="toggleMute()"></i>
+			<i *ngIf="isMuted" class="bi bi-volume-mute" (click)="toggleMute()"></i>
+			<div class="volume-container">
+				<input class="volume-bar" type="range" #volumeBar (input)="setVolume($event)" min="0" max="1"
+					step="0.1" />
+			</div>
+		</button>
+		</div>	
+	</div>
 </div>

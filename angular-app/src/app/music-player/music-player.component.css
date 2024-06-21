@@ -4,10 +4,18 @@
     width: 100%;
     background-color: #333;
     color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+}
+
+p {
+    margin: 0;
 }
 
 input[type="range"] {
@@ -17,27 +25,35 @@ input[type="range"] {
     accent-color: #ff0000;
 }
 
-.controls {
-    display: flex;
-    align-items: center;
+.progress-bar {
+    flex: 1;
+    height: 3px;
+    position: absolute;
+    top: -1.5px;
+    width: 100%;
 }
 
-.controls button,
-.controls input[type="range"] {
-    margin: 0 5px;
+.progress-bar:hover {
+    flex: 1;
+    height: 5px;
+    position: absolute;
+    top: -2.5px;
+    width: 100%;
 }
 
-input[type="range"] {
-    width: 100px;
+.controls button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
 }
 
 .volume-container {
     z-index: 2;
     position: absolute;
     bottom: 0;
-    /* Align with the bottom of the button */
     left: 100%;
-    /* Position to the right of the button */
     transform: translateY(-20%);
     display: none;
     padding: 5px;
