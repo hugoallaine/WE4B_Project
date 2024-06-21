@@ -1,30 +1,71 @@
-<div class="media-player">
-    <video #videoPlayer width="600">
-        <source src="/assets/video/videotest.mp4" type="video/mp4" />
-    </video>
-    <div class="controls">
-        <input class="progress" type="range" #progressBar (input)="seek($event)" min="0" max="100" step="1" />
-        <button (click)="togglePlayPause()">
-            <i *ngIf="!isPlaying" class="bi bi-play" style="font-size: 2rem; color: white;"></i>
-            <i *ngIf="isPlaying" class="bi bi-pause" style="font-size: 2rem; color: white;"></i>
+<div class="screen">
+    <div class="media-player">
+        <video #videoPlayer>
+            <source src="/assets/video/videotest.mp4" type="video/mp4" />
+        </video>
+        <button class="close-button" (click)="exit()">
+            <i class="bi bi-arrow-left-short"></i>
         </button>
-        <button (click)="skip(-10)">
-            <i class="bi bi-arrow-counterclockwise" style="font-size: 2rem; color: white;"></i>
-        </button>
-        <button (click)="skip(10)">
-            <i class="bi bi-arrow-clockwise" style="font-size: 2rem; color: white;"></i>
-        </button>
-        <p class="time" #progressText>00:00 / 00:00</p>
-        <button (click)="toggleMute()">
-            <i *ngIf="!isMuted" class="bi bi-volume-up" style="font-size: 2rem; color: white;"></i>
-            <i *ngIf="isMuted" class="bi bi-volume-mute" style="font-size: 2rem; color: white;"></i>
-        </button>
-        <input class="volume" type="range" (input)="setVolume($event)" min="0" max="1" step="0.1" />
-        <button (click)="toggleSettings()">
-            <i class="bi bi-gear" style="font-size: 2rem; color: white;"></i>
-        </button>
-        <button (click)="toggleFullScreen()">
-            <i class="bi bi-fullscreen" style="font-size: 2rem; color: white;"></i>
-        </button>
+        <div class="controls">
+            <div class="time-control">
+                <input class="progress-bar" type="range" #progressBar (input)="seek($event)" min="0" max="100" step="1" />
+                <p class="time" #progressText>00:00 / 00:00</p>
+            </div>
+            <div class="other-controls">
+                <div class="left-controls">
+                    <button class="play-pause" (click)="togglePlayPause()">
+                        <i *ngIf="!isPlaying" class="bi bi-play"></i>
+                        <i *ngIf="isPlaying" class="bi bi-pause"></i>
+                    </button>
+                    <button (click)="skip(-10)">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
+                    <button (click)="skip(10)">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                    <button class="volume-button">
+                        <i *ngIf="!isMuted" class="bi bi-volume-up" (click)="toggleMute()"></i>
+                        <i *ngIf="isMuted" class="bi bi-volume-mute" (click)="toggleMute()"></i>
+                        <div class="volume-container">
+                            <input class="volume-bar" type="range" #volumeBar (input)="setVolume($event)" min="0" max="1" step="0.1" />
+                        </div>
+                    </button>
+                </div>
+                <div class="title">
+                    <p>salut</p>
+                </div>
+                <div class="right-controls">
+                    <button (click)="toggleSettings()">
+                        <i class="bi bi-gear"></i>
+                    </button>
+                    <button (click)="toggleFullScreen()">
+                        <i class="bi bi-fullscreen"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- <div id="settings" class="settings-menu" [class.show]="showSettings">
+            <div>
+                <label for="playbackRate">Vitesse de lecture:</label>
+                <select id="playbackRate" (change)="setPlaybackRate($event)">
+                    <option value="0.5">0.5x</option>
+                    <option value="1" selected>1x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2x</option>
+                </select>
+            </div>
+            <div>
+                <label for="subtitles">Sous-titres:</label>
+                <input id="subtitles" type="checkbox" (change)="toggleSubtitles($event)">
+            </div>
+            <div>
+                <label for="language">Langue:</label>
+                <select id="language" (change)="setLanguage($event)">
+                    <option value="en">Anglais</option>
+                    <option value="fr">Français</option>
+                    <option value="es">Espagnol</option>
+                </select>
+            </div> 
+        </div>-->
     </div>
 </div>

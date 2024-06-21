@@ -1,115 +1,152 @@
-/* styles.css */
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
+.screen {
+    background-color: rgb(0, 0, 0);
+    height: 100vh;
 }
 
 .media-player {
     position: relative;
+    width: 100%; /* Ensure it takes the full width of its container */
     height: 100%;
-    width: 100%;
+    margin: auto; /* Center it horizontally */
     display: flex;
     align-items: center;
-    justify-content: center;
-    background-color: black;
+    overflow: hidden;
 }
 
-.media-player video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+video {
+    width: 100%; /* Ensure video takes the full width of its container */
+}
+
+p {
+    margin: 0;
 }
 
 .controls {
     position: absolute;
     bottom: 0;
     width: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.time-control {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    padding: 10px;
+}
+
+.time-control .time {
+    margin-right: 10px;
+}
+
+input[type="range"] {
+    -webkit-slider-thumb-background: #ff0000;
+    -moz-range-thumb-background: #ff0000;
+    -ms-thumb-background: #ff0000;
+    accent-color: #ff0000;
+}
+
+.time-control .progress-bar {
+    flex: 1;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.other-controls { 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .controls button {
-    background: transparent;
+    background: none;
     border: none;
     cursor: pointer;
-    color: white;
-    padding: 5px;
+    position: relative;
+    display: inline-block;
 }
 
-.controls button i {
+.controls i {
     font-size: 2rem;
     color: white;
 }
 
-.controls .progress {
-    -webkit-appearance: none;
-    width: 50%;
-    height: 5px;
-    background: red;
-    border-radius: 5px;
-    outline: none;
-    opacity: 0.7;
-    transition: opacity .2s;
+
+.controls button:hover {
+    animation: zoom 0.2s forwards;
 }
 
-.controls .progress:hover {
-    opacity: 1;
+.controls button:not(:hover) {
+    animation: zoom-out 0.2s forwards;
 }
 
-.controls .progress::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 15px;
-    height: 15px;
-    background: #fff;
+ @keyframes zoom {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.3);
+    }
+}
+
+@keyframes zoom-out {
+    0% {
+        transform: scale(1.3);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.controls .play-pause:hover i {
+    color: #ff0000;
+}
+
+.controls .volume-button:hover {
+    animation: none;
+}
+
+.controls .volume-button:not(:hover) {
+    animation: none;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px; /* Adjust the position as needed */
+    left: 10px;
+    background: none;
+    border: none;
     cursor: pointer;
 }
 
-.controls .progress::-moz-range-thumb {
-    width: 15px;
-    height: 15px;
-    background: #fff;
-    cursor: pointer;
-}
-
-.controls .volume {
-    -webkit-appearance: none;
-    width: 100px;
-    height: 5px;
-    background: #fff;
-    border-radius: 5px;
-    outline: none;
-    opacity: 0.7;
-    transition: opacity .2s;
-}
-
-.controls .volume:hover {
-    opacity: 1;
-}
-
-.controls .volume::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 15px;
-    height: 15px;
-    background: #fff;
-    cursor: pointer;
-}
-
-.controls .volume::-moz-range-thumb {
-    width: 15px;
-    height: 15px;
-    background: #fff;
-    cursor: pointer;
-}
-
-.controls .time {
+.close-button i {
+    font-size: 2rem;
     color: white;
-    margin: 0 10px;
+}
+
+.left-controls .right-controls{
+    display: flex;
+    align-items: center;
+    width: 30%;
+}
+
+
+.volume-container {
+    position: absolute;
+    bottom: 0; /* Align with the bottom of the button */
+    left: 100%; /* Position to the right of the button */
+    transform: translateY(-20%);
+    display: none;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.volume-container input[type="range"] {
+    width: 100px;
+}
+
+.controls .volume-button:hover .volume-container {
+    display: block;
 }

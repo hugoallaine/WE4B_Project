@@ -1,18 +1,21 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, HostListener, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-media-player',
   templateUrl: './media-player.component.html',
   styleUrls: ['./media-player.component.css']
 })
-
-export class MediaPlayerComponent {
+export class MediaPlayerComponent implements AfterViewInit {
   @ViewChild('videoPlayer') videoPlayer!: ElementRef;
   @ViewChild('progressBar') progressBar!: ElementRef;
   @ViewChild('progressText') progressText!: ElementRef;
-  
+  @ViewChild('volumeBar') volumeBar!: ElementRef;
+
   isPlaying: boolean = false;
   isMuted: boolean = false;
+  isFullScreen = false;
+  showVolume = false;
+  previousVolume: number = 1; // Default volume before muting
 
   ngAfterViewInit() {
     this.videoPlayer.nativeElement.addEventListener('timeupdate', this.updateProgressBar.bind(this));
@@ -23,7 +26,7 @@ export class MediaPlayerComponent {
     this.videoPlayer.nativeElement.addEventListener('click', this.togglePlayPause.bind(this));
     this.videoPlayer.nativeElement.addEventListener('dblclick', this.toggleFullScreen.bind(this));
   }
-  
+
   updateProgressBar() {
     const duration = this.videoPlayer.nativeElement.duration;
     const currentTime = this.videoPlayer.nativeElement.currentTime;
@@ -38,7 +41,7 @@ export class MediaPlayerComponent {
       this.progressText.nativeElement.textContent = `${formattedCurrentTime} / ${formattedDurationTime}`;
     }
   }
-  
+
   seek(event: Event) {
     const seekTo = parseFloat((event.target as HTMLInputElement).value);
     const duration = this.videoPlayer.nativeElement.duration;
@@ -53,40 +56,51 @@ export class MediaPlayerComponent {
     } else {
       this.videoPlayer.nativeElement.pause();
     }
-  } 
-
-  toggleMute() {
-    this.videoPlayer.nativeElement.muted = !this.videoPlayer.nativeElement.muted;
   }
 
+  toggleMute() {
+    if (this.videoPlayer.nativeElement.muted) {
+      this.videoPlayer.nativeElement.muted = false;
+      this.videoPlayer.nativeElement.volume = this.previousVolume;
+      this.volumeBar.nativeElement.value = this.previousVolume;
+    } else {
+      this.previousVolume = this.videoPlayer.nativeElement.volume;
+      this.videoPlayer.nativeElement.muted = true;
+      this.volumeBar.nativeElement.value = 0;
+    }
+    this.isMuted = this.videoPlayer.nativeElement.muted;
+  }
 
-  skip(time : number) {
+  skip(time: number) {
     this.videoPlayer.nativeElement.currentTime += time;
   }
 
   setVolume(event: Event) {
-    const volume = (event.target as HTMLInputElement).value;
+    const volume = parseFloat((event.target as HTMLInputElement).value);
     this.videoPlayer.nativeElement.volume = volume;
-    if (this.videoPlayer.nativeElement.volume == 0) {
+    if (volume === 0) {
       this.videoPlayer.nativeElement.muted = true;
     } else {
       this.videoPlayer.nativeElement.muted = false;
+      this.previousVolume = volume;
     }
+    this.isMuted = this.videoPlayer.nativeElement.muted;
   }
 
   toggleFullScreen() {
-    if (this.videoPlayer.nativeElement.requestFullscreen) {
+    if (!document.fullscreenElement) {
       this.videoPlayer.nativeElement.requestFullscreen();
-    } else if (this.videoPlayer.nativeElement.mozRequestFullScreen) {
-      this.videoPlayer.nativeElement.mozRequestFullScreen();
-    } else if (this.videoPlayer.nativeElement.webkitRequestFullscreen) {
-      this.videoPlayer.nativeElement.webkitRequestFullscreen();
-    } else if (this.videoPlayer.nativeElement.msRequestFullscreen) {
-      this.videoPlayer.nativeElement.msRequestFullscreen();
+    } else {
+      document.exitFullscreen();
     }
   }
 
-  toggleSettings(){
+  @HostListener('document:fullscreenchange', [])
+  onFullScreenChange() {
+    this.isFullScreen = !!document.fullscreenElement;
+  }
+
+  toggleSettings() {
     const settings = document.getElementById("settings");
     if (settings!.style.display === "block") {
       settings!.style.display = "none";
@@ -94,5 +108,9 @@ export class MediaPlayerComponent {
       settings!.style.display = "block";
     }
   }
-  
+
+  exit() {
+    const settings = document.getElementById("settings");
+    settings!.style.display = "none";
+  }
 }
