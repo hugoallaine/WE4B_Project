@@ -19,16 +19,19 @@ if ($query !== '') {
         if (strpos(strtolower($artist['name']), $query) !== false) {
             $searchResults['artists'][] = $artist;
         }
-    }
-
-    foreach ($data['albums'] as $album) {
-        if (strpos(strtolower($album['title']), $query) !== false || strpos(strtolower($album['artist']), $query) !== false) {
-            $searchResults['albums'][] = $album;
-        }
-        foreach ($album['tracks'] as $track) {
-            if (strpos(strtolower($track['title']), $query) !== false) {
-                $track['album'] = $album;
-                $searchResults['tracks'][] = $track;
+        foreach ($artist['albums'] as $album) {
+            if (strpos(strtolower($album['title']), $query) !== false) {
+                $albumWithArtist = $album;
+                $albumWithArtist['artist'] = $artist;
+                $searchResults['albums'][] = $albumWithArtist;
+            }
+            foreach ($album['tracks'] as $track) {
+                if (strpos(strtolower($track['title']), $query) !== false) {
+                    $trackWithArtist = $track;
+                    $trackWithArtist['albumId'] = $album['id'];
+                    $trackWithArtist['artist'] = $artist;
+                    $searchResults['tracks'][] = $trackWithArtist;
+                }
             }
         }
     }

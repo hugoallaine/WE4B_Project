@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SearchService } from '../services/search.service';
 import { NotificationService } from '../services/notification.service';
 import { HorizontalScrollService } from '../services/horizontal-scroll.service';
+import { Artist, Album, Track } from '../models/artist.model';
 
 @Component({
   selector: 'app-navbar',
@@ -12,7 +13,9 @@ import { HorizontalScrollService } from '../services/horizontal-scroll.service';
 })
 export class NavbarComponent implements OnInit {
   searchQuery: string = '';
-  searchResults: { artists: any[], albums: any[], tracks: any[] } = { artists: [], albums: [], tracks: [] };
+  searchResults: { artists: Artist[], albums: Album[], tracks: Track[] } = { 
+    artists: [], albums: [], tracks: []
+  };
   searchResultsVisible: boolean = false;
 
   constructor(
@@ -51,7 +54,7 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-  navigateToArtist(id: number) {
+  navigateToArtist(id: string) {
     if (id) {
       this.router.navigate(['/artist', id]);
     } else {
@@ -60,21 +63,12 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-  navigateToAlbum(id: number) {
+  navigateToAlbum(id: string) {
     if (id) {
       this.router.navigate(['/album', id]);
     } else {
       console.error('Album ID is undefined');
       this.notificationService.showNotification('Album ID is undefined', 'error');
-    }
-  }
-
-  navigateToAlbumByTrack(albumId: number) {
-    if (albumId) {
-      this.router.navigate(['/album', albumId]);
-    } else {
-      console.error('Album ID for track is undefined');
-      this.notificationService.showNotification('Album ID for track is undefined', 'error');
     }
   }
 

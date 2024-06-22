@@ -3,6 +3,8 @@ export interface Track {
   title: string;
   duration: number;
   filePath: string;
+  artist?: Artist;
+  albumId?: string;
 }
 
 export interface Album {
@@ -10,6 +12,7 @@ export interface Album {
   title: string;
   coverUrl: string;
   tracks: Track[];
+  artist?: Artist;
 }
 
 export interface Artist {
