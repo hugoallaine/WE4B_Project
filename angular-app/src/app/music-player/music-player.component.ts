@@ -156,12 +156,16 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toggleMute() {
-    if (!this.audioPlayer) {
-      return;
+    if (this.audioPlayer.nativeElement.muted) {
+      this.audioPlayer.nativeElement.muted = false;
+      this.audioPlayer.nativeElement.volume = this.previousVolume;
+      this.volumeBar.nativeElement.value = this.previousVolume;
+    } else {
+      this.previousVolume = this.audioPlayer.nativeElement.volume;
+      this.audioPlayer.nativeElement.muted = true;
+      this.volumeBar.nativeElement.value = 0;
     }
-    const audio = this.audioPlayer.nativeElement;
-    this.isMuted = !this.isMuted;
-    audio.muted = this.isMuted;
+    this.isMuted = this.audioPlayer.nativeElement.muted;
   }
 
   seekBackward() {
