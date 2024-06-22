@@ -1,4 +1,4 @@
-<div class="music-player" style="z-index: 10;" #audioElement>
+<div *ngIf="showPlayer" class="music-player" style="z-index: 10;" #audioElement>
 	<input class="progress-bar" type="range" min="0" max="100" step="1" [value]="progress" (input)="seek($event)">
 	<audio #audioPlayer>
 	  <source [src]="trackInfo[0].filePath" type="audio/mp3">
