@@ -129,6 +129,6 @@ input[type="range"] {
     width: 100px;
 }
 
-.controls .volume-button:hover .volume-container  {
+.controls .volume-button:hover .volume-container {
     display: block;
 }

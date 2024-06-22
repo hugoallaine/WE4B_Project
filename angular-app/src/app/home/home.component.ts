@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   artists: any[] = [];
 
   constructor(
-    private musicService: MusicService, 
+    private musicService: MusicService,
     private horizontalScrollService: HorizontalScrollService,
     private renderer: Renderer2, private router: Router
   ) { }

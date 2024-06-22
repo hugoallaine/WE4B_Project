@@ -1,9 +1,10 @@
 <app-navbar></app-navbar>
 <div class="container mt-4">
-    <h1>Music Library</h1>
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Enter directory path" [(ngModel)]="directoryPath">
-        <div class="input-group-append">
+    <div class="d-flex justify-content-between mb-3">
+        <div>
+            <h1>Music Library</h1>
+        </div>
+        <div>
             <button class="btn btn-primary" (click)="scanDirectory()">Scan Directory</button>
         </div>
     </div>
@@ -45,12 +46,12 @@
 
     <!-- Musics Section -->
     <div class="container mt-4">
-        <h2 class="mb-4 hover-clickable">Tracks</h2>
+        <h2 class="mb-4 hover-clickable" (click)="navigateTo('tracks')">Tracks</h2>
         <div class="d-flex flex-nowrap overflow-auto element-container">
             <ng-container *ngFor="let artist of artists">
                 <ng-container *ngFor="let album of artist.albums">
                     <div *ngFor="let track of album.tracks" class="p-2">
-                        <div class="card music-card hover-clickable">
+                        <div class="card music-card hover-clickable" (click)="navigateTo('album/' + album.id)">
                             <img [src]="album.coverUrl || 'assets/default-cover.jpg'" class="card-img-top music-cover"
                                 alt="{{track.title}}">
                             <div class="card-body text-center music-info">
@@ -63,3 +64,6 @@
             </ng-container>
         </div>
     </div>
+
+    <app-navbar></app-navbar>
+</div>
