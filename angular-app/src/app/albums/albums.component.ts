@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MusicService } from '../services/music.service';
 import { Router } from '@angular/router';
+import { Album, Artist } from '../models/artist.model';
 
 @Component({
   selector: 'app-albums',
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./albums.component.css']
 })
 export class AlbumsComponent implements OnInit {
-  albums: any[] = [];
+  artists: Artist[] = [];
 
   constructor(
     private musicService: MusicService,
@@ -16,12 +17,12 @@ export class AlbumsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadAlbums();
+    this.loadArtists();
   }
 
-  loadAlbums(): void {
-    this.musicService.getAlbums().subscribe(albums => {
-      this.albums = albums;
+  loadArtists(): void {
+    this.musicService.getArtists().subscribe(artists => {
+      this.artists = artists;
     });
   }
   navigateTo(page: string): void {

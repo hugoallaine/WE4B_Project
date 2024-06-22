@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     error_log("Received data: " . print_r($data, true));
 
-    $directoryPath = $data['filePaths'] ?? '';
+    $directoryPath = $data['directoryPath'] ?? '';
     error_log("Directory path: " . $directoryPath);
 
     if (empty($directoryPath)) {
@@ -209,11 +209,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Add the track if it does not already exist
             if (!$trackExists) {
                 $trackId = uniqid();
+                $baseAudioPath = 'assets/audio/';
                 $db['artists'][$artistIndex]['albums'][$albumIndex]['tracks'][] = [
                     'id' => $trackId,
                     'title' => $metadata['title'],
                     'duration' => $metadata['duration'],
-                    'filePath' => $metadata['filePath']
+                    'filePath' => $baseAudioPath . basename($metadata['filePath'])
                 ];
             }
         } else {

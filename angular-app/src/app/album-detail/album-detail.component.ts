@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MusicService } from '../services/music.service';
 import { Router } from '@angular/router';
-import { Track } from '../models/artist.model';
+import { Album, Artist, Track } from '../models/artist.model';
 
 @Component({
   selector: 'app-album-detail',
@@ -10,8 +10,19 @@ import { Track } from '../models/artist.model';
   styleUrls: ['./album-detail.component.css']
 })
 export class AlbumDetailComponent implements OnInit {
-  album: any;
-  tracks: any[] = [];
+  artist: Artist = {
+    id: '',
+    name: '',
+    pictureUrl: '',
+    albums: []
+  };
+
+  album: Album = {
+    id: '',
+    title: '',
+    coverUrl: '',
+    tracks: []
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -22,22 +33,22 @@ export class AlbumDetailComponent implements OnInit {
   ngOnInit(): void {
     const albumId = this.route.snapshot.paramMap.get('id');
     if (albumId) {
-      this.loadAlbum(parseInt(albumId));
+      this.loadAlbum(albumId);
     }
   }
 
-  loadAlbum(albumId: number): void {
-    this.musicService.getAlbums().subscribe(albums => {
-      this.album = albums.find(a => a.id === albumId);
-      this.tracks = this.album ? this.album.tracks : [];
+  loadAlbum(albumId: string): void {
+    this.musicService.getAlbum(albumId).subscribe(data => {
+      this.artist = data[0]
+      this.album = data[1];
     });
   }
   navigateTo(page: string): void {
     this.router.navigate([`/${page}`]);
   }
 
-  playTrack(track: Track): void {
-    this.musicService.addTrack(track);
+  playTrack(track: Track, album: Album, artist: Artist): void {
+    this.musicService.addTrack([track,album,artist], true);
   }
 }
 

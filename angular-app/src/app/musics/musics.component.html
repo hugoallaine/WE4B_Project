@@ -13,7 +13,7 @@
         <h2 class="mb-4 hover-clickable" (click)="navigateTo('artists')">Artistes</h2>
         <div class="d-flex flex-nowrap overflow-auto element-container">
             <div *ngFor="let artist of artists" class="p-2">
-                <div class="card artist-card hover-clickable" (click)="navigateTo('artist-detail/' + artist.id)">
+                <div class="card artist-card hover-clickable" (click)="navigateTo('artist/' + artist.id)">
                     <img [src]="artist.pictureUrl || 'assets/default-artist.jpg'" class="card-img-top artist-cover"
                         alt="{{ artist.name }}">
                     <div class="card-body text-center artist-info">
@@ -30,7 +30,7 @@
         <div class="d-flex flex-nowrap overflow-auto element-container">
             <ng-container *ngFor="let artist of artists">
                 <div *ngFor="let album of artist.albums" class="p-2">
-                    <div class="card album-card hover-clickable" (click)="navigateTo('album-detail/' + album.id)">
+                    <div class="card album-card hover-clickable" (click)="navigateTo('album/' + album.id)">
                         <img [src]="album.coverUrl || 'assets/default-cover.jpg'" class="card-img-top album-cover"
                             alt="{{ album.title }}">
                         <div class="card-body text-center album-info">
