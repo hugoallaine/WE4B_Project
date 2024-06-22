@@ -12,12 +12,12 @@ type QueueItem = [Track, Album, Artist];
 export class MusicService {
   private apiUrl = 'http://localhost:8000';
   private queueSubject: BehaviorSubject<QueueItem[]> = new BehaviorSubject<QueueItem[]>([]);
-  private currentIndexSubject: BehaviorSubject<number> = new BehaviorSubject<number>(1);
+  private currentIndexSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   constructor(private http: HttpClient) {
     const queue = this.queueSubject.value;
     queue.push([
-      { id: '', title: 'Player', duration: 0, filePath: '' }, 
+      { id: '', title: 'Player', duration: 1, filePath: '' }, 
       { id: '', title: 'No', coverUrl: '../../assets/logo/flex-logo-gris.svg', tracks: [] }, 
       { id: '', name: 'Song', pictureUrl: '', albums: [] }
     ]);
@@ -80,7 +80,10 @@ export class MusicService {
     queue.push(trackInfo);
     if (playNow) {
       this.queueSubject.next(queue);
-      this.currentIndexSubject.next(queue.length);
+      this.currentIndexSubject.next(queue.length - 1); // Update currentIndex to the last track
+      console.log('Playing track:', trackInfo[0].title)
+      console.log('queueIndex:', queue.length - 1)
+      console.log('queue:', queue)
     }
   }
 
@@ -100,6 +103,15 @@ export class MusicService {
     return queue[currentIndex];
   }
 
+  getCurrentTrackObservable(): Observable<QueueItem> {
+    return this.currentIndexSubject.pipe(
+      map(index => {
+        const queue = this.queueSubject.value;
+        return queue[index];
+      })
+    );
+  }
+
   nextTrack(): void {
     let currentIndex = this.currentIndexSubject.value;
     const queueLength = this.queueSubject.value.length;
@@ -107,6 +119,8 @@ export class MusicService {
       currentIndex++;
       this.currentIndexSubject.next(currentIndex);
     }
+    console.log('queueIndex:', this.currentIndexSubject.value)
+    console.log('queue:', this.queueSubject.value)
   }
 
   prevTrack(): void {
@@ -115,6 +129,8 @@ export class MusicService {
       currentIndex--;
       this.currentIndexSubject.next(currentIndex);
     }
+    console.log('queueIndex:', this.currentIndexSubject.value)
+    console.log('queue:', this.queueSubject.value)
   }
 
   setTrack(index: number) {

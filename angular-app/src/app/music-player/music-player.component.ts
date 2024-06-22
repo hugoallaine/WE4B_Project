@@ -20,13 +20,12 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   wrongUrl = ['/login', '/register', '/player'];
   isPlaying = false;
+  isLoading = false;
   isLooping = false;
   isMuted = false;
   previousVolume = 0.5;
   showPlayer = true;
   progress = 0;
-  currentTrackIndex = 0;
-  isLoading = false;
 
   trackInfo!: [Track, Album, Artist];
   private queueSubscription!: Subscription;
@@ -34,20 +33,9 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   private routerSubscription!: Subscription;
 
   ngOnInit() {
-    this.queueSubscription = this.musicService.getQueue().subscribe(queue => {
-      if (queue.length > 0) {
-        this.trackInfo = queue[this.currentTrackIndex];
-        if (this.audioPlayer && this.trackInfo[0].filePath) {
-          this.playCurrentTrack();
-        }
-      }
-    });
-
-    this.indexSubscription = this.musicService.getCurrentIndex().subscribe(index => {
-      this.currentTrackIndex = index;
-      if (this.audioPlayer && this.trackInfo[0].filePath) {
-        this.playCurrentTrack();
-      }
+    this.queueSubscription = this.musicService.getCurrentTrackObservable().subscribe(trackInfo => {
+      this.trackInfo = trackInfo;
+      this.playCurrentTrack();
     });
 
     this.checkUrl(); // Initial check
@@ -114,15 +102,17 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   prevTrack() {
+    this.isLoading = false;
     this.musicService.prevTrack();
   }
 
   nextTrack() {
+    this.isLoading = false;
     this.musicService.nextTrack();
   }
 
   playCurrentTrack() {
-    if (!this.audioPlayer || this.isLoading) {
+    if (!this.audioPlayer || this.isLoading || !this.progressText) {
       return;
     }
     const audio = this.audioPlayer.nativeElement;
@@ -141,6 +131,11 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isPlaying = false;
         }
       };
+    } else {
+      audio.pause();
+      audio.src = '';
+      this.isPlaying = false;
+      this.isLoading = false;
     }
   }
 
