@@ -87,3 +87,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.no-files-found {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    height: 10%;
+    font-size: 1.5rem;
+    color: #777;
+    white-space: normal;
+    overflow-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 10px;
+}

@@ -9,59 +9,65 @@
         </div>
     </div>
 
-    <!-- Artists Section -->
-    <div class="container mt-4">
-        <h2 class="mb-4 hover-clickable" (click)="navigateTo('artists')">Artistes</h2>
-        <div class="d-flex flex-nowrap overflow-auto element-container">
-            <div *ngFor="let artist of artists" class="p-2">
-                <div class="card artist-card hover-clickable" (click)="navigateTo('artist/' + artist.id)">
-                    <img [src]="artist.pictureUrl || 'assets/default-artist.jpg'" class="card-img-top artist-cover"
-                        alt="{{ artist.name }}">
-                    <div class="card-body text-center artist-info">
-                        <h5 class="card-title text-truncate">{{ artist.name }}</h5>
+    <div *ngIf="artists.length === 0" class="text-center no-files-found">
+        <p>We haven't found anything, so what are you waiting for to add your music?</p>
+    </div>
+
+    <div *ngIf="artists.length > 0">
+        <!-- Artists Section -->
+        <div class="container mt-4">
+            <h2 class="mb-4 hover-clickable" (click)="navigateTo('artists')">Artistes</h2>
+            <div class="d-flex flex-nowrap overflow-auto element-container">
+                <div *ngFor="let artist of artists" class="p-2">
+                    <div class="card artist-card hover-clickable" (click)="navigateTo('artist/' + artist.id)">
+                        <img [src]="artist.pictureUrl || 'assets/default-artist.jpg'" class="card-img-top artist-cover"
+                            alt="{{ artist.name }}">
+                        <div class="card-body text-center artist-info">
+                            <h5 class="card-title text-truncate">{{ artist.name }}</h5>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Albums Section -->
-    <div class="container mt-4">
-        <h2 class="mb-4 hover-clickable" (click)="navigateTo('albums')">Albums</h2>
-        <div class="d-flex flex-nowrap overflow-auto element-container">
-            <ng-container *ngFor="let artist of artists">
-                <div *ngFor="let album of artist.albums" class="p-2">
-                    <div class="card album-card hover-clickable" (click)="navigateTo('album/' + album.id)">
-                        <img [src]="album.coverUrl || 'assets/default-cover.jpg'" class="card-img-top album-cover"
-                            alt="{{ album.title }}">
-                        <div class="card-body text-center album-info">
-                            <h5 class="card-title text-truncate">{{ album.title }}</h5>
-                            <p class="card-text text-truncate">{{ artist.name }}</p>
-                        </div>
-                    </div>
-                </div>
-            </ng-container>
-        </div>
-    </div>
-
-    <!-- Musics Section -->
-    <div class="container mt-4">
-        <h2 class="mb-4 hover-clickable" (click)="navigateTo('tracks')">Tracks</h2>
-        <div class="d-flex flex-nowrap overflow-auto element-container">
-            <ng-container *ngFor="let artist of artists">
-                <ng-container *ngFor="let album of artist.albums">
-                    <div *ngFor="let track of album.tracks" class="p-2">
-                        <div class="card music-card hover-clickable" (click)="navigateTo('album/' + album.id)">
-                            <img [src]="album.coverUrl || 'assets/default-cover.jpg'" class="card-img-top music-cover"
-                                alt="{{track.title}}">
-                            <div class="card-body text-center music-info">
-                                <h5 class="card-title text-truncate">{{artist.name}}</h5>
-                                <p class="card-text text-truncate">{{track.title}}</p>
+        <!-- Albums Section -->
+        <div class="container mt-4">
+            <h2 class="mb-4 hover-clickable" (click)="navigateTo('albums')">Albums</h2>
+            <div class="d-flex flex-nowrap overflow-auto element-container">
+                <ng-container *ngFor="let artist of artists">
+                    <div *ngFor="let album of artist.albums" class="p-2">
+                        <div class="card album-card hover-clickable" (click)="navigateTo('album/' + album.id)">
+                            <img [src]="album.coverUrl || 'assets/default-cover.jpg'" class="card-img-top album-cover"
+                                alt="{{ album.title }}">
+                            <div class="card-body text-center album-info">
+                                <h5 class="card-title text-truncate">{{ album.title }}</h5>
+                                <p class="card-text text-truncate">{{ artist.name }}</p>
                             </div>
                         </div>
                     </div>
                 </ng-container>
-            </ng-container>
+            </div>
+        </div>
+
+        <!-- Musics Section -->
+        <div class="container mt-4">
+            <h2 class="mb-4 hover-clickable" (click)="navigateTo('tracks')">Tracks</h2>
+            <div class="d-flex flex-nowrap overflow-auto element-container">
+                <ng-container *ngFor="let artist of artists">
+                    <ng-container *ngFor="let album of artist.albums">
+                        <div *ngFor="let track of album.tracks" class="p-2">
+                            <div class="card music-card hover-clickable" (click)="navigateTo('album/' + album.id)">
+                                <img [src]="album.coverUrl || 'assets/default-cover.jpg'"
+                                    class="card-img-top music-cover" alt="{{track.title}}">
+                                <div class="card-body text-center music-info">
+                                    <h5 class="card-title text-truncate">{{artist.name}}</h5>
+                                    <p class="card-text text-truncate">{{track.title}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
         </div>
     </div>
 </div>
