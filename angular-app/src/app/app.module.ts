@@ -22,6 +22,7 @@ import { MusicsComponent } from './musics/musics.component';
 import { MoviesComponent } from './movies/movies.component';
 import { MusicPlayerComponent } from './music-player/music-player.component';
 import { DurationPipe } from './duration.pipe';
+import { MovieDetailComponent } from './movie-detail/movie-detail.component';
 
 @NgModule({
     declarations: [
@@ -42,6 +43,7 @@ import { DurationPipe } from './duration.pipe';
         MoviesComponent,
         MusicPlayerComponent,
         DurationPipe,
+        MovieDetailComponent,
     ],
     imports: [
         BrowserModule,

@@ -1,0 +1,277 @@
+{
+    "artists": [
+        {
+            "id": "667728f04f8cf",
+            "name": "Skillet",
+            "pictureUrl": "https:\/\/i.scdn.co\/image\/ab6761610000e5eb21a7fcb28b16068ac7e7680a",
+            "bio": "alternative metal",
+            "albums": [
+                {
+                    "id": "667728f0a5c56",
+                    "title": "Unleashed",
+                    "coverUrl": "assets\/covers\/809a204d2e212bd3702d80ffaf6f323a.jpeg",
+                    "tracks": [
+                        {
+                            "id": "667728f0a5c58",
+                            "title": "The Resistance",
+                            "duration": 3.87,
+                            "filePath": "assets\/audio\/song1.mp3"
+                        }
+                    ]
+                },
+                {
+                    "id": "667728f1e405f",
+                    "title": "Awake",
+                    "coverUrl": "assets\/covers\/0e9626ac55ad9ff93197789cff08cb3e.jpeg",
+                    "tracks": [
+                        {
+                            "id": "667728f1e4062",
+                            "title": "Awake and Alive",
+                            "duration": 3.49,
+                            "filePath": "assets\/audio\/song4.mp3"
+                        },
+                        {
+                            "id": "667728f1e4616",
+                            "title": "Hero",
+                            "duration": 3.11,
+                            "filePath": "assets\/audio\/song5.mp3"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "667728f0a629a",
+            "name": "Disturbed",
+            "pictureUrl": "https:\/\/i.scdn.co\/image\/ab6761610000e5eb012addc95f5b2e7283f45446",
+            "bio": "alternative metal",
+            "albums": [
+                {
+                    "id": "667728f0f2203",
+                    "title": "Evolution (Deluxe Edition)",
+                    "coverUrl": "assets\/covers\/da83868214f40c07e1d4280929adf857.jpeg",
+                    "tracks": [
+                        {
+                            "id": "667728f0f2206",
+                            "title": "A Reason to Fight",
+                            "duration": 4.74,
+                            "filePath": "assets\/audio\/song10.mp3"
+                        },
+                        {
+                            "id": "667728f0f2878",
+                            "title": "Are You Ready",
+                            "duration": 4.36,
+                            "filePath": "assets\/audio\/song11.mp3"
+                        },
+                        {
+                            "id": "667728f1009fe",
+                            "title": "Hold on to Memories",
+                            "duration": 5.06,
+                            "filePath": "assets\/audio\/song17.mp3"
+                        },
+                        {
+                            "id": "667728f100f3e",
+                            "title": "In Another Time",
+                            "duration": 4.18,
+                            "filePath": "assets\/audio\/song18.mp3"
+                        }
+                    ]
+                },
+                {
+                    "id": "667728f0f3114",
+                    "title": "Divisive",
+                    "coverUrl": "assets\/covers\/c10191beec76c3406d06513abf394611.jpeg",
+                    "tracks": [
+                        {
+                            "id": "667728f0f3117",
+                            "title": "Bad Man",
+                            "duration": 3.37,
+                            "filePath": "assets\/audio\/song12.mp3"
+                        },
+                        {
+                            "id": "667728f0f3c38",
+                            "title": "Divisive",
+                            "duration": 3.98,
+                            "filePath": "assets\/audio\/song14.mp3"
+                        },
+                        {
+                            "id": "667728f0f416c",
+                            "title": "Feeding the Fire",
+                            "duration": 4.32,
+                            "filePath": "assets\/audio\/song15.mp3"
+                        },
+                        {
+                            "id": "667728f100515",
+                            "title": "Hey You",
+                            "duration": 4.47,
+                            "filePath": "assets\/audio\/song16.mp3"
+                        }
+                    ]
+                },
+                {
+                    "id": "667728f0f36f3",
+                    "title": "Ten Thousand Fists",
+                    "coverUrl": "assets\/covers\/cb21bf84c2303e990b6d06d4d1cee6f6.jpeg",
+                    "tracks": [
+                        {
+                            "id": "667728f0f36f5",
+                            "title": "Decadence",
+                            "duration": 3.41,
+                            "filePath": "assets\/audio\/song13.mp3"
+                        }
+                    ]
+                },
+                {
+                    "id": "667728f10152f",
+                    "title": "Indestructible (Deluxe Edition)",
+                    "coverUrl": "assets\/covers\/53e60bc8c9f58db4c49251aaaa2670e2.jpeg",
+                    "tracks": [
+                        {
+                            "id": "667728f101531",
+                            "title": "Indestructible",
+                            "duration": 4.63,
+                            "filePath": "assets\/audio\/song19.mp3"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "667728f101a03",
+            "name": "STARSET",
+            "pictureUrl": "https:\/\/i.scdn.co\/image\/ab6761610000e5ebea600ab87986f0e9b95f6c6b",
+            "bio": "future rock",
+            "albums": [
+                {
+                    "id": "667728f14aeb9",
+                    "title": "Transmissions (Deluxe Version)",
+                    "coverUrl": "assets\/covers\/ca51e30c3569a3eb298c0e2c5938e861.jpeg",
+                    "tracks": [
+                        {
+                            "id": "667728f14aebc",
+                            "title": "My Demons",
+                            "duration": 4.8,
+                            "filePath": "assets\/audio\/song2.mp3"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "667728f14b4a7",
+            "name": "Avatar",
+            "pictureUrl": "https:\/\/i.scdn.co\/image\/ab6761610000e5eb855109a43a9e095d91916955",
+            "bio": "gothenburg metal",
+            "albums": [
+                {
+                    "id": "667728f192d80",
+                    "title": "Black Waltz",
+                    "coverUrl": "assets\/covers\/8114a77101ab0b98ee1cbd06a25eb8c7.jpeg",
+                    "tracks": [
+                        {
+                            "id": "667728f192d83",
+                            "title": "In Napalm",
+                            "duration": 5.54,
+                            "filePath": "assets\/audio\/song20.mp3"
+                        },
+                        {
+                            "id": "667728f1933d4",
+                            "title": "Torn Apart",
+                            "duration": 6.51,
+                            "filePath": "assets\/audio\/song21.mp3"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "667728f193aea",
+            "name": "Within Temptation",
+            "pictureUrl": "https:\/\/i.scdn.co\/image\/ab6761610000e5ebd7fd83f3a54ab822936034b6",
+            "bio": "dutch metal",
+            "albums": [
+                {
+                    "id": "667728f1e3a49",
+                    "title": "Bleed Out",
+                    "coverUrl": "assets\/covers\/fc9c2d43b8dd6bd125a159a05e2e7e5c.jpeg",
+                    "tracks": [
+                        {
+                            "id": "667728f1e3a4c",
+                            "title": "Bleed Out",
+                            "duration": 4.5,
+                            "filePath": "assets\/audio\/song3.mp3"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "667728f1e4ad4",
+            "name": "Adam Jensen",
+            "pictureUrl": "https:\/\/i.scdn.co\/image\/ab6761610000e5eb9a40eace1047f28f86a4c65b",
+            "bio": "modern alternative rock",
+            "albums": [
+                {
+                    "id": "667728f240bb5",
+                    "title": "I'm a Sucker for a Liar in a Red Dress",
+                    "coverUrl": "assets\/covers\/c96c4c473aade5243ec3c426dae0708d.jpeg",
+                    "tracks": [
+                        {
+                            "id": "667728f240bb7",
+                            "title": "I'm a Sucker for a Liar in a Red Dress",
+                            "duration": 3.73,
+                            "filePath": "assets\/audio\/song6.mp3"
+                        }
+                    ]
+                },
+                {
+                    "id": "667728f2412f5",
+                    "title": "The Hunter",
+                    "coverUrl": "assets\/covers\/6c5e2938944fc13e33d3541163c7792d.jpeg",
+                    "tracks": [
+                        {
+                            "id": "667728f2412f7",
+                            "title": "The Hunter",
+                            "duration": 3.52,
+                            "filePath": "assets\/audio\/song7.mp3"
+                        }
+                    ]
+                },
+                {
+                    "id": "667728f2417b7",
+                    "title": "New Bad Habit",
+                    "coverUrl": "assets\/covers\/33ca73ad5fdce45d42f87ba82cfe293f.jpeg",
+                    "tracks": [
+                        {
+                            "id": "667728f2417ba",
+                            "title": "New Bad Habit",
+                            "duration": 2.1,
+                            "filePath": "assets\/audio\/song8.mp3"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "667728f241cbc",
+            "name": "AGST",
+            "pictureUrl": "https:\/\/i.scdn.co\/image\/ab67616d0000b2732f074d726ce52f993375600e",
+            "bio": "",
+            "albums": [
+                {
+                    "id": "667728f28aff0",
+                    "title": "Overload",
+                    "coverUrl": "assets\/covers\/09ec350d09a7f598bbe77b87937a23d4.jpeg",
+                    "tracks": [
+                        {
+                            "id": "667728f28aff3",
+                            "title": "Overload",
+                            "duration": 3.5,
+                            "filePath": "assets\/audio\/song9.mp3"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

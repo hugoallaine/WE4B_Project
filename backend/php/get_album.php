@@ -9,7 +9,7 @@ header('Content-Type: application/json');
 
 if (isset($_GET['albumId'])) {
     $albumId = intval($_GET['albumId']);
-    $dbFile = dirname(__DIR__) . '/json/files_data.json';
+    $dbFile = dirname(__DIR__) . '/json/musics.json';
     $db = file_exists($dbFile) ? json_decode(file_get_contents($dbFile), true) : null;
 
     if ($db && is_array($db)) {

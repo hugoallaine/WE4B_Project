@@ -24,19 +24,19 @@ export class MusicService {
   }
 
   getArtists(): Observable<any[]> {
-    return this.http.get<any>(`${this.apiUrl}/get_data.php`).pipe(
+    return this.http.get<any>(`${this.apiUrl}/get_data.php?type=musics`).pipe(
       map(data => data.artists || [])
     );
   }
 
   getArtist(id: string): Observable<Artist> {
-    return this.http.get<any>(`${this.apiUrl}/get_data.php`).pipe(
+    return this.http.get<any>(`${this.apiUrl}/get_data.php?type=musics`).pipe(
       map(data => data.artists.find((artist: Artist) => artist.id === id))
     );
   }
 
   getAlbums(): Observable<any[]> {
-    return this.http.get<any>(`${this.apiUrl}/get_data.php`).pipe(
+    return this.http.get<any>(`${this.apiUrl}/get_data.php?type=musics`).pipe(
       map(data => {
         let albums: any[] = [];
         data.artists.forEach((artist: Artist) => {
@@ -48,7 +48,7 @@ export class MusicService {
   }
 
   getAlbum(id: string): Observable<any[]> {
-    return this.http.get<any>(`${this.apiUrl}/get_data.php`).pipe(
+    return this.http.get<any>(`${this.apiUrl}/get_data.php?type=musics`).pipe(
       map(data => {
         let artist = data.artists.find((artist: Artist) => artist.albums.some((album: Album) => album.id === id));
         let album = artist.albums.find((album: Album) => album.id === id);
@@ -58,7 +58,7 @@ export class MusicService {
   }
 
   getTracks(): Observable<Track[]> {
-    return this.http.get<any>(`${this.apiUrl}/get_data.php`).pipe(
+    return this.http.get<any>(`${this.apiUrl}/get_data.php?type=musics`).pipe(
       map(data => {
         let musics: Track[] = [];
         data.artists.forEach((artist: Artist) => {

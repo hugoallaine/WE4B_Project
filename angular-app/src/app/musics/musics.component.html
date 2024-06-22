@@ -20,7 +20,7 @@
             <div class="d-flex flex-nowrap overflow-auto element-container">
                 <div *ngFor="let artist of artists" class="p-2">
                     <div class="card artist-card hover-clickable" (click)="navigateTo('artist/' + artist.id)">
-                        <img [src]="artist.pictureUrl || 'assets/default-artist.jpg'" class="card-img-top artist-cover"
+                        <img [src]="artist.pictureUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top artist-cover"
                             alt="{{ artist.name }}">
                         <div class="card-body text-center artist-info">
                             <h5 class="card-title text-truncate">{{ artist.name }}</h5>
@@ -37,7 +37,7 @@
                 <ng-container *ngFor="let artist of artists">
                     <div *ngFor="let album of artist.albums" class="p-2">
                         <div class="card album-card hover-clickable" (click)="navigateTo('album/' + album.id)">
-                            <img [src]="album.coverUrl || 'assets/default-cover.jpg'" class="card-img-top album-cover"
+                            <img [src]="album.coverUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top album-cover"
                                 alt="{{ album.title }}">
                             <div class="card-body text-center album-info">
                                 <h5 class="card-title text-truncate">{{ album.title }}</h5>

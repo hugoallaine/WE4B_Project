@@ -11,7 +11,7 @@ import { Artist, Album, Track } from '../models/artist.model';
 })
 export class MusicsComponent implements OnInit, AfterViewInit {
   artists: Artist[] = [];
-  directoryPath: string = '../../angular-app/src/assets/audio';
+  directoryPath: string = '../../angular-app/src/audio';
 
   constructor(
     private musicService: MusicService,
@@ -36,7 +36,6 @@ export class MusicsComponent implements OnInit, AfterViewInit {
       this.artists = artists;
     });
   }
-
 
   scanDirectory(): void {
     if (this.directoryPath) {

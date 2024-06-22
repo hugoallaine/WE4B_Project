@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $dbFile = dirname(__DIR__) . '/json/files_data.json';
+    $dbFile = dirname(__DIR__) . '/json/musics.json';
     $db = file_exists($dbFile) ? json_decode(file_get_contents($dbFile), true) : null;
 
     // Initialize the database if it is empty or malformed

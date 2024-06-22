@@ -1,1 +1,32 @@
 <app-navbar></app-navbar>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between mb-3">
+        <div>
+            <h1>Movies Library</h1>
+        </div>
+        <div>
+            <button class="btn btn-primary" (click)="scanDirectory()">Scan Directory</button>
+        </div>
+    </div>
+
+    <div *ngIf="movies.length === 0" class="text-center no-files-found">
+        <p>We haven't found anything, so what are you waiting for to add your music?</p>
+    </div>
+
+    <div *ngIf="movies.length > 0">
+        <div class="container mt-4">
+            <h2 class="mb-4 hover-clickable">Movies</h2>
+            <div class="d-flex flex-nowrap overflow-auto element-container">
+                <div *ngFor="let movie of movies" class="p-2">
+                    <div class="card movie-card hover-clickable" (click)="navigateTo('movie/' + movie.id)">
+                        <img [src]="movie.picturePath || 'assets/logo/flex-logo-gris.svg'" alt="{{ movie.title }}"
+                            class="card-img-top movie-cover">
+                        <div class="card-body text-center movie-info">
+                            <h5 class="card-title text-truncate">{{ movie.title }}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

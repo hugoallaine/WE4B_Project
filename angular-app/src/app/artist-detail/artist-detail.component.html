@@ -31,9 +31,9 @@
 
     <!-- Musics Section -->
     <div class="container mt-4">
-      <h2 class="mb-4 hover-clickable" (click)="navigateTo('musics')">Musics</h2>
+      <h2 class="mb-4 hover-clickable" (click)="navigateTo('tracks')">Tracks</h2>
       <div class="d-flex flex-nowrap overflow-auto element-container">
-        <ng-component *ngFor="let album of artist.albums">
+        <ng-container *ngFor="let album of artist.albums">
           <div *ngFor="let track of album.tracks" class="p-2">
             <div class="card music-card hover-clickable">
               <img [src]="album.coverUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top music-cover rounded"
@@ -44,7 +44,7 @@
               </div>
             </div>
           </div>
-        </ng-component>
+        </ng-container>
       </div>
     </div>
     <div *ngIf="!artist">

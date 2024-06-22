@@ -13,7 +13,7 @@ import { ArtistDetailComponent } from './artist-detail/artist-detail.component';
 import { AlbumDetailComponent } from "./album-detail/album-detail.component";
 import { MusicsComponent } from "./musics/musics.component";
 import { MoviesComponent } from "./movies/movies.component";
-
+import { MovieDetailComponent } from "./movie-detail/movie-detail.component";
 
 const routes: Routes = [
     { path: "", redirectTo: "home", pathMatch: "full" },
@@ -29,6 +29,7 @@ const routes: Routes = [
     { path: 'artists', component: ArtistsComponent },
     { path: 'artist/:id', component: ArtistDetailComponent },
     { path: 'album/:id', component: AlbumDetailComponent },
+    { path: 'movie/:id', component: MovieDetailComponent },
     { path: "**", redirectTo: "home" },
 ];
 
