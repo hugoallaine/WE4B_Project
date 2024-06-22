@@ -5,7 +5,7 @@
     <ng-container *ngFor="let artist of artists" class="col-md-3 mb-4">
       <ng-container *ngFor="let album of artist.albums">
         <div *ngFor="let track of album.tracks" class="col-md-3 mb-4">
-          <div class="card music-card" (click)="navigateTo('album/' + album.id)">
+          <div class="card music-card hover-clickable" (click)="navigateTo('album/' + album.id)">
             <img [src]="album.coverUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top music-cover"
               alt="{{ track.title }}">
             <div class="card-body text-center music-info">
