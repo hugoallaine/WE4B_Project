@@ -3,7 +3,7 @@
 	<audio #audioPlayer>
 		<source [src]="trackInfo[0].filePath" type="audio/mp3">
 	</audio>
-	<div class="controls">
+	<div class="controls d-md-flex d-none justify-content-between align-items-center h-100">
 		<div class="left-controls">
 			<button (click)="prevTrack()"><i class="bi bi-skip-start-fill"></i></button>
 			<button class="play-pause" (click)="togglePlayPause()">
@@ -37,5 +37,37 @@
 				<i *ngIf="isLooping" class="bi bi-repeat-1"></i>
 			</button>
 		</div>
+	</div>
+	<div class="d-flex d-md-none justify-content-around align-items-center">
+		<div class="music-info">
+			<img [src]="trackInfo[1].coverUrl" alt="cover" width="50" height="50" />
+			<div class="infos">
+				<p class="title">{{trackInfo[0].title}}</p>
+				<p class="album-artist">{{trackInfo[1].title}} - {{trackInfo[2].name}}</p>
+			</div>
+		</div>
+		<div class="controls left-controls">
+			<button (click)="prevTrack()"><i class="bi bi-skip-start-fill"></i></button>
+			<button class="play-pause" (click)="togglePlayPause()">
+				<i *ngIf="!isPlaying" class="bi bi-play-fill"></i>
+				<i *ngIf="isPlaying" class="bi bi-pause-fill"></i>
+			</button>
+			<button (click)="nextTrack()"><i class="bi bi-skip-end-fill"></i></button>
+		</div>
+		<div class="time" #progressText>00:00 / 00:00</div>
+	</div>
+	<div class="right-controls controls d-flex d-md-none justify-content-around align-items-center">
+
+			<button class="volume-button">
+				<i *ngIf="!isMuted" class="bi bi-volume-up" (click)="toggleMute()"></i>
+				<i *ngIf="isMuted" class="bi bi-volume-mute" (click)="toggleMute()"></i>
+				<input class="volume-bar" type="range" #volumeBar (input)="setVolume($event)" min="0" max="1"
+					step="0.1" />
+			</button>
+			<button (click)="toggleShuffle()"><i class="bi bi-shuffle"></i></button>
+			<button (click)="toggleLoop()">
+				<i *ngIf="!isLooping" class="bi bi-repeat"></i>
+				<i *ngIf="isLooping" class="bi bi-repeat-1"></i>
+			</button>
 	</div>
 </div>

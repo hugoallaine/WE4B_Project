@@ -7,13 +7,6 @@
     background-color: #333;
 }
 
-.controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
-}
-
 input[type="range"] {
     -webkit-slider-thumb-background: #ff0000;
     -moz-range-thumb-background: #ff0000;
@@ -131,4 +124,11 @@ input[type="range"] {
 
 .controls .volume-button:hover .volume-container {
     display: block;
+}
+
+@media (max-width: 768px) {
+    .music-player {
+        height: 16%;
+        min-height: 150px;
+    }
 }
