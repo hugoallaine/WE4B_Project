@@ -27,7 +27,7 @@ Before you begin, ensure you have the following software installed on your syste
    You have two options to install the PHP dependencies:
 
    ### Option A: Download Vendor Archive
-   - Download the [vendor archive](https://cloud.allaine.cc/s/PorFeJ6f7AofaeN)
+   - Download the [vendor archive](https://cloud.allaine.cc/s/EWkS6NZfGk46NZS)
    - Unzip it and place it in the `php` folder inside the `backend` folder. The structure should look like this:
      ```
      backend/php/vendor
@@ -59,7 +59,7 @@ Before you begin, ensure you have the following software installed on your syste
 
 5. **Set Up MySQL Database**
    - Ensure your MySQL server is running on the default port 3306.
-   - Download the database SQL file from [this link](#) (link to be provided).
+   - Download the database SQL file from [this link](https://cloud.allaine.cc/s/SFGe62G8FrBMteA).
    - Import the SQL file into your MySQL database using a tool like phpMyAdmin or the MySQL command line:
      ```sh
      mysql -u your_username -p your_database_name < path_to_sql_file.sql
