@@ -16,7 +16,7 @@
     <div *ngIf="artists.length > 0">
         <!-- Artists Section -->
         <div class="container mt-4">
-            <h2 class="mb-4 hover-clickable" (click)="navigateTo('artists')">Artistes</h2>
+            <h2 class="mb-4 hover-clickable" (click)="navigateTo('artists')">Artists</h2>
             <div class="d-flex flex-nowrap overflow-auto element-container">
                 <div *ngFor="let artist of artists" class="p-2">
                     <div class="card artist-card hover-clickable" (click)="navigateTo('artist/' + artist.id)">
