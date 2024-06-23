@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MusicService } from '../services/music.service';
 import { Router } from '@angular/router';
 
+/**
+ * Artists component
+ * 
+ * This component is used to display the list of all artists on the platform.
+ */
 @Component({
   selector: 'app-artists',
   templateUrl: './artists.component.html',
@@ -10,7 +15,16 @@ import { Router } from '@angular/router';
 export class ArtistsComponent implements OnInit {
   artists: any[] = [];
 
-  constructor(private musicService: MusicService, private router: Router) { }
+  /**
+   * Constructor
+   * 
+   * @param musicService The music service
+   * @param router The router
+   */
+  constructor(
+    private musicService: MusicService, 
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.musicService.getArtists().subscribe(artists => {

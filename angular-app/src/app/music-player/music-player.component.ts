@@ -4,15 +4,17 @@ import { Subscription } from 'rxjs';
 import { Album, Artist, Track } from '../models/artist.model';
 import { MusicService } from '../services/music.service';
 
+/**
+ * Music player component
+ * 
+ * This component is used to display the music player.
+ */
 @Component({
   selector: 'app-music-player',
   templateUrl: './music-player.component.html',
   styleUrls: ['./music-player.component.css']
 })
 export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
-
-  constructor(private router: Router, private musicService: MusicService) { }
-
   @ViewChild('audioPlayer') audioPlayer!: ElementRef<HTMLAudioElement>;
   @ViewChild('progressBar') progressBar!: ElementRef;
   @ViewChild('progressText') progressText!: ElementRef;
@@ -31,6 +33,22 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   private indexSubscription!: Subscription;
   private routerSubscription!: Subscription;
 
+  /**
+   * Constructor
+   * 
+   * @param router The router
+   * @param musicService The music service
+   */
+  constructor(
+    private router: Router,
+    private musicService: MusicService
+  ) { }
+
+  /**
+   * OnInit lifecycle hook
+   * 
+   * It is used to subscribe to the queue and index observables.
+   */
   ngOnInit() {
     this.queueSubscription = this.musicService.getCurrentTrackObservable().subscribe(trackInfo => {
       this.trackInfo = trackInfo;
@@ -45,6 +63,11 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  /**
+   * OnDestroy lifecycle hook
+   * 
+   * It is used to unsubscribe from the observables.
+   */
   ngOnDestroy() {
     if (this.queueSubscription) {
       this.queueSubscription.unsubscribe();
@@ -57,21 +80,11 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  checkUrl() {
-    // Définition des motifs d'URL à exclure à l'aide d'expressions régulières
-    const wrongUrlPatterns = [
-      /^\/login$/,
-      /^\/register$/,
-      /^\/player\/.+$/ // Correspond à /player suivi de n'importe quel caractère (au moins un)
-    ];
-  
-    // Vérifie si l'URL actuelle correspond à l'un des motifs interdits
-    const isWrongUrl = wrongUrlPatterns.some(pattern => pattern.test(this.router.url));
-  
-    // Met à jour la visibilité du lecteur en fonction de l'URL
-    this.showPlayer = !isWrongUrl;
-  }
-
+  /**
+   * AfterViewInit lifecycle hook
+   * 
+   * It is used to add event listeners to the audio player.
+   */
   ngAfterViewInit() {
     const audio = this.audioPlayer.nativeElement;
     audio.volume = this.previousVolume;
@@ -86,6 +99,22 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  /**
+   * Check the URL to determine if the player should be visible
+   */
+  checkUrl() {
+    const wrongUrlPatterns = [
+      /^\/login$/,
+      /^\/register$/,
+      /^\/player\/.+$/
+    ];
+    const isWrongUrl = wrongUrlPatterns.some(pattern => pattern.test(this.router.url));
+    this.showPlayer = !isWrongUrl;
+  }
+
+  /**
+   * Update the progress bar
+   */
   updateProgressBar() {
     if (!this.audioPlayer) {
       return;
@@ -98,6 +127,9 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  /**
+   * Toggle play/pause
+   */
   togglePlayPause() {
     if (!this.audioPlayer) {
       return;
@@ -111,16 +143,25 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isPlaying = !this.isPlaying;
   }
 
+  /**
+   * Load the previous track
+   */
   prevTrack() {
     this.isLoading = false;
     this.musicService.prevTrack();
   }
 
+  /**
+   * Load the next track
+   */
   nextTrack() {
     this.isLoading = false;
     this.musicService.nextTrack();
   }
 
+  /**
+   * Play the current track of the queue
+   */
   playCurrentTrack() {
     if (!this.audioPlayer || this.isLoading || !this.progressText) {
       return;
@@ -149,6 +190,10 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  /**
+   * Seek the audio
+   * @param event The event
+   */
   seek(event: any) {
     if (!this.audioPlayer) {
       return;
@@ -157,6 +202,10 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     audio.currentTime = (event.target.value / 100) * audio.duration;
   }
 
+  /**
+   * Set the volume
+   * @param event The event
+   */
   setVolume(event: any) {
     if (!this.audioPlayer) {
       return;
@@ -165,6 +214,9 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     audio.volume = event.target.value;
   }
 
+  /**
+   * Toggle mute
+   */
   toggleMute() {
     if (this.audioPlayer.nativeElement.muted) {
       this.audioPlayer.nativeElement.muted = false;
@@ -178,6 +230,9 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isMuted = this.audioPlayer.nativeElement.muted;
   }
 
+  /**
+   * Seek backward
+   */
   seekBackward() {
     if (!this.audioPlayer) {
       return;
@@ -186,6 +241,9 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     audio.currentTime = Math.max(0, audio.currentTime - 10);
   }
 
+  /**
+   * Seek forward
+   */
   seekForward() {
     if (!this.audioPlayer) {
       return;
@@ -194,10 +252,16 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
   }
 
+  /**
+   * Toggle shuffle
+   */
   toggleShuffle() {
-    // Shuffle logic can be implemented here
+    // TODO: Implement shuffle
   }
 
+  /**
+   * Toggle loop
+   */
   toggleLoop() {
     if (!this.audioPlayer) {
       return;
@@ -207,6 +271,9 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     audio.loop = this.isLooping;
   }
 
+  /**
+   * Update the progress text
+   */
   updateProgressText() {
     if (!this.audioPlayer) {
       return;
@@ -217,6 +284,11 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.progressText.nativeElement.innerText = `${currentTime} / ${duration}`;
   }
 
+  /**
+   * Format time
+   * @param seconds The seconds
+   * @returns The formatted time
+   */
   formatTime(seconds: number): string {
     const minutes = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);

@@ -4,13 +4,17 @@ import { Router } from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NotificationService } from '../services/notification.service';
 
+/**
+ * Login component
+ * 
+ * This component is used to log in the user.
+ */
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
   loginForm = new FormGroup({
     username: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]),
     password: new FormControl('', Validators.required),
@@ -20,10 +24,24 @@ export class LoginComponent implements OnInit {
   tfa: boolean = false;
   error_message: string = '';
 
-  constructor(private authService: AuthService, private router: Router, private notificationService: NotificationService) { }
+  /**
+   * Constructor
+   * 
+   * @param authService The authentication service
+   * @param router The router
+   * @param notificationService The notification service
+   */
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private notificationService: NotificationService
+  ) { }
 
   ngOnInit(): void { }
 
+  /**
+   * Getters for form controls
+   */
   get username(): AbstractControl | null {
     return this.loginForm.get('username');
   }
@@ -40,6 +58,9 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('tfa_code');
   }
 
+  /**
+   * Submit the login form
+   */
   onSubmit(): void {
     if (this.loginForm.valid) {
       const username = this.loginForm.get('username')?.value;
@@ -61,9 +82,11 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+   * Toggle password visibility
+   */
   togglePasswordVisibility(): void {
     const passwordField = document.getElementById('password') as HTMLInputElement;
     passwordField.type = this.showPassword?.value ? 'text' : 'password';
   }
-
 }

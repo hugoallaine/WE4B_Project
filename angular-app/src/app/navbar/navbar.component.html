@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary custom-navbar">
     <div class="container-fluid">
         <a class="navbar-brand" routerLink="/home">
-            <img src="assets/logo/flex-logo.svg" alt="Logo" width="30" height="30" class="d-inline-block align-text-top me-2">
+            <img src="assets/logo/flex-logo.svg" alt="Logo" width="30" height="30"
+                class="d-inline-block align-text-top me-2">
             Flex
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -21,20 +22,25 @@
                 </li>
             </ul>
             <form class="d-flex position-relative w-25" role="search" (ngSubmit)="onSearch()">
-                <input class="form-control me-2" id="searchbar" type="search" placeholder="Search" aria-label="Search" [(ngModel)]="searchQuery" name="searchQuery" (input)="onSearch()" (focus)="onFocus()" (blur)="onBlur()">
-                <div class="search-results position-absolute w-100 custom-margin-top rounded" *ngIf="searchResultsVisible">
+                <input class="form-control me-2" id="searchbar" type="search" placeholder="Search" aria-label="Search"
+                    [(ngModel)]="searchQuery" name="searchQuery" (input)="onSearch()" (focus)="onFocus()"
+                    (blur)="onBlur()">
+                <div class="search-results position-absolute w-100 custom-margin-top rounded"
+                    *ngIf="searchResultsVisible">
                     <div *ngIf="searchResults.artists.length > 0">
                         <h5 class="px-3 pt-2">Artists</h5>
                         <ul class="list-group">
-                            <li class="list-group-item" *ngFor="let artist of searchResults.artists" (click)="navigateToArtist(artist.id)">
+                            <li class="list-group-item" *ngFor="let artist of searchResults.artists"
+                                (click)="navigateToArtist(artist.id)">
                                 {{ artist.name }}
                             </li>
                         </ul>
                     </div>
-                        <div *ngIf="searchResults.albums.length > 0">
+                    <div *ngIf="searchResults.albums.length > 0">
                         <h5 class="px-3 pt-2">Albums</h5>
                         <ul class="list-group">
-                            <li class="list-group-item element-container" *ngFor="let album of searchResults.albums" (click)="navigateToAlbum(album.id)">
+                            <li class="list-group-item element-container" *ngFor="let album of searchResults.albums"
+                                (click)="navigateToAlbum(album.id)">
                                 {{ album.title }} by {{ album.artist?.name }}
                             </li>
                         </ul>
@@ -42,7 +48,8 @@
                     <div *ngIf="searchResults.tracks.length > 0">
                         <h5 class="px-3 pt-2">Tracks</h5>
                         <ul class="list-group">
-                            <li class="list-group-item" *ngFor="let track of searchResults.tracks" (click)="navigateToAlbum(track.albumId ?? '')">
+                            <li class="list-group-item" *ngFor="let track of searchResults.tracks"
+                                (click)="navigateToAlbum(track.albumId ?? '')">
                                 {{ track.title }} by {{ track.artist?.name }}
                             </li>
                         </ul>
@@ -50,7 +57,8 @@
                     <div *ngIf="searchResults.movies.length > 0">
                         <h5 class="px-3 pt-2">Movies</h5>
                         <ul class="list-group">
-                            <li class="list-group-item" *ngFor="let movie of searchResults.movies" (click)="navigateToMovie(movie.id)">
+                            <li class="list-group-item" *ngFor="let movie of searchResults.movies"
+                                (click)="navigateToMovie(movie.id)">
                                 {{ movie.title }} ({{ movie.year }})
                             </li>
                         </ul>

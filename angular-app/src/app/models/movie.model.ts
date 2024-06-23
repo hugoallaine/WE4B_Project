@@ -1,3 +1,6 @@
+/**
+ * Movie model
+ */
 export interface Movie {
     id: string;
     title: string;

@@ -8,7 +8,8 @@
         </button>
         <div class="controls">
             <div class="time-control">
-                <input class="progress-bar" type="range" #progressBar (input)="seek($event)" min="0" max="100" step="1" />
+                <input class="progress-bar" type="range" #progressBar (input)="seek($event)" min="0" max="100"
+                    step="1" />
                 <p class="time" #progressText>00:00 / 00:00</p>
             </div>
             <div class="other-controls">
@@ -27,7 +28,8 @@
                         <i *ngIf="!isMuted" class="bi bi-volume-up" (click)="toggleMute()"></i>
                         <i *ngIf="isMuted" class="bi bi-volume-mute" (click)="toggleMute()"></i>
                         <div class="volume-container">
-                            <input class="volume-bar" type="range" #volumeBar (input)="setVolume($event)" min="0" max="1" step="0.1" />
+                            <input class="volume-bar" type="range" #volumeBar (input)="setVolume($event)" min="0"
+                                max="1" step="0.1" />
                         </div>
                     </button>
                 </div>
@@ -65,7 +67,7 @@
                             </div>
                         </div>
                     </button>
-                   
+
                     <button (click)="toggleFullScreen()">
                         <i class="bi bi-fullscreen"></i>
                     </button>

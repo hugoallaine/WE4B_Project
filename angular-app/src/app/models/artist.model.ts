@@ -1,3 +1,6 @@
+/**
+ * Track model
+ */
 export interface Track {
   id : string;
   title: string;
@@ -7,6 +10,9 @@ export interface Track {
   albumId?: string;
 }
 
+/**
+ * Album model
+ */
 export interface Album {
   id: string;
   title: string;
@@ -15,6 +21,9 @@ export interface Album {
   artist?: Artist;
 }
 
+/**
+ * Artist model
+ */
 export interface Artist {
   id: string;
   name: string;

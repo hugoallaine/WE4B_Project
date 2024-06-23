@@ -3,6 +3,11 @@ import { AuthService } from '../services/auth.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NotificationService } from '../services/notification.service';
 
+/**
+ * Account component
+ * 
+ * This component is used to display the user account information and allow the user to change it.
+ */
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
@@ -46,7 +51,16 @@ export class AccountComponent implements OnInit {
     passwordDelete: new FormControl('')
   })
 
-  constructor(private authService: AuthService, private notificationService: NotificationService) {
+  /**
+   * Constructor
+   * 
+   * @param authService The authentication service
+   * @param notificationService The notification service
+   */
+  constructor(
+    private authService: AuthService, 
+    private notificationService: NotificationService
+  ) {
     authService.getUser().subscribe(response => {
       if (response.success) {
         this.user.username = response.username;
@@ -75,6 +89,9 @@ export class AccountComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * Change the user information
+   */
   changeInfo(): void {
     const pseudo = this.changeInfoForm.get('pseudo')?.value;
     const firstname = this.changeInfoForm.get('firstname')?.value;
@@ -94,6 +111,9 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  /**
+   * Change the user password
+   */
   changePassword(): void {
     const oldPassword = this.changePasswordForm.get('oldPassword')?.value;
     const newPassword = this.changePasswordForm.get('newPassword')?.value;
@@ -109,6 +129,9 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  /**
+   * Enable the Two-Factor Authentication
+   */
   enableTfa(): void {
     const tfa_code = this.enableTfaForm.get('tfa_code')?.value;
     const enablePassword = this.enableTfaForm.get('enablePassword')?.value;
@@ -135,6 +158,9 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  /**
+   * Disable the Two-Factor Authentication
+   */
   disableTfa(): void {
     const disablePassword = this.disableTfaForm.get('disablePassword')?.value;
 
@@ -167,6 +193,9 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  /**
+   * Delete the user account
+   */
   deleteAccount(): void {
     const password = this.deleteAccountForm.get('passwordDelete')?.value;
 
