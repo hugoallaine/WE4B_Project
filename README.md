@@ -11,7 +11,7 @@ Before you begin, ensure you have the following software installed on your syste
 - [Angular CLI](https://angular.io/cli) - version 13.3.3
 - [PHP](https://www.php.net/)
 - [Composer](https://getcomposer.org/) (for PHP dependencies)
-- [MySQL Server](https://dev.mysql.com/downloads/mysql/) running on the default port 3306
+- [MySQL Server](https://dev.mysql.com/downloads/mysql/](https://mariadb.org/download/) running on the default port 3306
 
 ## Installation Steps
 
