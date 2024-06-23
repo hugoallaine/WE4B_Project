@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Notification, NotificationService } from '../services/notification.service';
 
+/**
+ * Notification component
+ * 
+ * This component is used to display the notifications.
+ */
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
@@ -9,8 +14,20 @@ import { Notification, NotificationService } from '../services/notification.serv
 export class NotificationComponent implements OnInit {
   notifications: Notification[] = [];
 
-  constructor(private notificationService: NotificationService) { }
+  /**
+   * Constructor
+   * 
+   * @param notificationService The notification service
+   */
+  constructor(
+    private notificationService: NotificationService
+  ) { }
 
+  /**
+   * OnInit lifecycle hook
+   * 
+   * It is used to subscribe to the notification observable.
+   */
   ngOnInit(): void {
     this.notificationService.getNotification().subscribe(notification => {
       this.notifications.push(notification);
@@ -18,10 +35,25 @@ export class NotificationComponent implements OnInit {
     });
   }
 
+  /**
+   * Remove notification
+   * 
+   * It is used to remove the notification with the given ID.
+   * 
+   * @param id The notification ID
+   */
   removeNotification(id: number): void {
     this.notifications = this.notifications.filter(n => n.id !== id);
   }
 
+  /**
+   * Get toast class
+   * 
+   * It is used to get the toast class based on the notification type.
+   * 
+   * @param type The notification type
+   * @returns The toast class
+   */
   getToastClass(type: 'success' | 'error' | 'info' | 'warning'): string {
     switch (type) {
       case 'success':

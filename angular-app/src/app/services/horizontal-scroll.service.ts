@@ -1,5 +1,10 @@
 import { Injectable, Renderer2 } from '@angular/core';
 
+/**
+ * Horizontal scroll service
+ * 
+ * This service is used to apply a smooth horizontal scroll effect.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -7,6 +12,14 @@ export class HorizontalScrollService {
 
   constructor() { }
 
+  /**
+   * Apply smooth scroll
+   * 
+   * It is used to apply a smooth scroll effect to the given section.
+   * 
+   * @param section The section
+   * @param renderer The renderer
+   */
   applySmoothScroll(section: HTMLElement, renderer: Renderer2): void {
     let isScrolling: boolean;
     let targetScrollLeft = 0;
@@ -37,12 +50,11 @@ export class HorizontalScrollService {
         smoothScroll();
       }
 
-      // Add 'scrolling' class and remove it after a delay
       renderer.addClass(section, 'scrolling');
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
         renderer.removeClass(section, 'scrolling');
-      }, 200); // Adjust the delay as needed
+      }, 200);
     });
   }
 }

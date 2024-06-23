@@ -4,12 +4,17 @@ import { Router } from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NotificationService } from '../services/notification.service';
 
+/**
+ * Register component
+ * 
+ * This component is used to display the register form.
+ */
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit{
+export class RegisterComponent implements OnInit {
   registerForm = new FormGroup({
     username: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]),
     password: new FormControl('', [Validators.required, this.passwordValidator]),
@@ -23,10 +28,24 @@ export class RegisterComponent implements OnInit{
   }, { validators: this.passwordMatchValidator('password', 'password2') });
   error_message: string = '';
 
-  constructor(private authService: AuthService, private router: Router, private notificationService: NotificationService) { }
+  /**
+   * Constructor
+   * 
+   * @param authService The auth service
+   * @param router The router
+   * @param notificationService The notification service
+   */
+  constructor(
+    private authService: AuthService, 
+    private router: Router, 
+    private notificationService: NotificationService
+  ) { }
 
   ngOnInit(): void { }
 
+  /**
+   * Getters for form controls
+   */
   get username(): AbstractControl | null {
     return this.registerForm.get('username');
   }
@@ -59,6 +78,14 @@ export class RegisterComponent implements OnInit{
     return this.registerForm.get('showPassword');
   }
 
+  /**
+   * Password validator
+   * 
+   * It is used to validate the password entered by the user.
+   * 
+   * @param control The form control
+   * @returns The validation result
+   */
   passwordValidator(control: AbstractControl): { [key: string]: any } | null {
     const value = control.value;
     if (!value) return null;
@@ -70,11 +97,20 @@ export class RegisterComponent implements OnInit{
     return isValid ? null : { invalidPassword: true };
   }
 
+  /**
+   * Password match validator
+   * 
+   * It is used to check if the password and confirm password fields match.
+   * 
+   * @param password The password field
+   * @param confirmPassword The confirm password field
+   * @returns The validation result
+   */
   passwordMatchValidator(password: string, confirmPassword: string): ValidatorFn {
     return (control: AbstractControl): { [key: string]: boolean } | null => {
       const passwordControl = control.get(password);
       const confirmPasswordControl = control.get(confirmPassword);
-  
+
       if (passwordControl && confirmPasswordControl && passwordControl.value !== confirmPasswordControl.value) {
         confirmPasswordControl.setErrors({ passwordMismatch: true });
         return { passwordMismatch: true };
@@ -84,6 +120,9 @@ export class RegisterComponent implements OnInit{
     };
   }
 
+  /**
+   * Submit the form
+   */
   onSubmit(): void {
     if (this.registerForm.valid) {
       const username = this.registerForm.get('username')?.value;
@@ -105,6 +144,9 @@ export class RegisterComponent implements OnInit{
     }
   }
 
+  /**
+   * Toggle password visibility
+   */
   togglePasswordVisibility(): void {
     const passwordField = document.getElementById('password') as HTMLInputElement;
     const password2Field = document.getElementById('password2') as HTMLInputElement;
@@ -112,6 +154,13 @@ export class RegisterComponent implements OnInit{
     password2Field.type = this.showPassword?.value ? 'text' : 'password';
   }
 
+  /**
+   * Check password criteria
+   * 
+   * It is used to check the password criteria.
+   * 
+   * @returns The password criteria
+   */
   checkPasswordCriteria(): { [key: string]: boolean } {
     const password = this.password?.value || '';
     return {

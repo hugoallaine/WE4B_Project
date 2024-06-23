@@ -1,5 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+/**
+ * Pipe to format a duration in minutes to a string in the format HH:MM:SS or MM:SS.
+ * 
+ * @example
+ * {{ 2.5 | durationPipe }} -> '02:30'
+ * {{ 163.75 | durationPipe }} -> '02:43:45'
+ */
 @Pipe({
   name: 'durationPipe'
 })

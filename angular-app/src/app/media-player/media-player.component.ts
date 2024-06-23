@@ -3,6 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MovieService } from '../services/movie.service';
 import { Movie } from '../models/movie.model';
 
+/**
+ * Media player component
+ * 
+ * This component is used to play movies and TV shows.
+ */
 @Component({
   selector: 'app-media-player',
   templateUrl: './media-player.component.html',
@@ -20,12 +25,24 @@ export class MediaPlayerComponent implements OnInit, AfterViewInit {
   isFullScreen: boolean = false;
   previousVolume: number = 1; // Default volume before muting
 
+  /**
+   * Constructor
+   * 
+   * @param route The activated route
+   * @param movieService The movie service
+   * @param router The router
+   */
   constructor(
     private route: ActivatedRoute,
     private movieService: MovieService,
     private router: Router
   ) { }
 
+  /**
+   * OnInit lifecycle hook
+   * 
+   * It is used to load the movie details of the movie ID passed in the URL parameter.
+   */
   ngOnInit(): void {
     const movieId = this.route.snapshot.paramMap.get('id');
     if (movieId) {
@@ -33,6 +50,11 @@ export class MediaPlayerComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * AfterViewInit lifecycle hook
+   * 
+   * It is used to add event listeners to the video player.
+   */
   ngAfterViewInit() {
     this.videoPlayer.nativeElement.autoplay = true;
     this.videoPlayer.nativeElement.addEventListener('timeupdate', this.updateProgressBar.bind(this));
@@ -43,6 +65,11 @@ export class MediaPlayerComponent implements OnInit, AfterViewInit {
     this.videoPlayer.nativeElement.addEventListener('dblclick', this.toggleFullScreen.bind(this));
   }
 
+  /**
+   * Load the movie details from the API
+   * 
+   * @param movieId The movie ID
+   */
   loadMovie(movieId: number): void {
     this.movieService.getMovies().subscribe(movies => {
       this.movie = movies.find(a => parseInt(a.id) === movieId);
@@ -52,6 +79,9 @@ export class MediaPlayerComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * Update the progress bar
+   */
   updateProgressBar() {
     const videoElement = this.videoPlayer.nativeElement;
     const progressBarElement = this.progressBar.nativeElement;
@@ -66,6 +96,13 @@ export class MediaPlayerComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Format the time in seconds to HH:MM:SS or MM:SS format
+   * 
+   * @param timeInSeconds The time in seconds
+   * @param totalDuration The total duration of the video
+   * @returns The formatted time
+   */
   formatTime(timeInSeconds: number, totalDuration: number) {
     const hours = Math.floor(timeInSeconds / 3600).toString().padStart(2, '0');
     const minutes = Math.floor((timeInSeconds % 3600) / 60).toString().padStart(2, '0');
@@ -79,6 +116,11 @@ export class MediaPlayerComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Seek to a specific time in the video
+   * 
+   * @param event The event
+   */
   seek(event: Event) {
     const seekTo = parseFloat((event.target as HTMLInputElement).value);
     const duration = this.videoPlayer.nativeElement.duration;
@@ -87,6 +129,9 @@ export class MediaPlayerComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Toggle play/pause
+   */
   togglePlayPause() {
     if (this.videoPlayer.nativeElement.paused) {
       this.videoPlayer.nativeElement.play();
@@ -95,6 +140,9 @@ export class MediaPlayerComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Toggle mute/unmute
+   */
   toggleMute() {
     if (this.videoPlayer.nativeElement.muted) {
       this.videoPlayer.nativeElement.muted = false;
@@ -108,10 +156,20 @@ export class MediaPlayerComponent implements OnInit, AfterViewInit {
     this.isMuted = this.videoPlayer.nativeElement.muted;
   }
 
+  /**
+   * Toggle play/pause
+   * 
+   * @param time The time to skip
+   */
   skip(time: number) {
     this.videoPlayer.nativeElement.currentTime += time;
   }
 
+  /**
+   * Set the volume
+   * 
+   * @param event The event
+   */
   setVolume(event: Event) {
     const volume = parseFloat((event.target as HTMLInputElement).value);
     this.videoPlayer.nativeElement.volume = volume;
@@ -124,6 +182,9 @@ export class MediaPlayerComponent implements OnInit, AfterViewInit {
     this.isMuted = this.videoPlayer.nativeElement.muted;
   }
 
+  /**
+   * Toggle full screen
+   */
   toggleFullScreen() {
     if (!document.fullscreenElement) {
       this.videoPlayer.nativeElement.requestFullscreen();
@@ -132,16 +193,29 @@ export class MediaPlayerComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Full screen change event listener
+   */
   @HostListener('document:fullscreenchange', [])
   onFullScreenChange() {
     this.isFullScreen = !!document.fullscreenElement;
   }
 
+  /**
+   * Set the playback rate
+   * 
+   * @param event The event
+   */
   setPlaybackRate(event: Event) {
     const playbackRate = parseFloat((event.target as HTMLSelectElement).value);
     this.videoPlayer.nativeElement.playbackRate = playbackRate;
   }
 
+  /**
+   * Toggle subtitles
+   * 
+   * @param event The event
+   */
   toggleSubtitles(event: Event) {
     const tracks = this.videoPlayer.nativeElement.textTracks;
     if ((event.target as HTMLInputElement).checked) {
@@ -155,6 +229,11 @@ export class MediaPlayerComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Set the language of the subtitles
+   * 
+   * @param event The event
+   */
   setLanguage(event: Event) {
     const language = (event.target as HTMLSelectElement).value;
     const tracks = this.videoPlayer.nativeElement.textTracks;
@@ -163,6 +242,11 @@ export class MediaPlayerComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Navigate to a specific page
+   * 
+   * @param page The page to navigate to
+   */
   navigateTo(page: string): void {
     this.router.navigate([`/${page}`]);
   }
