@@ -10,7 +10,7 @@ Before you begin, ensure you have the following software installed on your syste
 - [Node.js and npm](https://nodejs.org/)
 - [Angular CLI](https://angular.io/cli) - version 13.3.3
 - [PHP](https://www.php.net/)
-- [Composer](https://getcomposer.org/) (for PHP dependencies)
+- [Composer](https://getcomposer.org/) (Optional)
 - [MySQL Server](https://dev.mysql.com/downloads/mysql/) running on the default port 3306
 
 ## Installation Steps
@@ -27,7 +27,7 @@ Before you begin, ensure you have the following software installed on your syste
    You have two options to install the PHP dependencies:
 
    ### Option A: Download Vendor Archive
-   - Download the [vendor archive](https://cloud.allaine.cc/s/PorFeJ6f7AofaeN)
+   - Download the [vendor archive](https://cloud.allaine.cc/s/EWkS6NZfGk46NZS)
    - Unzip it and place it in the `php` folder inside the `backend` folder. The structure should look like this:
      ```
      backend/php/vendor
@@ -59,7 +59,7 @@ Before you begin, ensure you have the following software installed on your syste
 
 5. **Set Up MySQL Database**
    - Ensure your MySQL server is running on the default port 3306.
-   - Download the database SQL file from [this link](#) (link to be provided).
+   - Download the database SQL file from [this link](https://cloud.allaine.cc/s/SFGe62G8FrBMteA).
    - Import the SQL file into your MySQL database using a tool like phpMyAdmin or the MySQL command line:
      ```sh
      mysql -u your_username -p your_database_name < path_to_sql_file.sql
@@ -79,7 +79,8 @@ Before you begin, ensure you have the following software installed on your syste
          "db_password": "your_password",
          "db_name": "your_database_name",
          "SPOTIFY_CLIENT_ID": "your_spotify_client_id",
-         "SPOTIFY_CLIENT_SECRET": "your_spotify_client_secret"
+         "SPOTIFY_CLIENT_SECRET": "your_spotify_client_secret",
+         "tmdb_api_key": "your_tmdb_api_key"
      }
      ```
 
@@ -121,10 +122,10 @@ Before you begin, ensure you have the following software installed on your syste
   │   ├── php/
   │   │   ├── vendor/
   │   │   ├── ...
-  │   ├── audio/ 
-  │   ├── video/
   │   ├── private.json
   │   ├── ...
+  ├── video/
+  ├── audio/ 
   ```
   - Put your audio files in the `audio` folder and video files in the `video` folder.
 
