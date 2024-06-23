@@ -1,9 +1,9 @@
 <div class="screen">
     <div class="media-player">
         <video #videoPlayer>
-            <source src="{{path}}" type="video/mp4" />
+            <source [src]="" type="video/mp4" />
         </video>
-        <button class="close-button" (click)="exit()">
+        <button class="close-button" (click)="navigateTo('movie/' + movie?.id)">
             <i class="bi bi-arrow-left-short"></i>
         </button>
         <div class="controls">
@@ -32,7 +32,7 @@
                     </button>
                 </div>
                 <div class="title">
-                    <p>{{title}}</p>
+                    <p>{{movie?.title}}</p>
                 </div>
                 <div class="right-controls">
                     <button class="settings-button">

@@ -30,6 +30,7 @@ const routes: Routes = [
     { path: 'artist/:id', component: ArtistDetailComponent },
     { path: 'album/:id', component: AlbumDetailComponent },
     { path: 'movie/:id', component: MovieDetailComponent },
+    { path: 'player/:id', component: MediaPlayerComponent },
     { path: "**", redirectTo: "home" },
 ];
 

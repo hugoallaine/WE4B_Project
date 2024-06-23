@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./movies.component.css']
 })
 export class MoviesComponent implements OnInit, AfterViewInit {
-  directoryPath: string = '../../angular-app/src/video';
+  directoryPath: string = '../../video';
   movies: Movie[] = [];
 
   constructor(

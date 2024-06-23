@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MusicService } from '../services/music.service';
 import { Router } from '@angular/router';
-import { Album, Artist } from '../models/artist.model';
+import { Artist } from '../models/artist.model';
 
 @Component({
   selector: 'app-artist-detail',

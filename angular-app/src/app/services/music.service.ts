@@ -23,6 +23,10 @@ export class MusicService {
     ]);
   }
 
+  getMediaUrl(path: string): string {
+    return `${this.apiUrl}/serveMedia.php?path=${path}`;
+  }
+
   getArtists(): Observable<any[]> {
     return this.http.get<any>(`${this.apiUrl}/get_data.php?type=musics`).pipe(
       map(data => data.artists || [])

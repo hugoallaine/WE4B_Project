@@ -20,8 +20,8 @@
             <div class="d-flex flex-nowrap overflow-auto element-container">
                 <div *ngFor="let artist of artists" class="p-2">
                     <div class="card artist-card hover-clickable" (click)="navigateTo('artist/' + artist.id)">
-                        <img [src]="artist.pictureUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top artist-cover"
-                            alt="{{ artist.name }}">
+                        <img [src]="artist.pictureUrl || 'assets/logo/flex-logo-gris.svg'"
+                            class="card-img-top artist-cover" alt="{{ artist.name }}">
                         <div class="card-body text-center artist-info">
                             <h5 class="card-title text-truncate">{{ artist.name }}</h5>
                         </div>
@@ -37,8 +37,8 @@
                 <ng-container *ngFor="let artist of artists">
                     <div *ngFor="let album of artist.albums" class="p-2">
                         <div class="card album-card hover-clickable" (click)="navigateTo('album/' + album.id)">
-                            <img [src]="album.coverUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top album-cover"
-                                alt="{{ album.title }}">
+                            <img [src]="album.coverUrl || 'assets/logo/flex-logo-gris.svg'"
+                                class="card-img-top album-cover" alt="{{ album.title }}">
                             <div class="card-body text-center album-info">
                                 <h5 class="card-title text-truncate">{{ album.title }}</h5>
                                 <p class="card-text text-truncate">{{ artist.name }}</p>
@@ -70,4 +70,7 @@
             </div>
         </div>
     </div>
+    <div class="container mt-4">&nbsp;</div>
+    <div class="container mt-4">&nbsp;</div>
+
 </div>

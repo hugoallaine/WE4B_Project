@@ -11,6 +11,10 @@ export class MovieService {
 
   constructor(private http: HttpClient) { }
 
+  getMediaUrl(path: string): string {
+    return `${this.apiUrl}/serveMedia.php?path=${path}`;
+  }
+  
   getMovies(): Observable<Movie[]> {
     return this.http.get<any>(`${this.apiUrl}/get_data.php?type=movies`).pipe(
       map(data => data.movies || [])

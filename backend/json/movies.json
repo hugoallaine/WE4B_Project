@@ -7,7 +7,7 @@
             "year": "2014",
             "description": "The adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.",
             "duration": 169.06543333333332,
-            "filePath": "..\/..\/angular-app\/src\/video\\Interstellar (2014).mkv"
+            "filePath": "video\\Interstellar (2014).mkv"
         },
         {
             "id": 361743,
@@ -16,7 +16,7 @@
             "year": "2022",
             "description": "After more than thirty years of service as one of the Navy\u2019s top aviators, and dodging the advancement in rank that would ground him, Pete \u201cMaverick\u201d Mitchell finds himself training a detachment of TOP GUN graduates for a specialized mission the likes of which no living pilot has ever seen.",
             "duration": 130.24226666666667,
-            "filePath": "..\/..\/angular-app\/src\/video\\Top Gun Maverick (2022).mkv"
+            "filePath": "video\\Top Gun Maverick (2022).mkv"
         },
         {
             "id": 0,
@@ -26,7 +26,7 @@
             "year": null,
             "description": "No description available",
             "duration": 2.1389448148148147,
-            "filePath": "..\/..\/angular-app\/src\/video\\videotest.mp4"
+            "filePath": "video\\videotest.mp4"
         }
     ]
 }

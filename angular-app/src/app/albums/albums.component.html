@@ -5,7 +5,8 @@
     <ng-container *ngFor="let artist of artists">
       <div *ngFor="let album of artist.albums" class="col-md-3 mb-4">
         <div class="card album-card hover-clickable" (click)="navigateTo('album/' + album.id)">
-          <img [src]="album.coverUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top album-cover rounded" alt="{{ album.title }}">
+          <img [src]="album.coverUrl || 'assets/logo/flex-logo-gris.svg'" class="card-img-top album-cover rounded"
+            alt="{{ album.title }}">
           <div class="card-body text-center album-info">
             <h5 class="card-title text-truncate" title="{{ album.title }}">{{ album.title }}</h5>
             <p class="card-text text-truncate" title="{{ artist.name }}">{{ artist.name }}</p>
@@ -14,4 +15,7 @@
       </div>
     </ng-container>
   </div>
+  <div class="container mt-4">&nbsp;</div>
+  <div class="container mt-4">&nbsp;</div>
+
 </div>

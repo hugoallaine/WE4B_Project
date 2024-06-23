@@ -209,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Add the track if it does not already exist
             if (!$trackExists) {
                 $trackId = uniqid();
-                $baseAudioPath = 'assets/audio/';
+                $baseAudioPath = 'audio/';
                 $db['artists'][$artistIndex]['albums'][$albumIndex]['tracks'][] = [
                     'id' => $trackId,
                     'title' => $metadata['title'],

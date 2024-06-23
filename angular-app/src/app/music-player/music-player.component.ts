@@ -18,7 +18,6 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('progressText') progressText!: ElementRef;
   @ViewChild('volumeBar') volumeBar!: ElementRef;
 
-  wrongUrl = ['/login', '/register', '/player'];
   isPlaying = false;
   isLoading = false;
   isLooping = false;
@@ -59,7 +58,18 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   checkUrl() {
-    this.showPlayer = !this.wrongUrl.includes(this.router.url);
+    // Définition des motifs d'URL à exclure à l'aide d'expressions régulières
+    const wrongUrlPatterns = [
+      /^\/login$/,
+      /^\/register$/,
+      /^\/player\/.+$/ // Correspond à /player suivi de n'importe quel caractère (au moins un)
+    ];
+  
+    // Vérifie si l'URL actuelle correspond à l'un des motifs interdits
+    const isWrongUrl = wrongUrlPatterns.some(pattern => pattern.test(this.router.url));
+  
+    // Met à jour la visibilité du lecteur en fonction de l'URL
+    this.showPlayer = !isWrongUrl;
   }
 
   ngAfterViewInit() {
@@ -117,7 +127,7 @@ export class MusicPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     const audio = this.audioPlayer.nativeElement;
     if (this.trackInfo) {
-      audio.src = this.trackInfo[0].filePath || '';
+      audio.src = this.musicService.getMediaUrl(this.trackInfo[0].filePath) || '';
       audio.load(); // Ensure the audio element reloads the new source
       this.isLoading = true;
       audio.oncanplaythrough = () => {

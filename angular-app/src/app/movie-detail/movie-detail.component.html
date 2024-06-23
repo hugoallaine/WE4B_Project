@@ -1,1 +1,23 @@
-<p>movie-detail works!</p>
+<app-navbar></app-navbar>
+<div class="container mt-4">
+    <div *ngIf="movie">
+        <div class="row">
+            <div class="col-md-4">
+                <img [src]="movie.picturePath || 'assets/logo/flex-logo-gris.svg'" class="img-fluid rounded"
+                    alt="{{ movie.title }}">
+            </div>
+            <div class="col-md-8">
+                <h1>{{ movie.title }}</h1>
+                <p class="bio">{{ movie.description }}</p>
+                <div class="d-flex">
+                    <p class="me-4">{{ movie.year }}</p>
+                    <p>{{ movie.duration | durationPipe }}</p>
+                </div>
+                <button routerLink="/player/{{movie.id}}">Play</button>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-4">&nbsp;</div>
+    <div class="container mt-4">&nbsp;</div>
+
+</div>

@@ -11,7 +11,7 @@ import { Artist, Album, Track } from '../models/artist.model';
 })
 export class MusicsComponent implements OnInit, AfterViewInit {
   artists: Artist[] = [];
-  directoryPath: string = '../../angular-app/src/audio';
+  directoryPath: string = '../../audio';
 
   constructor(
     private musicService: MusicService,
