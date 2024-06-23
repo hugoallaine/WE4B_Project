@@ -13,7 +13,10 @@
                     <p class="me-4">{{ movie.year || 'No date available'}}</p>
                     <p>{{ movie.duration | durationPipe }}</p>
                 </div>
-                <button routerLink="/player/{{movie.id}}">Play</button>
+                <button class="btn btn-primary" routerLink="/player/{{movie.id}}">
+                    <i class="bi bi-play-fill"></i>
+                    Play
+                </button>
             </div>
         </div>
     </div>
