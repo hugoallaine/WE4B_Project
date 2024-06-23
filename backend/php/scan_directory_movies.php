@@ -10,6 +10,7 @@ use GuzzleHttp\Client;
 
 $apiKey = $json['tmdb_api_key'];
 $dbFile = dirname(__DIR__) . '/json/movies.json';
+$baseMoviePath = 'video/';
 
 function extractMetadata($filePath) {
     $getID3 = new getID3;
@@ -84,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             'year' => substr($movieInfo['release_date'], 0, 4),
                             'description' => $movieInfo['overview'],
                             'duration' => $metadata['playtime_seconds'] / 60,
-                            'filePath' => $filePath
+                            'filePath' => $baseMoviePath . basename($filePath)
                         ];
                     } else {
                         $db['movies'][] = [
@@ -95,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             'year' => null,
                             'description' => 'No description available',
                             'duration' => $metadata['playtime_seconds'] / 60,
-                            'filePath' => $filePath
+                            'filePath' => $baseMoviePath . basename($filePath)
                         ];
                     
                     }
