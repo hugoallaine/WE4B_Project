@@ -66,7 +66,7 @@ Before you begin, ensure you have the following software installed on your syste
      ```
    - **Important**: Ensure you set up a MySQL user with the appropriate privileges to access the database. 
 
-   - Create a `backend/private.json` file with your credentials as follows:
+   - Create a `backend/private.json` file with your credentials as follows (don't use localhost for db_host, it may not work):
      ```json
      {
          "mailserver": "mail.server.com",
@@ -74,7 +74,7 @@ Before you begin, ensure you have the following software installed on your syste
          "SMTP_user": "user@server.com",
          "SMTP_password": "smpt_password",
          "SMTP_noreply": "no-reply@server.com",
-         "db_host": "127.0.0.1", // don't use localhost 
+         "db_host": "127.0.0.1",
          "db_user": "your_username",
          "db_password": "your_password",
          "db_name": "your_database_name",
