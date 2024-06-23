@@ -122,10 +122,10 @@ Before you begin, ensure you have the following software installed on your syste
   │   ├── php/
   │   │   ├── vendor/
   │   │   ├── ...
-  │   ├── audio/ 
-  │   ├── video/
   │   ├── private.json
   │   ├── ...
+  ├── video/
+  ├── audio/ 
   ```
   - Put your audio files in the `audio` folder and video files in the `video` folder.
 
