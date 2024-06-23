@@ -114,12 +114,12 @@ Before you begin, ensure you have the following software installed on your syste
 
 - Ensure your file structure matches the expected layout:
   ```
-  ├── angular-app
+  ├── angular-app/
   │   ├── src/
   │   ├── ...
-  ├── backend
+  ├── backend/
   │   ├── php/
-  │   │   ├── vendor
+  │   │   ├── vendor/
   │   │   ├── ...
   │   ├── audio/ 
   │   ├── video/
