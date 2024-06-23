@@ -17,9 +17,11 @@ Before you begin, ensure you have the following software installed on your syste
 
 1. **Clone the Repository**
    ```sh
-   git clone <repository_url>
-   cd <repository_name>
+   git clone https://github.com/hugoallaine/WE4B_Project
    ```
+    ```sh
+    cd WE4B_Project
+    ```
 
 2. **Install PHP Dependencies**
    You have two options to install the PHP dependencies:
