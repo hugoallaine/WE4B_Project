@@ -37,6 +37,7 @@ function getIp()
  * - birthdate (string): the birthdate
  * 
  * Response:
+ * - success (boolean): true if the request was successful
  * - error (boolean): true if an error occured
  * - message (string): the error message
  * - info (boolean): true if an info message is present

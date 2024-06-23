@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NotificationService } from '../services/notification.service';
 
 /**
@@ -26,17 +26,17 @@ export class AccountComponent implements OnInit {
   tfa_qrcode: string = '';
 
   changeInfoForm = new FormGroup({
-    pseudo: new FormControl(''),
-    firstname: new FormControl(''),
-    name: new FormControl(''),
-    birthdate: new FormControl('')
+    pseudo: new FormControl('', Validators.pattern(/^[a-zA-Z0-9_\-\u00C0-\u017F]{1,32}$/)),
+    firstname: new FormControl('', Validators.pattern(/^[a-zA-Z_\-\u00C0-\u017F]{1,32}$/)),
+    name: new FormControl('', Validators.pattern(/^[a-zA-Z_\-\u00C0-\u017F]{1,32}$/)),
+    birthdate: new FormControl('', Validators.required)
   })
 
   changePasswordForm = new FormGroup({
-    oldPassword: new FormControl(''),
-    newPassword: new FormControl(''),
-    newPassword2: new FormControl('')
-  })
+    oldPassword: new FormControl('', Validators.required),
+    newPassword: new FormControl('', [Validators.required, this.passwordValidator]),
+    newPassword2: new FormControl('', Validators.required)
+  }, { validators: this.passwordMatchValidator('newPassword', 'newPassword2') });
 
   enableTfaForm = new FormGroup({
     tfa_code: new FormControl(''),
@@ -89,6 +89,34 @@ export class AccountComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  get pseudo(): AbstractControl | null {
+    return this.changeInfoForm.get('pseudo');
+  }
+
+  get firstname(): AbstractControl | null {
+    return this.changeInfoForm.get('firstname');
+  }
+
+  get name(): AbstractControl | null {
+    return this.changeInfoForm.get('name');
+  }
+
+  get birthdate(): AbstractControl | null {
+    return this.changeInfoForm.get('birthdate');
+  }
+
+  get oldPassword(): AbstractControl | null {
+    return this.changePasswordForm.get('oldPassword');
+  }
+
+  get newPassword(): AbstractControl | null {
+    return this.changePasswordForm.get('newPassword');
+  }
+
+  get newPassword2(): AbstractControl | null {
+    return this.changePasswordForm.get('newPassword2');
+  }
+
   /**
    * Change the user information
    */
@@ -127,6 +155,65 @@ export class AccountComponent implements OnInit {
         this.notificationService.showNotification(response.message, 'error');
       }
     });
+  }
+
+  /**
+   * Password validator
+   * 
+   * It is used to validate the password entered by the user.
+   * 
+   * @param control The form control
+   * @returns The validation result
+   */
+  passwordValidator(control: AbstractControl): { [key: string]: any } | null {
+    const value = control.value;
+    if (!value) return null;
+    const validLength = value.length >= 12;
+    const hasUppercase = /[A-Z]/.test(value);
+    const hasDigit = /\d/.test(value);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>-_]/.test(value);
+    const isValid = validLength && hasUppercase && hasDigit && hasSpecial;
+    return isValid ? null : { invalidPassword: true };
+  }
+
+  /**
+   * Password match validator
+   * 
+   * It is used to check if the password and confirm password fields match.
+   * 
+   * @param password The password field
+   * @param confirmPassword The confirm password field
+   * @returns The validation result
+   */
+  passwordMatchValidator(password: string, confirmPassword: string): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      const passwordControl = control.get(password);
+      const confirmPasswordControl = control.get(confirmPassword);
+
+      if (passwordControl && confirmPasswordControl && passwordControl.value !== confirmPasswordControl.value) {
+        confirmPasswordControl.setErrors({ passwordMismatch: true });
+        return { passwordMismatch: true };
+      } else {
+        return null;
+      }
+    };
+  }
+
+  /**
+   * Check password criteria
+   * 
+   * It is used to check the password criteria.
+   * 
+   * @returns The password criteria
+   */
+  checkPasswordCriteria(): { [key: string]: boolean } {
+    const password = this.newPassword?.value || '';
+    return {
+      validLength: password.length >= 12,
+      hasUppercase: /[A-Z]/.test(password),
+      hasDigit: /\d/.test(password),
+      hasSpecial: /[!@#$%^&*(),.?":{}|<>-_]/.test(password)
+    };
   }
 
   /**

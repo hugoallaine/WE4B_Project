@@ -19,8 +19,12 @@
                                 <label for="pseudo" class="form-label">Nickname</label>
                                 <input type="text" class="form-control" id="pseudo" name="pseudo"
                                     value="{{user.pseudo}}" formControlName="pseudo">
+                                <div *ngIf="pseudo?.invalid && (pseudo?.dirty || pseudo?.touched)" class="text-danger">
+                                    <div *ngIf="pseudo?.hasError('pattern')">Nickname must contain between 1 and 32
+                                        characters.</div>
+                                </div>
                             </div>
-                            <div class="row mb-3">
+                            <div class="mb-3 row">
                                 <div class="col">
                                     <label for="firstname" class="form-label">First Name</label>
                                     <input type="text" class="form-control" id="firstname" name="firstname"
@@ -32,12 +36,23 @@
                                         formControlName="name" autocomplete="family-name">
                                 </div>
                             </div>
+                            <div *ngIf="firstname?.invalid && (firstname?.dirty || firstname?.touched)"
+                                class="text-danger">
+                                <div *ngIf="firstname?.hasError('pattern')">First name must contain between 1 and 32
+                                    characters.</div>
+                            </div>
+                            <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="text-danger">
+                                <div *ngIf="name?.hasError('pattern')">Last name must contain between 1 and 32
+                                    characters.</div>
+                            </div>
                             <div class="mb-3">
                                 <label for="birthdate" class="form-label">Birth Date</label>
-                                <input type="date" class="form-control" id="birthdate" name="birthdate"
+                                <input [class.is-valid]="birthdate?.valid && (birthdate?.dirty || birthdate?.touched)"
+                                    [class.is-invalid]="birthdate?.invalid && (birthdate?.dirty || birthdate?.touched)"
+                                    type="date" class="form-control" id="birthdate" name="birthdate"
                                     value="{{user.birthdate}}" formControlName="birthdate">
                             </div>
-                            <button type="submit" class="btn btn-primary">Apply</button>
+                            <button type="submit" class="btn btn-primary" [disabled]="!changeInfoForm.valid">Apply</button>
                             <div id="error-message-info" class="text-danger text-align-center"></div>
                         </div>
                     </form>
@@ -57,30 +72,42 @@
                         method="POST">
                         <div class="form-group">
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="oldPassword" name="oldPassword"
+                                <input
+                                    [class.is-valid]="oldPassword?.valid && (oldPassword?.dirty || oldPassword?.touched)"
+                                    [class.is-invalid]="oldPassword?.invalid && (oldPassword?.dirty || oldPassword?.touched)"
+                                    type="password" class="form-control" id="oldPassword" name="oldPassword"
                                     formControlName="oldPassword" placeholder="" required>
                                 <label for="oldPassword">Current password</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="newPassword" name="newPassword"
+                                <input
+                                    [class.is-valid]="newPassword?.valid && (newPassword?.dirty || newPassword?.touched)"
+                                    [class.is-invalid]="newPassword?.invalid && (newPassword?.dirty || newPassword?.touched)"
+                                    type="password" class="form-control" id="newPassword" name="newPassword"
                                     formControlName="newPassword" placeholder="" required>
                                 <label for="newPassword">New password</label>
                                 <div class="form-text">
                                     The minimum requirements for a password are :
                                     <ul>
-                                        <li>12 characters</li>
-                                        <li>1 uppercase</li>
-                                        <li>1 digit</li>
-                                        <li>1 special character</li>
+                                        <li [class.text-success]="checkPasswordCriteria()['validLength']">12 characters
+                                        </li>
+                                        <li [class.text-success]="checkPasswordCriteria()['hasUppercase']">1 uppercase
+                                        </li>
+                                        <li [class.text-success]="checkPasswordCriteria()['hasDigit']">1 digit</li>
+                                        <li [class.text-success]="checkPasswordCriteria()['hasSpecial']">1 special
+                                            character</li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="newPasswordConfirm"
+                                <input
+                                    [class.is-valid]="newPassword2?.valid && (newPassword2?.dirty || newPassword2?.touched)"
+                                    [class.is-invalid]="newPassword2?.invalid && (newPassword2?.dirty || newPassword2?.touched)"
+                                    type="password" class="form-control" id="newPasswordConfirm"
                                     name="newPasswordConfirm" formControlName="newPassword2" placeholder="" required>
                                 <label for="newPasswordConfirm">Confirm new password</label>
                             </div>
-                            <button type="submit" class="btn btn-primary">Apply</button>
+                            <button type="submit" class="btn btn-primary" [disabled]="!changePasswordForm.valid">Apply</button>
                             <div id="error-message-password" class="text-danger text-align-center"></div>
                         </div>
                     </form>
@@ -106,7 +133,7 @@
                                     formControlName="disablePassword" placeholder="" required>
                                 <label for="password_check">Password</label>
                             </div>
-                            <button type="submit" class="btn btn-danger">Disable Two-Factor Authentication</button>
+                            <button type="submit" class="btn btn-danger" [disabled]="!disableTfaForm.valid">Disable Two-Factor Authentication</button>
                             <div id="error-message" class="text-danger text-align-center"></div>
                         </form>
                     </div>
@@ -121,7 +148,7 @@
                                 <div class="card mb-3">
                                     <img src="{{tfa_qrcode}}" class="rounded">
                                     <div class="card-body">
-                                        <h5 class="card-title text-center">{{tfa_secret}}</h5>
+                                        <h5 class="card-title text-center code">{{tfa_secret}}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -145,7 +172,7 @@
                                             Please enter your password to verify your identity.
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Enable Two-Factor
+                                    <button type="submit" class="btn btn-primary" [disabled]="!enableTfaForm.valid">Enable Two-Factor
                                         Authentication</button>
                                     <div id="error-message" class="text-danger text-align-center"></div>
                                 </form>
@@ -174,7 +201,7 @@
                                     required>
                                 <label for="password_check_delete">Password</label>
                             </div>
-                            <button type="submit" class="btn btn-danger">Delete my account</button>
+                            <button type="submit" class="btn btn-danger" [disabled]="!deleteAccountForm.valid">Delete my account</button>
                         </div>
                     </form>
                 </div>

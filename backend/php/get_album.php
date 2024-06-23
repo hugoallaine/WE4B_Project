@@ -7,6 +7,13 @@ header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header('Content-Type: application/json');
 
+/**
+ * API to get an album
+ * 
+ * Response:
+ * - error (string): the error message
+ * - album (array): the album
+ */
 if (isset($_GET['albumId'])) {
     $albumId = intval($_GET['albumId']);
     $dbFile = dirname(__DIR__) . '/json/musics.json';

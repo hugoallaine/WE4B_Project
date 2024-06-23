@@ -10,7 +10,22 @@ use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
 $tfa = new TwoFactorAuth(new EndroidQrCodeProvider());
 
-// Réception des données JSON
+/**
+ * API to login
+ * 
+ * Request:
+ * - user (string): the user e-mail address
+ * - password (string): the user password
+ * - tfa_code [second request] (string): the two-factor authentication code
+ * 
+ * Response:
+ * - success (boolean): true if the request was successful
+ * - error (boolean): true if an error occured
+ * - message (string): the error message
+ * - id (int): the user id
+ * - token (string): the user token
+ * - tfa (boolean): true if the user has two-factor authentication enabled
+ */
 $data = json_decode(file_get_contents("php://input"));
 
 if (isset($data->user) && isset($data->password)) {

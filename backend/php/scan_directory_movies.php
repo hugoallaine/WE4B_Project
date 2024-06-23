@@ -1,23 +1,32 @@
 <?php
-require_once 'vendor/autoload.php';
-require_once dirname(__FILE__).'/json.php';
-
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-
+require_once 'vendor/autoload.php';
+require_once dirname(__FILE__).'/json.php';
 use GuzzleHttp\Client;
 
+// Configuration
 $apiKey = $json['tmdb_api_key'];
 $dbFile = dirname(__DIR__) . '/json/movies.json';
 $baseMoviePath = 'video/';
 
+/**
+ * Function to extract metadata from a file
+ * @param string $filePath Path to the file
+ * @return array Metadata
+ */
 function extractMetadata($filePath) {
     $getID3 = new getID3;
     $fileInfo = $getID3->analyze($filePath);
     return $fileInfo;
 }
 
+/**
+ * Function to fetch movie information from TMDB
+ * @param string $title Movie title
+ * @return object TMDB API response (json)
+ */
 function fetchTMDBInfo($title) {
     global $apiKey;
     $client = new Client();
@@ -35,6 +44,11 @@ function fetchTMDBInfo($title) {
     return $response;
 }
 
+/**
+ * Function to parse the title of a movie
+ * @param string $fileName File name
+ * @return string Title
+ */
 function parseTitle($fileName) {
     $baseName = pathinfo($fileName, PATHINFO_FILENAME);
     if (preg_match('/^(.*) \((\d{4})\)$/', $baseName, $matches)) {
@@ -44,12 +58,27 @@ function parseTitle($fileName) {
     }
 }
 
+/**
+ * Function to clean a title
+ * @param string $title Title
+ * @return string Cleaned title
+ */
 function cleanTitle($title) {
     $title = str_replace(['.', '_'], ' ', $title);
     $title = preg_replace('/[^a-zA-Z0-9 ]/', '', $title);
     return trim($title);
 }
 
+/**
+ * API to scan a directory for movies
+ * 
+ * Request:
+ * - directoryPath (string): the path to the directory
+ * 
+ * Response:
+ * - success (string): the success message
+ * - error (string): the error message
+ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     error_log("Received POST request");
     $data = json_decode(file_get_contents('php://input'), true);

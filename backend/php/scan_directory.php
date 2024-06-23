@@ -1,26 +1,30 @@
 <?php
-require_once dirname(__FILE__) . '/vendor/autoload.php';
-require_once dirname(__FILE__) . '/vendor/james-heinrich/getid3/getid3/getid3.php';
-require_once dirname(__FILE__) . '/json.php';
-
 header("Access-Control-Allow-Origin: http://localhost:4200");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header('Content-Type: application/json');
+require_once dirname(__FILE__) . '/vendor/autoload.php';
+require_once dirname(__FILE__) . '/vendor/james-heinrich/getid3/getid3/getid3.php';
+require_once dirname(__FILE__) . '/json.php';
 
+// Configuration
 $SPOTIFY_CLIENT_ID = $json['SPOTIFY_CLIENT_ID'];
 $SPOTIFY_CLIENT_SECRET = $json['SPOTIFY_CLIENT_SECRET'];
 
+/**
+ * Analyze a file and extract its metadata
+ * 
+ * @param string $filePath Path to the file
+ * @return array Metadata
+ */
 function analyzeFile($filePath)
 {
     $getID3 = new getID3;
     $fileInfo = $getID3->analyze($filePath);
-
     $title = isset($fileInfo['tags']['id3v2']['title'][0]) ? $fileInfo['tags']['id3v2']['title'][0] : basename($filePath);
     $artist = isset($fileInfo['tags']['id3v2']['artist'][0]) ? $fileInfo['tags']['id3v2']['artist'][0] : 'Unknown Artist';
     $album = isset($fileInfo['tags']['id3v2']['album'][0]) ? $fileInfo['tags']['id3v2']['album'][0] : 'Unknown Album';
     $duration = isset($fileInfo['playtime_seconds']) ? round($fileInfo['playtime_seconds'] / 60, 2) : 0;
-
     $coverUrl = null;
     if (isset($fileInfo['comments']['picture'][0])) {
         $picture = $fileInfo['comments']['picture'][0];
@@ -28,21 +32,13 @@ function analyzeFile($filePath)
         $imageMime = $picture['image_mime'];
         $imageExtension = explode('/', $imageMime)[1];
         $imagePath = 'assets/covers/' . md5($filePath) . '.' . $imageExtension;
-
-        // Path to the covers directory relative to scan_directory.php
         $relativeCoversPath = dirname(dirname(__DIR__)) . '/angular-app/src/' . $imagePath;
-
-        // Create the covers directory if it doesn't exist
         if (!is_dir(dirname(dirname(__DIR__)) . '/angular-app/src/assets/covers')) {
             mkdir(dirname(dirname(__DIR__)) . '/angular-app/src/assets/covers', 0755, true);
         }
-
-        // Save the image file
         file_put_contents($relativeCoversPath, $imageData);
-
         $coverUrl = $imagePath;
     }
-
     return [
         'title' => $title,
         'artist' => $artist,
@@ -53,6 +49,13 @@ function analyzeFile($filePath)
     ];
 }
 
+/**
+ * Get a Spotify access token
+ * 
+ * @param string $clientId Spotify client ID
+ * @param string $clientSecret Spotify client secret
+ * @return string Access token
+ */
 function getSpotifyAccessToken($clientId, $clientSecret)
 {
     $url = 'https://accounts.spotify.com/api/token';
@@ -81,6 +84,13 @@ function getSpotifyAccessToken($clientId, $clientSecret)
     return $data['access_token'] ?? null;
 }
 
+/**
+ * Get artist info from Spotify
+ * 
+ * @param string $artistName Artist name
+ * @param string $accessToken Spotify access token
+ * @return array | null Artist info
+ */
 function getArtistInfoFromSpotify($artistName, $accessToken) {
     $url = 'https://api.spotify.com/v1/search?q=' . urlencode($artistName) . '&type=artist&limit=1';
     $headers = [
@@ -105,13 +115,23 @@ function getArtistInfoFromSpotify($artistName, $accessToken) {
         $artist = $data['artists']['items'][0];
         return [
             'image' => $artist['images'][0]['url'] ?? 'assets/logo/flex-logo-gris.svg',
-            'bio' => $artist['genres'][0] ?? '' // Spotify doesn't provide detailed bios, using genres as a placeholder
+            'bio' => $artist['genres'][0] ?? ''
         ];
     }
 
     return null;
 }
 
+/**
+ * API to scan a directory for music files
+ * 
+ * Request:
+ * - directoryPath (string): the path to the directory
+ * 
+ * Response:
+ * - success (boolean): true if the request was successful
+ * - error (string): the error message
+ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     error_log("Received POST request");
     $data = json_decode(file_get_contents('php://input'), true);
@@ -228,4 +248,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo json_encode(['error' => 'Invalid request method']);
 }
+
 ?>

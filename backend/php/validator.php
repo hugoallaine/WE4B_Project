@@ -3,6 +3,13 @@ require_once dirname(__FILE__).'/db.php';
 
 /**
  * API to verify the email address
+ * 
+ * Request:
+ * - email (string): the user e-mail address
+ * - key (string): the verification key
+ * 
+ * Response:
+ * - the verification result
  */
 if (isset($_GET['email']) && isset($_GET['key'])) {
     $email = urldecode($_GET['email']);

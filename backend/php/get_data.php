@@ -4,6 +4,14 @@ header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header('Content-Type: application/json');
 
+/**
+ * API to get data
+ * 
+ * Response:
+ * - error (string): the error message
+ * - movies (array): the movies list
+ * - musics (array): the musics list
+ */
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['type'])) {
         if ($_GET['type'] === 'movies') {
