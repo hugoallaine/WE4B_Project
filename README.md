@@ -24,19 +24,22 @@ Before you begin, ensure you have the following software installed on your syste
 2. **Install PHP Dependencies**
    You have two options to install the PHP dependencies:
 
-   ### Option A: Download Vendor Archive
-   - Download the [vendor archive](https://cloud.allaine.cc/s/PorFeJ6f7AofaeN)
-   - Unzip it and place it in the `php` folder inside the `backend` folder. The structure should look like this:
-     ```
-     backend/php/vendor
-     ```
-
-   ### Option B: Use Composer
-   - Navigate to the `backend/php` directory and run the following command:
-     ```sh
-     cd backend/php
-     composer update
-     ```
+   <details>
+<summary><strong>Option A: Download Vendor Archive</strong></summary>
+- Download the [vendor archive](https://cloud.allaine.cc/s/PorFeJ6f7AofaeN)
+- Unzip it and place it in the `php` folder inside the `backend` folder. The structure should look like this:
+  ```
+  backend/php/vendor
+  ```
+</details>
+<details>
+<summary><strong>Option B: Use Composer</strong></summary>
+- Navigate to the `backend/php` directory and run the following command:
+  ```sh
+  cd backend/php
+  composer update
+  ```
+</details>
 
 3. **Install Angular Dependencies**
    - Navigate to the `angular-app` folder and run the following commands:
@@ -72,7 +75,7 @@ Before you begin, ensure you have the following software installed on your syste
          "SMTP_user": "user@server.com",
          "SMTP_password": "smpt_password",
          "SMTP_noreply": "no-reply@server.com",
-         "db_host": "127.0.0.1", (don't use localhost)
+         "db_host": "127.0.0.1", // don't use localhost 
          "db_user": "your_username",
          "db_password": "your_password",
          "db_name": "your_database_name",
@@ -113,17 +116,18 @@ Before you begin, ensure you have the following software installed on your syste
 - Ensure your file structure matches the expected layout:
   ```
   ├── angular-app
-  │   ├── src
+  │   ├── src/
   │   ├── ...
   ├── backend
-  │   ├── php
+  │   ├── php/
   │   │   ├── vendor
   │   │   ├── ...
+  │   ├── audio/ 
+  │   ├── video/
   │   ├── private.json
-  │   ├── json
-  │   │   ├── files_data.json
   │   ├── ...
   ```
+  - Put your audio files in the `audio` folder and video files in the `video` folder.
 
 ## Module used :
 
