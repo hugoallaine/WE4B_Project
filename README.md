@@ -136,7 +136,7 @@ Two-factor authentication :
 Sending mail using SMTP authentication :   
 - https://github.com/PHPMailer/PHPMailer   
 
-Extract metadafrom from files :
+Extract metadata from from files :
 - https://github.com/JamesHeinrich/getID3
 
 ## Developers
