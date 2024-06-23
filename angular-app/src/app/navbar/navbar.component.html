@@ -47,6 +47,14 @@
                             </li>
                         </ul>
                     </div>
+                    <div *ngIf="searchResults.movies.length > 0">
+                        <h5 class="px-3 pt-2">Movies</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item" *ngFor="let movie of searchResults.movies" (click)="navigateToMovie(movie.id)">
+                                {{ movie.title }} ({{ movie.year }})
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </form>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">

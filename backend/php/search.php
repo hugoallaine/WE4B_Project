@@ -5,16 +5,18 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 $query = isset($_GET['q']) ? strtolower(trim($_GET['q'])) : '';
 
-$json = file_get_contents(dirname(__DIR__).'/json/files_data.json');
-$data = json_decode($json, true);
+$json_musics = file_get_contents(dirname(__DIR__).'/json/musics.json');
+$json_movies = file_get_contents(dirname(__DIR__).'/json/movies.json');
 
 $searchResults = [
     'artists' => [],
     'albums' => [],
-    'tracks' => []
+    'tracks' => [],
+    'movies' => []
 ];
 
 if ($query !== '') {
+    $data = json_decode($json_musics, true);
     foreach ($data['artists'] as $artist) {
         if (strpos(strtolower($artist['name']), $query) !== false) {
             $searchResults['artists'][] = $artist;
@@ -33,6 +35,12 @@ if ($query !== '') {
                     $searchResults['tracks'][] = $trackWithArtist;
                 }
             }
+        }
+    }
+    $data = json_decode($json_movies, true);
+    foreach ($data['movies'] as $movie) {
+        if (strpos(strtolower($movie['title']), $query) !== false) {
+            $searchResults['movies'][] = $movie;
         }
     }
 }

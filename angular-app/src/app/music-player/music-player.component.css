@@ -107,6 +107,10 @@ input[type="range"] {
     color: #ff0000;
 }
 
+.enabled {
+    color: #ff0000;
+}
+
 .volume-container {
     position: absolute;
     display: none;

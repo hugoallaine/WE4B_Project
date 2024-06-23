@@ -10,7 +10,7 @@
                 <h1>{{ movie.title }}</h1>
                 <p class="bio">{{ movie.description }}</p>
                 <div class="d-flex">
-                    <p class="me-4">{{ movie.year }}</p>
+                    <p class="me-4">{{ movie.year || 'No date available'}}</p>
                     <p>{{ movie.duration | durationPipe }}</p>
                 </div>
                 <button routerLink="/player/{{movie.id}}">Play</button>

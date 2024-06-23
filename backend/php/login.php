@@ -17,7 +17,7 @@ if (isset($data->user) && isset($data->password)) {
     $email = SecurizeString_ForSQL($data->user);
     $password = SecurizeString_ForSQL($data->password);
     if (!empty($email) AND !empty($password)) {
-        $req = $db->prepare("SELECT id,email,password,token,pseudo,avatar,verified,tfaKey FROM users WHERE email = ?");
+        $req = $db->prepare("SELECT id,email,password,token,pseudo,verified,tfaKey FROM users WHERE email = ?");
         $req->execute(array($email));
         $isUserExist = $req->rowCount();
         if ($isUserExist) {
@@ -30,7 +30,6 @@ if (isset($data->user) && isset($data->password)) {
                             $_SESSION['email'] = $user['email'];
                             $_SESSION['token'] = $user['token'];
                             $_SESSION['pseudo'] = $user['pseudo'];
-                            $_SESSION['avatar'] = empty($user['avatar']) ? null : $user['avatar'];
                             echo json_encode(['success' => true, 'message' => 'Login successful', 'id' => $user['id'], 'token' => $user['token'], 'tfa' => true]);
                         } else {
                             $error = "Code invalide.";
@@ -42,7 +41,6 @@ if (isset($data->user) && isset($data->password)) {
                         $_SESSION['email'] = $user['email'];
                         $_SESSION['token'] = $user['token'];
                         $_SESSION['pseudo'] = $user['pseudo'];
-                        $_SESSION['avatar'] = empty($user['avatar']) ? null : $user['avatar'];
                         echo json_encode(['success' => true, 'message' => 'Login successful', 'id' => $user['id'], 'token' => $user['token']]);
                     }
                 } else {

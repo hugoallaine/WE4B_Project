@@ -9,8 +9,11 @@ session_start_secure();
  * API to check the session status
  * 
  *  Response:
+ * - success (boolean): true if the request was successful
  * - error (boolean): true if an error occured
  * - message (string): the error message
+ * - id (int): the user id
+ * - token (string): the user token
  */
 header('Content-Type: application/json');
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {

@@ -15,7 +15,7 @@
 
     <div *ngIf="movies.length > 0">
         <div class="container mt-4">
-            <h2 class="mb-4 hover-clickable">Movies</h2>
+            <h2 class="mb-4">Movies</h2>
             <div class="d-flex flex-nowrap overflow-auto element-container">
                 <div *ngFor="let movie of movies" class="p-2">
                     <div class="card movie-card hover-clickable" (click)="navigateTo('movie/' + movie.id)">

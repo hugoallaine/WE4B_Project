@@ -134,38 +134,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 }
             }
 
-            // Change avatar
-            if (isset($_FILES['avatar-f']) && $_FILES['avatar-f']['error'] === UPLOAD_ERR_OK) {
-                if ($_FILES['avatar-f']['size'] <= 2097152) {
-                    $filename = $_FILES['avatar-f']['name'];
-                    $file_extension = pathinfo($filename, PATHINFO_EXTENSION);
-                    $allowed_extensions = array('jpg', 'jpeg', 'png', 'gif');
-                    if (in_array($file_extension, $allowed_extensions) === true) {
-                        $newfilename = "avatar.".$file_extension;
-                        $tmp_name = $_FILES['avatar-f']['tmp_name'];
-                        $upload_directory = '../img/user/'.$id.'/';
-                        if (!file_exists($upload_directory)) {
-                            mkdir($upload_directory, 0777, true);
-                        }
-                        $path = $upload_directory.$newfilename;
-                        $req = $db->prepare("SELECT avatar FROM users WHERE id = ?");
-                        $req->execute(array($id));
-                        $oldfilename = $req->fetch();
-                        if (!empty($oldfilename['avatar'])) {
-                            unlink($upload_directory.$oldfilename['avatar']);
-                        }
-                        move_uploaded_file($tmp_name, $path);
-                        $req = $db->prepare("UPDATE users SET avatar = ? WHERE id = ?");
-                        $req->execute(array($newfilename, $id));
-                        $_SESSION['avatar'] = $newfilename;
-                    } else {
-                        $error = "The avatar must be a jpg, jpeg, png or gif file.";
-                    }
-                } else {
-                    $error = "The avatar must be less than 2MB.";
-                }
-            }
-
             // Change password
             if (isset($data->oldpassword) && isset($data->newpassword) && isset($data->newpasswordconfirm)) {
                 $oldPassword = SecurizeString_ForSQL($data->oldpassword);
@@ -263,7 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 if (isset($error)) {
     header('Content-Type: application/json');
-    echo json_encode(array('error' => true,'message' => $error));
+    echo json_encode(array('success' => false, 'error' => true,'message' => $error));
 }
 
 ?>

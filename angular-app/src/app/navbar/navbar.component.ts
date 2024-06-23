@@ -5,6 +5,7 @@ import { SearchService } from '../services/search.service';
 import { NotificationService } from '../services/notification.service';
 import { HorizontalScrollService } from '../services/horizontal-scroll.service';
 import { Artist, Album, Track } from '../models/artist.model';
+import { Movie } from '../models/movie.model';
 
 @Component({
   selector: 'app-navbar',
@@ -13,8 +14,8 @@ import { Artist, Album, Track } from '../models/artist.model';
 })
 export class NavbarComponent implements OnInit {
   searchQuery: string = '';
-  searchResults: { artists: Artist[], albums: Album[], tracks: Track[] } = { 
-    artists: [], albums: [], tracks: []
+  searchResults: { artists: Artist[], albums: Album[], tracks: Track[], movies: Movie[] } = { 
+    artists: [], albums: [], tracks: [], movies: []
   };
   searchResultsVisible: boolean = false;
 
@@ -49,7 +50,7 @@ export class NavbarComponent implements OnInit {
         this.searchResultsVisible = true;
       });
     } else {
-      this.searchResults = { artists: [], albums: [], tracks: [] };
+      this.searchResults = { artists: [], albums: [], tracks: [], movies: []};
       this.searchResultsVisible = false;
     }
   }
@@ -69,6 +70,15 @@ export class NavbarComponent implements OnInit {
     } else {
       console.error('Album ID is undefined');
       this.notificationService.showNotification('Album ID is undefined', 'error');
+    }
+  }
+
+  navigateToMovie(id: string) {
+    if (id) {
+      this.router.navigate(['/movie', id]);
+    } else {
+      console.error('Movie ID is undefined');
+      this.notificationService.showNotification('Movie ID is undefined', 'error');
     }
   }
 

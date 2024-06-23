@@ -29,19 +29,12 @@ function getIp()
  * API to register a user
  * 
  * POST Parameters:
- * - mail1-r (string): the first part of the email
- * - mail2-r (string): the second part of the email
- * - password-r (string): the password
- * - password2-r (string): the confirmation of the password
- * - pseudo-r (string): the pseudo
- * - name-r (string): the name
- * - firstname-r (string): the firstname
- * - birthdate-r (string): the birthdate
- * - address-r (string): the address
- * - city-r (string): the city
- * - zipcode-r (string): the zipcode
- * - country-r (string): the country
- * - g-recaptcha-response (string): the reCaptcha response
+ * - user (string): the email
+ * - password (string): the password
+ * - pseudo (string): the pseudo
+ * - name (string): the name
+ * - firstname (string): the firstname
+ * - birthdate (string): the birthdate
  * 
  * Response:
  * - error (boolean): true if an error occured
@@ -80,31 +73,6 @@ if (isset($data->user) && isset($data->password) && isset($data->password2) && i
                                     }
                                     $req = $db->prepare("UPDATE users SET token = ? WHERE id = ?");
                                     $req->execute(array($token, $id));
-                                }
-                                if (isset($_FILES['avatar-r']) && $_FILES['avatar-r']['error'] === UPLOAD_ERR_OK) {
-                                    if ($_FILES['avatar-r']['size'] <= 2097152) {
-                                        $req = $db->prepare("SELECT id FROM users WHERE email = ?");
-                                        $req->execute(array($email));
-                                        $line = $req->fetch();
-                                        $filename = $_FILES['avatar-r']['name'];
-                                        $file_extension = pathinfo($filename, PATHINFO_EXTENSION);
-                                        $allowed_extensions = array('jpg', 'jpeg', 'png', 'gif');
-                                        if (in_array($file_extension, $allowed_extensions) === true) {
-                                            $newfilename = "avatar." . $file_extension;
-                                            $tmp_name = $_FILES['avatar-r']['tmp_name'];
-                                            $upload_directory = '../img/user/' . $line['id'] . '/';
-                                            if (!file_exists($upload_directory)) {
-                                                mkdir($upload_directory, 0777, true);
-                                            }
-                                            $path = $upload_directory . $newfilename;
-                                            move_uploaded_file($tmp_name, $path);
-                                            $avatar = $newfilename;
-                                            $req = $db->prepare("UPDATE users SET avatar = ? WHERE email = ?");
-                                            $req->execute(array($avatar, $email));
-                                        } else {
-                                            $info = "Your avatar must be in jpg, jpeg, png or gif format and must not exceed 2 MB.";
-                                        }
-                                    }
                                 }
                                 $req = $db->prepare("INSERT INTO emailsnonverifies(email,token,id_user) VALUES (?,?,(SELECT id FROM users WHERE email = ?))");
                                 $req->execute(array($email, $key, $email));
