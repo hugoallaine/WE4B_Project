@@ -2,12 +2,128 @@
 
 Flex | WE4B Project in third year at UTBM.
 
-## Installation
+# Installation
 
-- Clone the repository
-- Download the [vendor archive](https://cloud.allaine.cc/s/PorFeJ6f7AofaeN) unzip it and put it in the php folder in the backend folder for it looks like this : `backend/php/vendor`
-- Go into angular-app folder and run `npm install` then `ng serve`
-- To launch the php server go to backend/php then `php -S localhost:8000`
+## Prerequisites
+
+Before you begin, ensure you have the following software installed on your system:
+- [Node.js and npm](https://nodejs.org/)
+- [Angular CLI](https://angular.io/cli) - version 13.3.3
+- [PHP](https://www.php.net/)
+- [Composer](https://getcomposer.org/) (for PHP dependencies)
+- [MySQL Server](https://dev.mysql.com/downloads/mysql/) running on the default port 3306
+
+## Installation Steps
+
+1. **Clone the Repository**
+   ```sh
+   git clone <repository_url>
+   cd <repository_name>
+   ```
+
+2. **Install PHP Dependencies**
+   You have two options to install the PHP dependencies:
+
+   ### Option A: Download Vendor Archive
+   - Download the [vendor archive](https://cloud.allaine.cc/s/PorFeJ6f7AofaeN)
+   - Unzip it and place it in the `php` folder inside the `backend` folder. The structure should look like this:
+     ```
+     backend/php/vendor
+     ```
+
+   ### Option B: Use Composer
+   - Navigate to the `backend/php` directory and run the following command:
+     ```sh
+     cd backend/php
+     composer update
+     ```
+
+3. **Install Angular Dependencies**
+   - Navigate to the `angular-app` folder and run the following commands:
+     ```sh
+     cd angular-app
+     npm install
+     ng serve
+     ```
+   - This will start the Angular development server. By default, it runs at `http://localhost:4200`.
+
+4. **Launch PHP Server**
+   - Open another terminal and navigate to the `backend/php` directory:
+     ```sh
+     cd backend/php
+     php -S localhost:8000
+     ```
+   - This will start the PHP server at `http://localhost:8000`.
+
+5. **Set Up MySQL Database**
+   - Ensure your MySQL server is running on the default port 3306.
+   - Download the database SQL file from [this link](#) (link to be provided).
+   - Import the SQL file into your MySQL database using a tool like phpMyAdmin or the MySQL command line:
+     ```sh
+     mysql -u your_username -p your_database_name < path_to_sql_file.sql
+     ```
+   - **Important**: Ensure you set up a MySQL user with the appropriate privileges to access the database. 
+
+   - Create a `backend/private.json` file with your credentials as follows:
+     ```json
+     {
+         "mailserver": "mail.server.com",
+         "SMTP_port": 465,
+         "SMTP_user": "user@server.com",
+         "SMTP_password": "smpt_password",
+         "SMTP_noreply": "no-reply@server.com",
+         "db_host": "127.0.0.1", (don't use localhost)
+         "db_user": "your_username",
+         "db_password": "your_password",
+         "db_name": "your_database_name",
+         "SPOTIFY_CLIENT_ID": "your_spotify_client_id",
+         "SPOTIFY_CLIENT_SECRET": "your_spotify_client_secret"
+     }
+     ```
+
+6. **Configure `php.ini`**
+
+   ### Windows
+   - The `php.ini` file is usually located in the PHP installation directory, such as `C:\php\php.ini` or `C:\Program Files\php\php.ini`.
+   - Open your `php.ini` file and ensure the following line is uncommented (remove the leading `;` if present):
+     ```ini
+     extension=gd
+     ```
+
+   ### Linux
+   - The `php.ini` file is typically located in `/etc/php/php.ini`.
+   - Open your `php.ini` file and ensure the following lines are uncommented (remove the leading `;` if present):
+     ```ini
+     extension=gd
+     extension=iconv
+     extension=mysqli
+     extension=pdo_mysql
+     ```
+   - Additionally, you may need to install the `php-gd` package. On Debian-based distributions (such as Ubuntu) and Arch-based distributions, you can install it using the package manager:
+     ```sh
+     sudo apt-get install php-gd   # For Debian-based distributions
+     sudo pacman -S php-gd         # For Arch-based distributions
+     ```
+
+7. **User Verification Without SMTP Server**
+   - If you do not have an SMTP server set up, you can manually verify users by changing the value of the `isverified` column to `1` in the `user` table of the database.
+
+## Additional Notes
+
+- Ensure your file structure matches the expected layout:
+  ```
+  ├── angular-app
+  │   ├── src
+  │   ├── ...
+  ├── backend
+  │   ├── php
+  │   │   ├── vendor
+  │   │   ├── ...
+  │   ├── private.json
+  │   ├── json
+  │   │   ├── files_data.json
+  │   ├── ...
+  ```
 
 ## Module used :
 
@@ -16,6 +132,9 @@ Two-factor authentication :
 
 Sending mail using SMTP authentication :   
 - https://github.com/PHPMailer/PHPMailer   
+
+Extract metadafrom from files :
+- https://github.com/JamesHeinrich/getID3
 
 ## Developers
 
