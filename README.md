@@ -24,22 +24,19 @@ Before you begin, ensure you have the following software installed on your syste
 2. **Install PHP Dependencies**
    You have two options to install the PHP dependencies:
 
-   <details>
-<summary><strong>Option A: Download Vendor Archive</strong></summary>
-- Download the [vendor archive](https://cloud.allaine.cc/s/PorFeJ6f7AofaeN)
-- Unzip it and place it in the `php` folder inside the `backend` folder. The structure should look like this:
-  ```
-  backend/php/vendor
-  ```
-</details>
-<details>
-<summary><strong>Option B: Use Composer</strong></summary>
-- Navigate to the `backend/php` directory and run the following command:
-  ```sh
-  cd backend/php
-  composer update
-  ```
-</details>
+   ### Option A: Download Vendor Archive
+   - Download the [vendor archive](https://cloud.allaine.cc/s/PorFeJ6f7AofaeN)
+   - Unzip it and place it in the `php` folder inside the `backend` folder. The structure should look like this:
+     ```
+     backend/php/vendor
+     ```
+
+   ### Option B: Use Composer
+   - Navigate to the `backend/php` directory and run the following command:
+     ```sh
+     cd backend/php
+     composer update
+     ```
 
 3. **Install Angular Dependencies**
    - Navigate to the `angular-app` folder and run the following commands:
