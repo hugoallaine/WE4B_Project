@@ -13,11 +13,9 @@
     <div class="col-md-8">
       <h4>Tracks</h4>
       <ul class="list-group">
-        <li class="list-group-item" *ngFor="let track of album.tracks; let i = index">
-          <div class="d-flex justify-content-between hover-clickable" (click)="playTrack(track, album, artist)">
-            <span>{{ i + 1 }}. {{ track.title }}</span>
-            <span>{{ track.duration | durationPipe }} mins</span>
-          </div>
+        <li class="list-group-item d-flex justify-content-between hover-clickable" *ngFor="let track of album.tracks; let i = index" (click)="playTrack(track, album, artist)">
+          <div>{{ i + 1 }}. {{ track.title }}</div>
+          <div>{{ track.duration | durationPipe }}</div>
         </li>
       </ul>
     </div>
